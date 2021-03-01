@@ -9,8 +9,10 @@ import java.net.http.HttpResponse.BodyHandlers;
 
 public class Site {
 	private String siteUrl;
+	private HttpClient httpClient;
 
-	public Site(String siteUrl) {
+	public Site(String siteUrl, HttpClient httpClient) {
+		this.httpClient = httpClient;
 		if (!siteUrl.startsWith("http")) {
 			this.siteUrl = "https://" + siteUrl;
 		} else {
@@ -27,15 +29,11 @@ public class Site {
 	}
 
 	private HttpResponse<String> retrieveSiteContent() throws IOException, InterruptedException {
-		// create a client
-		var client = HttpClient.newHttpClient();
-
 		// create a request
 		var request = HttpRequest.newBuilder(URI.create(siteUrl)).header("accept", "text/html").build();
 
 		// use the client to send the request
-		var response = client.send(request, BodyHandlers.ofString());
+		var response = httpClient.send(request, BodyHandlers.ofString());
 		return response;
 	}
-
 }
