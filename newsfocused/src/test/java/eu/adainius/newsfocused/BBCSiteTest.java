@@ -1,6 +1,7 @@
 package eu.adainius.newsfocused;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.io.IOException;
@@ -32,6 +33,21 @@ public class BBCSiteTest {
         var site = new BBCSite(mockHttpClient);
         List<String> headlines = site.headlines();
 
-        assertEquals(List.of(headline.replace("<h3>","").replace("</h3>", "")), headlines);
+        assertEquals(List.of(headline.replace("<h3>", "").replace("</h3>", "")), headlines);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "<h1>This is NOT a headline</h1>", "<h2>This is NOT a headline</h2>",
+            "<p>This is NOT a headline</p>", "<a href=''>This is NOT a headline</a>" })
+    public void rejects_non_headlines(String nonHeadline) throws IOException, InterruptedException {
+
+        var mockResponse = Mockito.mock(HttpResponse.class);
+        Mockito.when(mockResponse.body()).thenReturn(nonHeadline);
+        Mockito.when(mockHttpClient.send(any(), any())).thenReturn(mockResponse);
+
+        var site = new BBCSite(mockHttpClient);
+        List<String> headlines = site.headlines();
+
+        assertTrue(headlines.isEmpty());
     }
 }
