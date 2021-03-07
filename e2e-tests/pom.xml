@@ -10,9 +10,14 @@
   </parent>
 
   <groupId>eu.adainius</groupId>
-  <artifactId>newsfocused</artifactId>
+  <artifactId>newsfocused-e2e-tests</artifactId>
 
   <dependencies>
+    <dependency>
+      <groupId>eu.adainius</groupId>
+      <artifactId>newsfocused</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
