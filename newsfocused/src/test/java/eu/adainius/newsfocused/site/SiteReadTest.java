@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused;
+package eu.adainius.newsfocused.site;
 
 import static org.junit.jupiter.api.Assertions.fail;
 

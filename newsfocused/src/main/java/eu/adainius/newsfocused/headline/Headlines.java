@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused;
+package eu.adainius.newsfocused.headline;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +9,9 @@ public class Headlines {
 
     private Headlines(List<Headline> headlinesList) {
         this.headlinesList.addAll(headlinesList);
+    }
+
+    public Headlines() {
     }
 
     public static Headlines of(Headline... headlines) {
@@ -35,6 +38,10 @@ public class Headlines {
             }
         }
         return Collections.unmodifiableList(headlinesFromDate);
+    }
+
+    public int count() {
+        return headlinesList.size();
     }
 
 }

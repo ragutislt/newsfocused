@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused;
+package eu.adainius.newsfocused.headline;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

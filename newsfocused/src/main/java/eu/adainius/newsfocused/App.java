@@ -7,6 +7,8 @@ package eu.adainius.newsfocused;
 public class App {
     public static void main(String[] args) {
         String sitesFile = args[0];
-        System.out.println("Hello World! Sites will be read from: " + sitesFile);
+        String email = args[1];
+        System.out.println("Sites will be read from: " + sitesFile);
+        System.out.println("News will be sent to: " + email);
     }
 }

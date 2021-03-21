@@ -1,7 +1,9 @@
-package eu.adainius.newsfocused;
+package eu.adainius.newsfocused.headline;
 
 import java.time.LocalDate;
 
+import eu.adainius.newsfocused.ApplicationException;
+import eu.adainius.newsfocused.Validation;
 import lombok.Builder;
 
 @Builder

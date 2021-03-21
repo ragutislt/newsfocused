@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused;
+package eu.adainius.newsfocused.site;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,5 +12,12 @@ public class SiteListTest {
         String sitesFile = "src/test/resources/sites.txt";
         Sites sites = new Sites(sitesFile);
         assertEquals(List.of("www.bbc.com", "www.lrt.lt"), sites.list());
+    }
+
+    @Test
+    public void should_make_each_site_parse_headlines() throws IOException {
+        String sitesFile = "src/test/resources/sites.txt";
+        Sites sites = new Sites(sitesFile);
+        
     }
 }

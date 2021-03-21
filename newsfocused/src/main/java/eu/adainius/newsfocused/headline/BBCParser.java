@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused;
+package eu.adainius.newsfocused.headline;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,14 +17,26 @@ public class BBCParser implements HeadlineParser {
     public List<Headline> parseFrom(String htmlContent) {
         Document doc = Jsoup.parse(htmlContent);
 
-        return doc.getElementsByTag(HEADLINE_TAG).stream().map(h -> h.html()).map(h -> htmlToHeadline(h))
+        return doc.getElementsByTag(HEADLINE_TAG).stream().map(h -> h.html()).filter(h->isHeadline(h)).map(h -> htmlToHeadline(h))
                 .collect(Collectors.toList());
+    }
+
+    private boolean isHeadline(String headlineHtml) {
+        Document doc = Jsoup.parse(headlineHtml);
+        Element linkElement = doc.selectFirst("a");
+        if(linkElement == null) {
+            return false;
+        }
+        return true;
     }
 
     private Headline htmlToHeadline(String headlineHtml) {
         String urlLink = htmlToUrl(headlineHtml);
         String title = htmlToTitle(headlineHtml);
         String htmlLink = htmlToHtmlLink(headlineHtml);
+        if (htmlLink == null || urlLink == null || title == null) {
+            return null;
+        }
         return Headline.builder().date(LocalDate.now()).website(BBC_URL).title(title).urlLink(urlLink)
                 .htmlLink(htmlLink).build();
     }
