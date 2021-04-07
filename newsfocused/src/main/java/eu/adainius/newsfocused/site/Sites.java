@@ -11,7 +11,7 @@ import java.util.List;
 import eu.adainius.newsfocused.ApplicationException;
 import eu.adainius.newsfocused.headline.BBCParser;
 import eu.adainius.newsfocused.headline.HeadlineParser;
-import eu.adainius.newsfocused.headline.Headlines;
+import eu.adainius.newsfocused.headline.LRTParser;
 
 public class Sites {
     private List<String> siteNames;
@@ -52,7 +52,7 @@ public class Sites {
                 siteUrl = BBC;
                 break;
             case LRT:
-                parser = new BBCParser();
+                parser = new LRTParser();
                 siteUrl = LRT;
                 break;
             default:

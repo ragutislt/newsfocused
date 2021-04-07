@@ -35,9 +35,12 @@ public class SitesTest {
         String bbcContentLocation = "src/test/resources/bbc.html";
         String bbcContent = Files.readString(Paths.get(bbcContentLocation));
 
+        String lrtContentLocation = "src/test/resources/lrt.html";
+        String lrtContent = Files.readString(Paths.get(lrtContentLocation));
+
         HttpClient mockClient = Mockito.mock(HttpClient.class);
         HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
-        Mockito.when(mockResponse.body()).thenReturn(bbcContent);
+        Mockito.when(mockResponse.body()).thenReturn(bbcContent).thenReturn(lrtContent);
         Mockito.when(mockClient.send(any(HttpRequest.class), any(BodyHandler.class))).thenReturn(mockResponse);
 
         try(MockedStatic<HttpClientFactory> mockedHttpClientBuilder = mockStatic(HttpClientFactory.class)) {
@@ -50,19 +53,7 @@ public class SitesTest {
             Headlines lrtHeadlines = sites.getSites().get(1).headlines();
     
             assertEquals(5, bbcHeadlines.count());
-            assertEquals(7, lrtHeadlines.count());
+            assertEquals(22, lrtHeadlines.count());
         };
     }
-
-    /*
-     * @Test public void builds_sites() { String siteFile =
-     * "src/main/resources/sites.txt"; Sites sites = new Sites(siteFile);
-     * 
-     * sites.sit Headline bbcHeadline = new Headline(); Headline lrtHeadline = new
-     * Headline();
-     * 
-     * Headlines headlines = sites.headlines();
-     * 
-     * assertEquals(Headlines.of(bbcHeadline, lrtHeadline), headlines); }
-     */
 }
