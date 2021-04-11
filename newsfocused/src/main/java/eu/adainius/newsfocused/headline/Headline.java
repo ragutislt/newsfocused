@@ -66,4 +66,10 @@ public class Headline {
     public String urlLink() {
         return urlLink;
     }
+
+    @Override
+    public String toString() {
+        return "Headline [title=" + title + "]";
+    }
+
 }
