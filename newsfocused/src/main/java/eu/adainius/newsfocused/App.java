@@ -6,21 +6,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
-import java.util.Locale;
 
 import eu.adainius.newsfocused.email.Email;
-import eu.adainius.newsfocused.headline.Headline;
 import eu.adainius.newsfocused.headline.Headlines;
 import eu.adainius.newsfocused.site.Site;
 import eu.adainius.newsfocused.site.Sites;
 import freemarker.template.Configuration;
-import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.Version;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class App {
     public static Configuration templateEngineConfiguration;
+    // TODO limit headlines of each site
+    // TODO favicon based on absolute site path, not relative news path
     
     public static void main(String[] args) throws IOException {
         String sitesFile = args[0];
@@ -56,6 +54,6 @@ public class App {
         Files.write(
             Paths.get(emailAddress), 
             emailBody.getBytes(), 
-            StandardOpenOption.CREATE_NEW);
+            StandardOpenOption.TRUNCATE_EXISTING);
     }
 }

@@ -1,11 +1,9 @@
 package eu.adainius.newsfocused;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mockStatic;
 
-import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -13,8 +11,6 @@ import java.net.http.HttpResponse.BodyHandler;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -24,7 +20,7 @@ public class AppTest {
     @Test
     public void parses_headlines_and_saves_them_to_file() throws Exception {
         runWithMockedHttpResponses(() -> {
-            String fileResults = "target/results.txt";
+            String fileResults = "target/results.html";
             String fileSites = "src/test/resources/sites.txt";
 
             App.main(new String[] { fileSites, fileResults });
@@ -38,16 +34,18 @@ public class AppTest {
     }
 
     @Test
-    public void saves_headlines_to_html_file() throws IOException {
-        String fileResults = "target/results.txt";
-        String fileSites = "src/test/resources/sites.txt";
+    public void saves_headlines_to_html_file() throws Exception {
+        runWithMockedHttpResponses(() -> {
+            String fileResults = "target/results.html";
+            String fileSites = "src/test/resources/sites.txt";
 
-        App.main(new String[] { fileSites, fileResults });
+            App.main(new String[] { fileSites, fileResults });
 
-        String fileContent = Files.readString(Paths.get(fileResults));
+            String fileContent = Files.readString(Paths.get(fileResults));
 
-        Document doc = Jsoup.parse(fileContent);
-        assertNotNull(doc);
+            assertTrue(fileContent.contains("<html"));
+            assertTrue(fileContent.contains("</html>"));
+        });
     }
 
     @Test
