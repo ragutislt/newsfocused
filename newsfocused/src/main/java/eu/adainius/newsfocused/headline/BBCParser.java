@@ -17,14 +17,14 @@ public class BBCParser implements HeadlineParser {
     public List<Headline> parseFrom(String htmlContent) {
         Document doc = Jsoup.parse(htmlContent);
 
-        return doc.getElementsByTag(HEADLINE_TAG).stream().map(h -> h.html()).filter(h->isHeadline(h)).map(h -> htmlToHeadline(h))
-                .collect(Collectors.toList());
+        return doc.getElementsByTag(HEADLINE_TAG).stream().map(h -> h.html()).filter(h -> isHeadline(h))
+                .map(h -> htmlToHeadline(h)).collect(Collectors.toList());
     }
 
     private boolean isHeadline(String headlineHtml) {
         Document doc = Jsoup.parse(headlineHtml);
         Element linkElement = doc.selectFirst("a");
-        if(linkElement == null) {
+        if (linkElement == null) {
             return false;
         }
         return true;
@@ -51,18 +51,27 @@ public class BBCParser implements HeadlineParser {
     private String htmlToHtmlLink(String headlineHtml) {
         Document doc = Jsoup.parse(headlineHtml);
         Element linkElement = doc.selectFirst("a");
-        if (linkElement != null) {
-            return linkElement.outerHtml();
+        if (linkElement == null) {
+            return null;
         }
-        return null;
+        replaceRelativeHrefWithAbsoluteInHtmlHeadline(linkElement);
+        return linkElement.outerHtml();
     }
 
     private String htmlToUrl(String headlineHtml) {
         Document doc = Jsoup.parse(headlineHtml);
         Element linkElement = doc.selectFirst("a");
-        String url = linkElement.attr("href").startsWith("http") ? linkElement.attr("href")
-                : BBC_URL + linkElement.attr("href");
+        String url = getHrefFromHtmlHeadline(linkElement);
         return url;
     }
 
+    private String getHrefFromHtmlHeadline(Element linkElement) {
+        return linkElement.attr("href").startsWith("http") ? linkElement.attr("href")
+                : "http://" + BBC_URL + linkElement.attr("href");
+    }
+
+    private void replaceRelativeHrefWithAbsoluteInHtmlHeadline(Element linkElement) {
+        String url = getHrefFromHtmlHeadline(linkElement);
+        linkElement.attr("href", url);
+    }
 }

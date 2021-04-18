@@ -58,4 +58,22 @@ public class BBCParserTest {
         assertTrue(headlines.stream().anyMatch(headline -> headlineUrlsExpected.get(0).equals(headline.urlLink())));
         assertTrue(headlines.stream().anyMatch(headline -> headlineUrlsExpected.get(1).equals(headline.urlLink())));
     }
+    
+    @Test
+    public void includes_site_address_and_protocol_in_html_link() throws IOException {
+        List<String> headlineUrlsExpectedInHtml = List.of("www.bbc.com/news/world-asia-56395085",
+                "www.bbc.com/news/world-asia-56391445");
+
+        String bbcContentLocation = "src/test/resources/bbc.html";
+        String bbcContent = Files.readString(Paths.get(bbcContentLocation));
+
+        HeadlineParser bbcParser = new BBCParser();
+
+        List<Headline> headlines = bbcParser.parseFrom(bbcContent);
+
+        assertTrue(headlines.stream().anyMatch(headline -> headline.htmlLink().contains(headlineUrlsExpectedInHtml.get(0))));
+        assertTrue(headlines.stream().anyMatch(headline -> headline.htmlLink().contains(headlineUrlsExpectedInHtml.get(1))));
+
+        assertTrue(headlines.stream().allMatch(headline -> headline.htmlLink().contains("http") && headline.htmlLink().contains("://")));
+    }
 }
