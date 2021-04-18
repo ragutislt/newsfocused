@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 public class App {
     public static Configuration templateEngineConfiguration;
     // TODO limit headlines of each site
-    // TODO favicon based on absolute site path, not relative news path
     
     public static void main(String[] args) throws IOException {
         String sitesFile = args[0];

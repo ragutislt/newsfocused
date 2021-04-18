@@ -51,7 +51,7 @@ public class Email {
             List<Headline> headlinesFromTheDay = headlines.from(dateString);
             List<HeadlineDto> headlinesForEmail = new ArrayList<>();
             for (Headline headline : headlinesFromTheDay) {
-                headlinesForEmail.add(new HeadlineDto(headline.urlLink(), headline.htmlLink()));
+                headlinesForEmail.add(new HeadlineDto(headline.urlLink(), headline.htmlLink(), headline.website()));
             }
             DayDto day = new DayDto(headlinesForEmail, dateString);
             days.add(day);

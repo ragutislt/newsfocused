@@ -36,6 +36,23 @@ public class EmailTest {
     }
 
     @Test
+    void includesFaviconLinks() {
+        String template = "email_template.ftl";
+        Headline headline1 = Headline.builder().title("news 1").htmlLink("<a href=\"www.mysite.com\\news\">news 1</a>")
+                .urlLink("www.mysite.com\\news").date(LocalDate.now()).website(Sites.BBC).build();
+        Headline headline2 = Headline.builder().title("news 2").htmlLink("<a href=\"www.mysite2.com\\news\">news 2</a>")
+                .urlLink("www.mysite2.com\\news").date(LocalDate.now().minusDays(1)).website(Sites.LRT).build();
+
+        Headlines headlines = Headlines.of(headline1, headline2);
+        Email email = new Email(template, headlines);
+
+        System.out.println(email.body());
+
+        assertTrue(email.body().contains("www.bbc.com/favicon.ico"));
+        assertTrue(email.body().contains("www.lrt.lt/favicon.ico"));
+    }
+
+    @Test
     void producesEmailBody() {
         String template = "email_template.ftl";
         Headline headline1 = Headline.builder().title("news 1").htmlLink("<a href=\"www.mysite.com\\news\">news 1</a>")
@@ -46,14 +63,14 @@ public class EmailTest {
         Headlines headlines = Headlines.of(headline1, headline2);
         Email email = new Email(template, headlines);
 
+        System.out.println(email.body());
+
         assertTrue(email.body().contains("<html"));
         assertTrue(email.body().contains("</html>"));
         assertTrue(email.body().contains("<a href=\"www.mysite.com\\news\">news 1</a>"));
         assertTrue(email.body().contains("<a href=\"www.mysite2.com\\news\">news 2</a>"));
         assertTrue(email.body().contains("Here's your summary of the week"));
         assertTrue(email.body().contains(LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
-
-        System.out.println(email.body());
     }
 
     @Test

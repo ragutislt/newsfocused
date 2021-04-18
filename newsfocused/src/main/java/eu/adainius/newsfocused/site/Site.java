@@ -19,7 +19,6 @@ public class Site {
 	private HttpClient httpClient;
 	private HeadlineParser parser;
 	private Headlines headlines;
-	// TODO add favicon
 
 	public Site(HeadlineParser parser, String siteUrl) {
 		this.parser = parser;
