@@ -17,8 +17,8 @@ public class Sites {
     private List<String> siteNames;
     private List<Site> sites;
 
-    private static final String BBC = "www.bbc.com";
-    private static final String LRT = "www.lrt.lt";
+    public static final String BBC = "www.bbc.com";
+    public static final String LRT = "www.lrt.lt";
 
     public Sites(String sitesFile) {
         sites = new ArrayList<>();
