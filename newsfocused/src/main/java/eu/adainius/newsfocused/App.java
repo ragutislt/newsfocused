@@ -8,6 +8,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 import eu.adainius.newsfocused.email.Email;
+import eu.adainius.newsfocused.email.EmailProvider;
 import eu.adainius.newsfocused.headline.Headlines;
 import eu.adainius.newsfocused.site.Site;
 import eu.adainius.newsfocused.site.Sites;
@@ -18,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class App {
     public static Configuration templateEngineConfiguration;
     // TODO limit headlines of each site
-    
+
     public static void main(String[] args) throws IOException {
         String sitesFile = args[0];
         String emailAddress = args[1];
@@ -27,9 +28,9 @@ public class App {
 
         Sites sites = new Sites(sitesFile);
         log.info("Sites read from {} are: {}", sitesFile, sites.list());
-        
+
         File file = new File(emailAddress);
-        if(file.exists()) {
+        if (file.exists()) {
             file.delete();
         }
         file.createNewFile();
@@ -37,22 +38,15 @@ public class App {
         Headlines aggregatedHeadlines = new Headlines();
 
         List<Site> siteList = sites.getSites();
-        for(Site site : siteList) {
+        for (Site site : siteList) {
             Headlines headlines = site.headlines();
             aggregatedHeadlines.add(headlines.getList());
-            /* for(Headline headline: headlines.getList()) {
-                Files.write(
-                    Paths.get(emailAddress), 
-                    headline.htmlLink().getBytes(), 
-                    StandardOpenOption.APPEND);
-            } */
         }
 
         Email email = new Email("email_template.ftl", aggregatedHeadlines);
         String emailBody = email.body();
-        Files.write(
-            Paths.get(emailAddress), 
-            emailBody.getBytes(), 
-            StandardOpenOption.TRUNCATE_EXISTING);
+        Files.write(Paths.get(emailAddress), emailBody.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+
+        EmailProvider.sendEmail(email);
     }
 }
