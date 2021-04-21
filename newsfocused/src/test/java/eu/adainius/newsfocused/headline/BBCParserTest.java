@@ -13,8 +13,8 @@ public class BBCParserTest {
     @Test
     public void parses_bbc_headlines() throws IOException {
         List<String> headlinesExpected = List.of(
-                "<a class=\"media__link\" href=\"/news/world-asia-56395085\" rev=\"hero1|headline\"> Bloody day in Myanmar's main city sees 14 killed </a>",
-                "<a class=\"media__link\" href=\"/news/world-asia-56391445\" rev=\"hero3|headline\"> North Korea 'not responding' to US contact efforts </a>");
+                "<a class=\"media__link\" href=\"http://www.bbc.com/news/world-asia-56395085\" rev=\"hero1|headline\"> Bloody day in Myanmar's main city sees 14 killed </a>",
+                "<a class=\"media__link\" href=\"http://www.bbc.com/news/world-asia-56391445\" rev=\"hero3|headline\"> North Korea 'not responding' to US contact efforts </a>");
 
         String bbcContentLocation = "src/test/resources/bbc.html";
         String bbcContent = Files.readString(Paths.get(bbcContentLocation));
@@ -45,8 +45,8 @@ public class BBCParserTest {
 
     @Test
     public void parses_urlLink() throws IOException {
-        List<String> headlineUrlsExpected = List.of("www.bbc.com/news/world-asia-56395085",
-                "www.bbc.com/news/world-asia-56391445");
+        List<String> headlineUrlsExpected = List.of("http://www.bbc.com/news/world-asia-56395085",
+                "http://www.bbc.com/news/world-asia-56391445");
 
         String bbcContentLocation = "src/test/resources/bbc.html";
         String bbcContent = Files.readString(Paths.get(bbcContentLocation));
@@ -61,8 +61,8 @@ public class BBCParserTest {
     
     @Test
     public void includes_site_address_and_protocol_in_html_link() throws IOException {
-        List<String> headlineUrlsExpectedInHtml = List.of("www.bbc.com/news/world-asia-56395085",
-                "www.bbc.com/news/world-asia-56391445");
+        List<String> headlineUrlsExpectedInHtml = List.of("http://www.bbc.com/news/world-asia-56395085",
+                "http://www.bbc.com/news/world-asia-56391445");
 
         String bbcContentLocation = "src/test/resources/bbc.html";
         String bbcContent = Files.readString(Paths.get(bbcContentLocation));
