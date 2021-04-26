@@ -80,17 +80,6 @@ public class AppTest {
     }
 
     private void runWithMockedMailProvider(RunnableStaticMockWithExceptions testToExecute) throws Exception {
-        String bbcContentLocation = "src/test/resources/bbc.html";
-        String bbcContent = Files.readString(Paths.get(bbcContentLocation));
-
-        String lrtContentLocation = "src/test/resources/lrt.html";
-        String lrtContent = Files.readString(Paths.get(lrtContentLocation));
-
-        HttpClient mockClient = Mockito.mock(HttpClient.class);
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
-        Mockito.when(mockResponse.body()).thenReturn(bbcContent).thenReturn(lrtContent);
-        Mockito.when(mockClient.send(any(HttpRequest.class), any(BodyHandler.class))).thenReturn(mockResponse);
-
         try (MockedStatic<EmailProvider> mockedEmailProvider = mockStatic(EmailProvider.class)) {
             testToExecute.run(mockedEmailProvider);
         }
