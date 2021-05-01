@@ -43,7 +43,7 @@ public class App {
             aggregatedHeadlines.add(headlines.getList());
         }
 
-        Email email = new Email("email_template.ftl", aggregatedHeadlines);
+        Email email = new Email("email_template.ftl", aggregatedHeadlines, emailAddress);
         String emailBody = email.body();
         Files.write(Paths.get(emailAddress), emailBody.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 
