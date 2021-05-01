@@ -28,5 +28,9 @@ public class EmailConfiguration {
         templateEngineConfiguration.setLocale(Locale.US);
         templateEngineConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
+
+    public static String from() {
+        return "news@newsfocused.eu";
+    }
     
 }

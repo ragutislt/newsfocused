@@ -44,8 +44,6 @@ public class App {
         }
 
         Email email = new Email("email_template.ftl", aggregatedHeadlines, emailAddress);
-        String emailBody = email.body();
-        Files.write(Paths.get(emailAddress), emailBody.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 
         EmailProvider.sendEmail(email);
     }

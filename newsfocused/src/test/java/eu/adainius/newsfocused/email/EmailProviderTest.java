@@ -19,8 +19,8 @@ import jakarta.mail.Transport;
 public class EmailProviderTest {
     @Test
     void uses_java_mail() throws Exception {
-        String emailToSendTo = "sample@email.com";
-        String template = "src/test/resources/templates/email_template.ftl";
+        String emailAddress = "sample@email.com";
+        String template = "email_template.ftl";
 
         String bbcContentLocation = "src/test/resources/bbc.html";
         String bbcContent = Files.readString(Paths.get(bbcContentLocation));
@@ -28,7 +28,7 @@ public class EmailProviderTest {
         HeadlineParser bbcParser = new BBCParser();
         Headlines headlines = Headlines.of(bbcParser.parseFrom(bbcContent));
 
-        Email email = new Email(template, headlines);
+        Email email = new Email(template, headlines, emailAddress);
 
         // verify Transport.send is executed
         try (MockedStatic<Transport> mockedTransport = mockStatic(Transport.class)) {

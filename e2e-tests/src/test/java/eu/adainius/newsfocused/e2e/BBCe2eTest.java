@@ -50,8 +50,8 @@ public class BBCe2eTest {
 
         runMailServer();
 
-        String siteFile = "/sites.txt";
-        String email = "some@email.address";
+        String siteFile = "src/test/resources/sites.txt";
+        String email = "some@email.com";
         App.main(new String[] { siteFile, email });
 
         // create a request
