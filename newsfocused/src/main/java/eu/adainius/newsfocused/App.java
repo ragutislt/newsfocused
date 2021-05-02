@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class App {
     public static Configuration templateEngineConfiguration;
-    // TODO limit headlines of each site
 
     public static void main(String[] args) throws IOException {
         String sitesFile = args[0];
@@ -29,12 +28,6 @@ public class App {
         Sites sites = new Sites(sitesFile);
         log.info("Sites read from {} are: {}", sitesFile, sites.list());
 
-        File file = new File(emailAddress);
-        if (file.exists()) {
-            file.delete();
-        }
-        file.createNewFile();
-
         Headlines aggregatedHeadlines = new Headlines();
 
         List<Site> siteList = sites.getSites();
@@ -42,6 +35,10 @@ public class App {
             Headlines headlines = site.headlines();
             aggregatedHeadlines.add(headlines.getList());
         }
+
+        // TODO here - put logic to decide whether to generate email and to store headlines in data storage otherwise
+        // on each run, read from the file existing headlines, then add to them today's headlines
+        // TODO limit headlines of each site
 
         Email email = new Email("email_template.ftl", aggregatedHeadlines, emailAddress);
 
