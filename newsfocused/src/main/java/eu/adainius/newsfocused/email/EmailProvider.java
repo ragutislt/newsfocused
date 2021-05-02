@@ -35,7 +35,7 @@ public class EmailProvider {
             message.setFrom(new InternetAddress(EmailConfiguration.from()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email.address()));
             message.setSubject("Here's your news of the week");
-            message.setText(email.body());
+            message.setContent(email.body(), "text/html");
             Transport.send(message);
             System.out.println("Email Message Sent Successfully");
         } catch (MessagingException e) {
