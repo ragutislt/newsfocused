@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -18,18 +19,26 @@ import eu.adainius.newsfocused.headline.Headlines;
 import freemarker.template.Template;
 
 public class Email {
+    private static final int DEFAULT_HEADLINE_COUNT = 2;
     private String template;
     private Headlines headlines;
     private String emailBody;
     private String address;
+    private int headlineDailyCount;
     EmailValidator emailValidator = EmailValidator.getInstance();
 
-    public Email(String template, Headlines headlines, String address) {
+    // TODO - this is getting ugly, add a builder
+    public Email(String template, Headlines headlines, String address, int headlineDailyCount) {
         this.template = template;
         this.headlines = headlines;
         this.address = address;
+        this.headlineDailyCount = headlineDailyCount;
 
         validateEmailAddress();
+    }
+
+    public Email(String template, Headlines headlines, String address) {
+        this(template, headlines, address, DEFAULT_HEADLINE_COUNT);
     }
 
     private void validateEmailAddress() {
@@ -41,6 +50,10 @@ public class Email {
 
     public Headlines headlines() {
         return this.headlines;
+    }
+
+    public int headlineDailyCount() {
+        return this.headlineDailyCount;
     }
 
     public String template() {
@@ -66,7 +79,8 @@ public class Email {
             LocalDate date = LocalDate.now().minusDays(i);
             String dateString = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            List<Headline> headlinesFromTheDay = headlines.from(dateString);
+            List<Headline> headlinesFromTheDay = headlines.from(dateString).stream().limit(headlineDailyCount)
+                    .collect(Collectors.toList());
             List<HeadlineDto> headlinesForEmail = new ArrayList<>();
             for (Headline headline : headlinesFromTheDay) {
                 headlinesForEmail.add(new HeadlineDto(headline.urlLink(), headline.htmlLink(), headline.website()));
