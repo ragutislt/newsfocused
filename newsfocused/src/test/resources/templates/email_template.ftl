@@ -20,7 +20,7 @@
             <div class="daysHeadlines">
                 <#list day.headlines as headline>
                     <div class="headline">
-                        <img src="http://${headline.siteUrl}/favicon.ico" />
+                        <img src="${headline.siteUrl}/favicon.ico" />
                         ${headline.htmlLink}
                     </div>
                 </#list>
