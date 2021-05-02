@@ -2,6 +2,7 @@ package eu.adainius.newsfocused.headline;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.stream.Stream;
@@ -31,6 +32,20 @@ public class HeadlineTest {
         assertEquals(htmlLink, headline.htmlLink());
         assertEquals(website, headline.website());
         assertEquals(date, headline.date());
+    }
+
+    @Test
+    public void appendsProtocolToWebsite() {
+        String title = "title";
+        String urlLink = "urlLink";
+        String htmlLink = "htmlLink";
+        String website = "www.bbc.com";
+        LocalDate date = LocalDate.now();
+
+        Headline headline = Headline.builder().date(date).htmlLink(htmlLink).title(title).urlLink(urlLink)
+                .website(website).build();
+
+        assertTrue(headline.website().contains("http"));
     }
 
     @ParameterizedTest

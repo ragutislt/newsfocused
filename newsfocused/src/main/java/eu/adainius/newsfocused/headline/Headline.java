@@ -42,7 +42,11 @@ public class Headline {
 
         this.date = date;
         this.title = title;
-        this.website = website;
+        if (!website.startsWith("http")) {
+            this.website = "https://" + website;
+        } else {
+            this.website = website;
+        }
         this.htmlLink = htmlLink;
         this.urlLink = urlLink;
     }
