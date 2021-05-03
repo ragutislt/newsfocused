@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -12,16 +13,58 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandler;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
+import eu.adainius.newsfocused.data.NewsRepository;
 import eu.adainius.newsfocused.email.Email;
 import eu.adainius.newsfocused.email.EmailProvider;
+import eu.adainius.newsfocused.headline.Headlines;
 
 public class AppTest {
+    @Test
+    public void loadsHeadlinesFromRunningWeek() throws Exception {
+        runWithMockedHttpResponses(() -> {
+            runWithMockedMailProvider(mailProviderMock -> {
+                String email = "sample@email.com";
+                String sitesFile = "src/test/resources/sites.txt";
+
+                NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
+                when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                App.setNewsRepository(mockRepository);
+                App.main(new String[] { sitesFile, email });
+
+                ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
+                mailProviderMock.verify(() -> EmailProvider.sendEmail(emailCaptor.capture()), times(1));
+
+                Mockito.verify(mockRepository).getRunningWeek();
+            });
+        });
+    }
+
+    @Test
+    public void savesHeadlinesToRunningWeek() throws Exception {
+        runWithMockedHttpResponses(() -> {
+            runWithMockedMailProvider(mailProviderMock -> {
+                String email = "sample@email.com";
+                String sitesFile = "src/test/resources/sites.txt";
+
+                NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
+                when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                App.setNewsRepository(mockRepository);
+                App.main(new String[] { sitesFile, email });
+
+                ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
+                mailProviderMock.verify(() -> EmailProvider.sendEmail(emailCaptor.capture()), times(1));
+
+                Mockito.verify(mockRepository).saveRunningWeek(Mockito.any(Headlines.class));
+            });
+        });
+    }
 
     @Test
     public void parses_headlines_and_sends_them_in_an_email() throws Exception {
