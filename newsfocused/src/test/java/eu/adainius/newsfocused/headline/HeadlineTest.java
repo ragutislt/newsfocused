@@ -1,6 +1,7 @@
 package eu.adainius.newsfocused.headline;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,6 +47,26 @@ public class HeadlineTest {
                 .website(website).build();
 
         assertTrue(headline.website().contains("http"));
+    }
+
+    @Test
+    void headlines_are_equal_when_content_is_equal() {
+        Headline headline1 = Headline.builder().date(LocalDate.parse("2023-09-17")).htmlLink("www.bbc.com")
+                .title("title").urlLink("www.sdasdbbc.com").website("www.bbc.com").build();
+        Headline headline2 = Headline.builder().date(LocalDate.parse("2023-09-17")).htmlLink("www.bbc.com")
+                .title("title").urlLink("www.sdasdbbc.com").website("www.bbc.com").build();
+
+        assertEquals(headline1, headline2);
+    }
+
+    @Test
+    void headlines_are_not_equal_when_content_is_not_equal() {
+        Headline headline1 = Headline.builder().date(LocalDate.parse("1999-09-17")).htmlLink("www.bbc.com")
+                .title("title").urlLink("www.weqweqwe.com").website("www.bbc.com").build();
+        Headline headline2 = Headline.builder().date(LocalDate.parse("2023-09-17")).htmlLink("www.bbc.com")
+                .title("title").urlLink("www.sdasdbbc.com").website("www.bbc.com").build();
+
+        assertNotEquals(headline1, headline2);
     }
 
     @ParameterizedTest

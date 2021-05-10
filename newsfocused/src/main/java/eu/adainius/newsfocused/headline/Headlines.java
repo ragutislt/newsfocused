@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Headlines {
-    List<Headline> headlinesList = new ArrayList<>();
+    private List<Headline> headlinesList = new ArrayList<>();
 
     private Headlines(List<Headline> headlinesList) {
         this.headlinesList.addAll(headlinesList);
@@ -42,6 +42,31 @@ public class Headlines {
 
     public int count() {
         return headlinesList.size();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((headlinesList == null) ? 0 : headlinesList.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Headlines other = (Headlines) obj;
+        if (headlinesList == null) {
+            if (other.headlinesList != null)
+                return false;
+        } else if (!headlinesList.equals(other.headlinesList))
+            return false;
+        return true;
     }
 
 }

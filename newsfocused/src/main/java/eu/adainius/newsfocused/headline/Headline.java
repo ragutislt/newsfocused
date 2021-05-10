@@ -1,6 +1,7 @@
 package eu.adainius.newsfocused.headline;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import eu.adainius.newsfocused.ApplicationException;
 import eu.adainius.newsfocused.Validation;
@@ -73,7 +74,56 @@ public class Headline {
 
     @Override
     public String toString() {
-        return "Headline [title=" + title + "]";
+        return String.format("Headline [title=%s, date=%s, site=%s]", title,
+                date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), website);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((date == null) ? 0 : date.hashCode());
+        result = prime * result + ((htmlLink == null) ? 0 : htmlLink.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + ((urlLink == null) ? 0 : urlLink.hashCode());
+        result = prime * result + ((website == null) ? 0 : website.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Headline other = (Headline) obj;
+        if (date == null) {
+            if (other.date != null)
+                return false;
+        } else if (!date.equals(other.date))
+            return false;
+        if (htmlLink == null) {
+            if (other.htmlLink != null)
+                return false;
+        } else if (!htmlLink.equals(other.htmlLink))
+            return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        if (urlLink == null) {
+            if (other.urlLink != null)
+                return false;
+        } else if (!urlLink.equals(other.urlLink))
+            return false;
+        if (website == null) {
+            if (other.website != null)
+                return false;
+        } else if (!website.equals(other.website))
+            return false;
+        return true;
+    }
 }
