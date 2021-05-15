@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import eu.adainius.newsfocused.ApplicationException;
-import eu.adainius.newsfocused.EmailConfiguration;
+import eu.adainius.newsfocused.config.EmailConfiguration;
 import eu.adainius.newsfocused.headline.Headline;
 import eu.adainius.newsfocused.headline.Headlines;
 import freemarker.template.Template;

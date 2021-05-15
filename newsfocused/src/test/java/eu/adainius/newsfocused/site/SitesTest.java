@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import eu.adainius.newsfocused.HttpClientFactory;
+import eu.adainius.newsfocused.config.HttpClientFactory;
 import eu.adainius.newsfocused.headline.Headlines;
 
 public class SitesTest {

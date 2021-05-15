@@ -13,13 +13,20 @@ import java.nio.file.Paths;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import eu.adainius.newsfocused.HttpClientFactory;
+import eu.adainius.newsfocused.config.HttpClientFactory;
 import eu.adainius.newsfocused.email.EmailProvider;
+import eu.adainius.newsfocused.util.Today;
 
 public class TestUtils {
     public static void runWithMockedMailProvider(RunnableStaticMockWithExceptions testToExecute) throws Exception {
         try (MockedStatic<EmailProvider> mockedEmailProvider = mockStatic(EmailProvider.class)) {
             testToExecute.run(mockedEmailProvider);
+        }
+    }
+
+    public static void runWithMockedTodaysDate(RunnableStaticMockWithExceptions testToExecute) throws Exception {
+        try (MockedStatic<Today> mockedToday = mockStatic(Today.class)) {
+            testToExecute.run(mockedToday);
         }
     }
 

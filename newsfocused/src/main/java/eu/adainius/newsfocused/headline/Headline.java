@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import eu.adainius.newsfocused.ApplicationException;
-import eu.adainius.newsfocused.Validation;
+import eu.adainius.newsfocused.util.Validation;
 import lombok.Builder;
 
 @Builder

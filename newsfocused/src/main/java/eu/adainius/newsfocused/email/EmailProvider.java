@@ -3,7 +3,7 @@ package eu.adainius.newsfocused.email;
 import java.util.Properties;
 
 import eu.adainius.newsfocused.ApplicationException;
-import eu.adainius.newsfocused.EmailConfiguration;
+import eu.adainius.newsfocused.config.EmailConfiguration;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.PasswordAuthentication;

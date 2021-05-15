@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused;
+package eu.adainius.newsfocused.config;
 
 import java.net.http.HttpClient;
 

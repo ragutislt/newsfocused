@@ -9,7 +9,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 
 import eu.adainius.newsfocused.ApplicationException;
-import eu.adainius.newsfocused.HttpClientFactory;
+import eu.adainius.newsfocused.config.HttpClientFactory;
 import eu.adainius.newsfocused.headline.Headline;
 import eu.adainius.newsfocused.headline.HeadlineParser;
 import eu.adainius.newsfocused.headline.Headlines;

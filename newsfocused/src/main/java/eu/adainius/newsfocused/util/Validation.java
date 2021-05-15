@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused;
+package eu.adainius.newsfocused.util;
 
 public class Validation {
     public static boolean empty(final String s) {

@@ -1,7 +1,9 @@
-package eu.adainius.newsfocused;
+package eu.adainius.newsfocused.config;
 
+import java.util.List;
 import java.util.Locale;
 
+import eu.adainius.newsfocused.App;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
@@ -10,7 +12,7 @@ public class EmailConfiguration {
     private static Configuration templateEngineConfiguration;
 
     public static Configuration templateConfiguration() {
-        if(templateEngineConfiguration == null) {
+        if (templateEngineConfiguration == null) {
             configureTemplateEngine();
         }
         return templateEngineConfiguration;
@@ -32,5 +34,4 @@ public class EmailConfiguration {
     public static String from() {
         return "news@newsfocused.eu";
     }
-    
 }
