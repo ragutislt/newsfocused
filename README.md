@@ -12,3 +12,24 @@ This avoids breakdown of parsing a site
 1. Java
 2. Maven
 3. Junit
+4. Mockito
+5. Jakarta mail
+6. MailCatcher (for e2e tests)
+
+## Requirements still left to implement (constantly changing list)
+* configurable properties
+    - email address
+    - which days to send emails
+    - what time of the day to send email
+    - when the batch runs?
+    - number of headlines per site
+    - where data is stored
+    - smtp server details
+* scheduling when to send the email
+* after sending email, clear running list
+    
+    Here don't clean data right away, instead keep the 'old' week/period and just save new headlines in the new week/period
+
+### Non-Functional requirements
+* Integrate in AWS, use lambda to run
+
