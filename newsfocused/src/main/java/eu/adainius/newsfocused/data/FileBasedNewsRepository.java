@@ -10,7 +10,9 @@ import com.google.gson.Gson;
 import eu.adainius.newsfocused.ApplicationException;
 import eu.adainius.newsfocused.headline.Headlines;
 import eu.adainius.newsfocused.util.Today;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class FileBasedNewsRepository implements NewsRepository {
 
     final Gson gson = new Gson();
@@ -24,15 +26,24 @@ public class FileBasedNewsRepository implements NewsRepository {
     public Headlines getRunningWeek() {
         FileReader reader = null;
         try {
-            reader = new FileReader(repoFile);
-            return gson.fromJson(reader, Headlines.class);
+            Headlines headlines = null;
+
+            if (new File(repoFile).exists()) {
+                reader = new FileReader(repoFile);
+                headlines = gson.fromJson(reader, Headlines.class);
+            }
+
+            return headlines != null ? headlines : new Headlines();
         } catch (IOException e) {
+            log.error("Exception when reading file", e);
             throw new ApplicationException(String.format("Failure when deserializing data from file %s", this.repoFile),
                     e);
         } finally {
             try {
-                reader.close();
-            } catch (IOException e) {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (Exception e) {
                 throw new ApplicationException(
                         String.format("Failure when deserializing data from file %s", this.repoFile), e);
             }
@@ -47,11 +58,12 @@ public class FileBasedNewsRepository implements NewsRepository {
             gson.toJson(headlines, writer);
             writer.flush();
         } catch (IOException e) {
+            log.error("Exception when writing file", e);
             throw new ApplicationException(String.format("Failure when serializing data to file %s", this.repoFile), e);
         } finally {
             try {
                 writer.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 throw new ApplicationException(
                         String.format("Failure when deserializing data from file %s", this.repoFile), e);
             }

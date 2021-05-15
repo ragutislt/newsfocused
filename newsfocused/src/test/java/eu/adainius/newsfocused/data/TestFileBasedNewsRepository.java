@@ -26,19 +26,47 @@ public class TestFileBasedNewsRepository {
     @Test
     void returnsRunningWeek() throws Exception {
 
-        Path repoFile = Files.createFile(tempRepoFile.resolve("headlines_return_running_week.json"));
+        Path repoFilePath = Files.createFile(tempRepoFile.resolve("headlines_return_running_week.json"));
 
-        NewsRepository repository = new FileBasedNewsRepository(repoFile.toString());
+        NewsRepository repository = new FileBasedNewsRepository(repoFilePath.toString());
 
         Headline headline1 = Headline.builder().date(LocalDate.parse("2018-05-05")).htmlLink("www.bbc.com")
                 .title("title").urlLink("www.bbc.com").website("www.bbc.com").build();
         Headline headline2 = Headline.builder().date(LocalDate.parse("2020-09-17")).htmlLink("www.bbc.com")
                 .title("title").urlLink("www.bbc.com").website("www.bbc.com").build();
         Headlines headlines = Headlines.of(headline1, headline2);
-        writeToFile(headlines, repoFile);
+        writeToFile(headlines, repoFilePath);
 
         Headlines runningWeek = repository.getRunningWeek();
         assertEquals(headlines, runningWeek);
+    }
+
+    @Test
+    void returnsEmptyRunningWeekIfNoDataInFile() throws Exception {
+        Path repoFilePath = Files.createFile(tempRepoFile.resolve("headlines_return_running_week.json"));
+
+        NewsRepository repository = new FileBasedNewsRepository(repoFilePath.toString());
+        writeToFile(null, repoFilePath);
+
+        Headlines runningWeekHeadlines = repository.getRunningWeek();
+        assertTrue(runningWeekHeadlines.areEmpty());
+
+        new File(repoFilePath.toAbsolutePath().toString()).delete();
+    }
+
+    @Test
+    void returnsEmptyRunningWeekIfFileDoesNotExist() throws Exception {
+        Path repoFilePath = Files.createFile(tempRepoFile.resolve("headlines_return_running_week.json"));
+        File repoFile = new File(repoFilePath.toAbsolutePath().toString());
+
+        if(repoFile.exists()) {
+            repoFile.delete();
+        }
+        
+        NewsRepository repository = new FileBasedNewsRepository(repoFilePath.toString());
+
+        Headlines runningWeekHeadlines = repository.getRunningWeek();
+        assertTrue(runningWeekHeadlines.areEmpty());
     }
 
     private void writeToFile(Headlines headlines, Path repoFile) throws Exception {
@@ -97,11 +125,13 @@ public class TestFileBasedNewsRepository {
 
         String oldRepoFileName = String.format("headlines_save_running_week_%s.json", Today.getDateString());
         File oldRepoFile = new File("C:\\Users\\senel\\AppData\\Local\\Temp\\tests", oldRepoFileName);
-        //assertTrue(repoFile.exists());
+        // assertTrue(repoFile.exists());
         assertTrue(oldRepoFile.exists());
 
-        /* Headlines newHeadlines = readFromFile(repoFile);
-        assertTrue(newHeadlines.areEmpty()); */
+        /*
+         * Headlines newHeadlines = readFromFile(repoFile);
+         * assertTrue(newHeadlines.areEmpty());
+         */
 
         Headlines oldHeadlinesFromFile = readFromFile(oldRepoFile);
         assertEquals(headlines, oldHeadlinesFromFile);

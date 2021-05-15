@@ -2,6 +2,7 @@ package eu.adainius.newsfocused.e2e;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -52,7 +53,10 @@ public class BBCe2eTest {
 
         String siteFile = "src/test/resources/sites.txt";
         String email = "some@email.com";
-        App.main(new String[] { siteFile, email });
+        String daysToSendOn = "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday";
+        String dataStorageFile = "C:\\Users\\senel\\AppData\\Local\\Temp\\tests\\headlines_save_running_week.json";
+        createStorageFile(dataStorageFile);
+        App.main(new String[] { siteFile, email, daysToSendOn, dataStorageFile });
 
         // create a request
         var request = HttpRequest.newBuilder(URI.create(mailServerUrl + "messages"))
@@ -64,6 +68,25 @@ public class BBCe2eTest {
         JsonArray messageArray = new Gson().fromJson(response.body(), JsonArray.class);
 
         assertTrue(messageArray.size() > 0);
+
+        deleteStorageFile(dataStorageFile);
+    }
+
+    private void deleteStorageFile(String dataStorageFile) {
+        File repoFile = new File(dataStorageFile);
+
+        if (repoFile.exists()) {
+            repoFile.delete();
+        }
+    }
+
+    private void createStorageFile(String dataStorageFile) throws IOException {
+        File repoFile = new File(dataStorageFile);
+
+        if (repoFile.exists()) {
+            repoFile.delete();
+        }
+        repoFile.createNewFile();
     }
 
 }
