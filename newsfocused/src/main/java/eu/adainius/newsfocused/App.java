@@ -9,6 +9,7 @@ import eu.adainius.newsfocused.email.EmailProvider;
 import eu.adainius.newsfocused.headline.Headlines;
 import eu.adainius.newsfocused.site.Site;
 import eu.adainius.newsfocused.site.Sites;
+import eu.adainius.newsfocused.util.Today;
 import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,8 +19,12 @@ public class App {
     private static NewsRepository newsRepository;
 
     public static void main(String[] args) throws IOException {
+        // TODO add validation of args
+
         String sitesFile = args[0];
         String emailAddress = args[1];
+        List<String> daysToSendOn = (args.length > 2 && !args[2].isEmpty()) ? List.of(args[2].split(","))
+                : List.of("Saturday");
         log.info("Sites will be read from: {}", sitesFile);
         log.info("News will be sent to: {}", emailAddress);
 
@@ -36,12 +41,10 @@ public class App {
 
         newsRepository.saveRunningWeek(headlinesOfTheWeek);
 
-        // TODO here - put logic to decide whether to generate email and to store headlines in data storage otherwise
-        // on each run, read from the file existing headlines, then add to them today's headlines
-
-        Email email = new Email("email_template.ftl", headlinesOfTheWeek, emailAddress);
-
-        EmailProvider.sendEmail(email);
+        if (Today.isOneOf(daysToSendOn)) {
+            Email email = new Email("email_template.ftl", headlinesOfTheWeek, emailAddress);
+            EmailProvider.sendEmail(email);
+        }
     }
 
     public static void setNewsRepository(NewsRepository newsRepository) {
