@@ -44,6 +44,7 @@ public class App {
         if (Today.isOneOf(daysToSendOn)) {
             Email email = new Email("email_template.ftl", headlinesOfTheWeek, emailAddress);
             EmailProvider.sendEmail(email);
+            newsRepository.resetRunningWeek();
         }
     }
 

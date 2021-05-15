@@ -44,6 +44,10 @@ public class Headlines {
         return headlinesList.size();
     }
 
+    public boolean areEmpty() {
+        return headlinesList.size() == 0;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

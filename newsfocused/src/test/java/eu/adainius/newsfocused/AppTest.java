@@ -35,8 +35,7 @@ public class AppTest {
                 App.setNewsRepository(mockRepository);
                 App.main(new String[] { sitesFile, email });
 
-                ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
-                mailProviderMock.verify(() -> EmailProvider.sendEmail(emailCaptor.capture()), times(1));
+                mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(1));
 
                 Mockito.verify(mockRepository).getRunningWeek();
             });
@@ -55,10 +54,31 @@ public class AppTest {
                 App.setNewsRepository(mockRepository);
                 App.main(new String[] { sitesFile, email });
 
-                ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
-                mailProviderMock.verify(() -> EmailProvider.sendEmail(emailCaptor.capture()), times(1));
+                mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(1));
 
                 Mockito.verify(mockRepository).saveRunningWeek(Mockito.any(Headlines.class));
+            });
+        });
+    }
+
+    @Test
+    public void resetsRunningWeekHeadlinesUponSendingEmail() throws Exception {
+        runWithMockedHttpResponses(() -> {
+            runWithMockedMailProvider(mailProviderMock -> {
+                runWithMockedTodaysDate(mockedToday -> {
+                    String email = "sample@email.com";
+                    String sitesFile = "src/test/resources/sites.txt";
+
+                    mockedToday.when(() -> Today.isOneOf(any(List.class))).thenReturn(true);
+
+                    NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
+                    when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                    App.setNewsRepository(mockRepository);
+                    App.main(new String[] { sitesFile, email });
+
+                    mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(1));
+                    Mockito.verify(mockRepository).resetRunningWeek();
+                });
             });
         });
     }
