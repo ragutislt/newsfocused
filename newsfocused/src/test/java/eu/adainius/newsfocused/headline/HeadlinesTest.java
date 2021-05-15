@@ -51,8 +51,11 @@ public class HeadlinesTest {
 
     @Test
     public void gets_headlines_from_a_certain_day() {
-        Headline headline1 = Headline.builder().date(LocalDate.parse("2018-05-05")).build();
-        Headline headline2 = Headline.builder().date(LocalDate.parse("2020-09-17")).build();
+        Headline headline1 = Headline.builder().date(LocalDate.parse("2018-05-05")).htmlLink("www.bbc.com")
+                .title("title").urlLink("www.bbc.com").website("www.bbc.com").build();
+        Headline headline2 = Headline.builder().date(LocalDate.parse("2020-09-17")).htmlLink("www.bbc.com")
+                .title("title").urlLink("www.bbc.com").website("www.bbc.com").build();
+
         Headlines headlines = Headlines.of(headline1, headline2);
 
         assertEquals(List.of(headline2), headlines.from("2020-09-17"));

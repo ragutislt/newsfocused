@@ -22,7 +22,7 @@ public class HeadlineTest {
         String title = "title";
         String urlLink = "urlLink";
         String htmlLink = "htmlLink";
-        String website = "website";
+        String website = "https://www.website.com";
         LocalDate date = LocalDate.now();
 
         Headline headline = Headline.builder().date(date).htmlLink(htmlLink).title(title).urlLink(urlLink)
