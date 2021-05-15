@@ -1,7 +1,6 @@
 package eu.adainius.newsfocused;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
@@ -74,6 +73,10 @@ public class AppTest {
                 String sitesFile = "src/test/resources/sites.txt";
                 String fileResults = "src/test/resources/emailSample.html";
 
+                NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
+                when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                App.setNewsRepository(mockRepository);
+
                 App.main(new String[] { sitesFile, email });
 
                 ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
@@ -82,38 +85,6 @@ public class AppTest {
             });
         });
     }
-
-    @Test
-    public void parses_headlines_and_saves_them_to_file() throws Exception {
-        runWithMockedHttpResponses(() -> {
-            String fileResults = "target/results.html";
-            String fileSites = "src/test/resources/sites.txt";
-
-            App.main(new String[] { fileSites, fileResults });
-
-            String fileContent = Files.readString(Paths.get(fileResults));
-
-            assertTrue(fileContent.contains(
-                    "Profesorius Janeliūnas: vertybiniai klausimai ateityje gali sukelti didelius nesutarimus koalicijoje"));
-            assertTrue(fileContent.contains("Bloody day in Myanmar's main city sees 14 killed"));
-        });
-    }
-
-    @Test
-    public void saves_headlines_to_html_file() throws Exception {
-        runWithMockedHttpResponses(() -> {
-            String fileResults = "target/results.html";
-            String fileSites = "src/test/resources/sites.txt";
-
-            App.main(new String[] { fileSites, fileResults });
-
-            String fileContent = Files.readString(Paths.get(fileResults));
-
-            assertTrue(fileContent.contains("<html"));
-            assertTrue(fileContent.contains("</html>"));
-        });
-    }
-
     private interface RunnableWithExceptions {
         void run() throws Exception;
     }
