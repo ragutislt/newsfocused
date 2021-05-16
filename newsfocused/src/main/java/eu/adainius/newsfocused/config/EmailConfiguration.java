@@ -33,7 +33,7 @@ public class EmailConfiguration {
     }
 
     public static String from() {
-        return "news@newsfocused.eu";
+        return emailProtocolProperties.getProperty("email.from");
     }
 
     public static void setEmailProtocolProperties(Properties emailProtocolProperties) {
@@ -49,6 +49,7 @@ public class EmailConfiguration {
             emailProtocolProperties.setProperty("mail.smtp.starttls.enable", "true");
             emailProtocolProperties.setProperty("mail.smtp.host", "127.0.0.1");
             emailProtocolProperties.setProperty("mail.smtp.port", "10025");
+            emailProtocolProperties.setProperty("email.from", "news@newsfocused.eu");
         }
         return EmailConfiguration.emailProtocolProperties;
     }

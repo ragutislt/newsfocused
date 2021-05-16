@@ -21,7 +21,7 @@ public class EmailProvider {
         // create the Session object
         Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("aa", "dd");
+                return new PasswordAuthentication(props.getProperty("email.server.login"), props.getProperty("email.server.password"));
             }
         });
 
