@@ -69,8 +69,6 @@ public class Email {
             return emailBody;
         }
 
-        // TODO above in the flow, check if it's a saturday (or a day from config
-        // (cron?))
         Map<String, Object> input = new HashMap<String, Object>();
 
         List<DayDto> days = new ArrayList<>(7);
@@ -81,6 +79,11 @@ public class Email {
 
             List<Headline> headlinesFromTheDay = headlines.from(dateString).stream().limit(headlineDailyCount)
                     .collect(Collectors.toList());
+
+            if (headlinesFromTheDay.isEmpty()) {
+                continue;
+            }
+
             List<HeadlineDto> headlinesForEmail = new ArrayList<>();
             for (Headline headline : headlinesFromTheDay) {
                 headlinesForEmail.add(new HeadlineDto(headline.urlLink(), headline.htmlLink(), headline.website()));

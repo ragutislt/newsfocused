@@ -153,4 +153,34 @@ public class EmailTest {
         email.body();
         Mockito.verify(headlines, Mockito.times(7)).from(any());
     }
+
+    @Test
+    void onlyIncludesDaysWithHeadlinesFound() {
+        String template = "email_template.ftl";
+        Headline headline1 = Headline.builder().title("news 1").htmlLink("<a href=\"www.mysite.com\\news\">news 1</a>")
+                .urlLink("www.mysite.com\\news").date(LocalDate.now()).website(Sites.BBC).build();
+        Headline headline2 = Headline.builder().title("news 2").htmlLink("<a href=\"www.mysite2.com\\news\">news 2</a>")
+                .urlLink("www.mysite2.com\\news").date(LocalDate.now().minusDays(1)).website(Sites.LRT).build();
+        String address = "aaa@aaa.com";
+
+        Headlines headlines = Headlines.of(headline1, headline2);
+        int headlineDailyCount = 1;
+        Email email = new Email(template, headlines, address, headlineDailyCount);
+
+        System.out.println(email.body());
+
+        assertTrue(email.body().contains(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        assertTrue(
+                email.body().contains(LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        assertFalse(
+                email.body().contains(LocalDate.now().minusDays(2).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        assertFalse(
+                email.body().contains(LocalDate.now().minusDays(3).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        assertFalse(
+                email.body().contains(LocalDate.now().minusDays(4).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        assertFalse(
+                email.body().contains(LocalDate.now().minusDays(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        assertFalse(
+                email.body().contains(LocalDate.now().minusDays(6).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+    }
 }
