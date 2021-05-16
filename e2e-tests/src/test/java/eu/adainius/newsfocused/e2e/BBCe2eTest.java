@@ -20,7 +20,7 @@ import eu.adainius.newsfocused.App;
 
 public class BBCe2eTest {
     private static Process mailServer;
-    private static String mailServerName = "mailcatcher.bat";
+    private static String mailServerName = "mailcatcher.bat --smtp-port 10025";
 
     @BeforeAll
     public static void runMailServer() throws IOException {

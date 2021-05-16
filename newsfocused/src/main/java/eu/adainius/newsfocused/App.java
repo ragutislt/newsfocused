@@ -1,8 +1,11 @@
 package eu.adainius.newsfocused;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
+import eu.adainius.newsfocused.config.EmailConfiguration;
 import eu.adainius.newsfocused.data.FileBasedNewsRepository;
 import eu.adainius.newsfocused.data.NewsRepository;
 import eu.adainius.newsfocused.email.Email;
@@ -37,6 +40,15 @@ public class App {
         log.info("News will be sent to: {}", emailAddress);
         log.info("News will be sent on days: {}", daysToSendOn);
 
+        if(args.length > 4 && args[4] != null) {
+            String emailProtocolPropertiesFile = args[4];
+            Properties emailProtocolProperties = new Properties();
+            emailProtocolProperties.load(new FileReader(emailProtocolPropertiesFile));
+
+            EmailConfiguration.setEmailProtocolProperties(emailProtocolProperties);
+            log.info("Email protocol properties will be used from file {}, they are: {}", emailProtocolPropertiesFile, emailProtocolProperties);
+        }
+
         Sites sites = new Sites(sitesFile);
         log.info("Sites read from {} are: {}", sitesFile, sites.list());
 
@@ -54,6 +66,8 @@ public class App {
             Email email = new Email("email_template.ftl", headlinesOfTheWeek, emailAddress);
             EmailProvider.sendEmail(email);
             newsRepository.resetRunningWeek();
+        } else {
+            log.info("Today is not one of {}, email will not be sent to {}", daysToSendOn, emailAddress);
         }
     }
 

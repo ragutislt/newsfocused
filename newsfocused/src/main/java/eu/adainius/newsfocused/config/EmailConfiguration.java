@@ -1,7 +1,7 @@
 package eu.adainius.newsfocused.config;
 
-import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import eu.adainius.newsfocused.App;
 import freemarker.template.Configuration;
@@ -10,6 +10,7 @@ import freemarker.template.Version;
 
 public class EmailConfiguration {
     private static Configuration templateEngineConfiguration;
+    private static Properties emailProtocolProperties;
 
     public static Configuration templateConfiguration() {
         if (templateEngineConfiguration == null) {
@@ -34,4 +35,22 @@ public class EmailConfiguration {
     public static String from() {
         return "news@newsfocused.eu";
     }
+
+    public static void setEmailProtocolProperties(Properties emailProtocolProperties) {
+        EmailConfiguration.emailProtocolProperties = emailProtocolProperties;
+    }
+
+    public static Properties emailProtocolProperties() {
+        if (emailProtocolProperties == null) {
+            emailProtocolProperties = new Properties();
+
+            // by default, mailcatcher - smtp://127.0.0.1:10025
+            emailProtocolProperties.setProperty("mail.smtp.auth", "true");
+            emailProtocolProperties.setProperty("mail.smtp.starttls.enable", "true");
+            emailProtocolProperties.setProperty("mail.smtp.host", "127.0.0.1");
+            emailProtocolProperties.setProperty("mail.smtp.port", "10025");
+        }
+        return EmailConfiguration.emailProtocolProperties;
+    }
+
 }

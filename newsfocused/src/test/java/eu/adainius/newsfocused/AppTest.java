@@ -3,7 +3,9 @@ package eu.adainius.newsfocused;
 import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedHttpResponses;
 import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedMailProvider;
 import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedTodaysDate;
+import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedEmailConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -11,11 +13,13 @@ import static org.mockito.Mockito.when;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import eu.adainius.newsfocused.config.EmailConfiguration;
 import eu.adainius.newsfocused.data.NewsRepository;
 import eu.adainius.newsfocused.email.Email;
 import eu.adainius.newsfocused.email.EmailProvider;
@@ -149,6 +153,56 @@ public class AppTest {
                     App.main(new String[] { sitesFile, email, String.join(",", daysToSendOn) });
 
                     mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(0));
+                });
+            });
+        });
+    }
+
+    @Test
+    void uses_default_email_configuration_if_no_email_properties_file_supplied() throws Exception {
+        runWithMockedHttpResponses(() -> {
+            runWithMockedMailProvider(mailProviderMock -> {
+                runWithMockedEmailConfiguration(mockedEmailConfiguration -> {
+                    String email = "sample@email.com";
+                    String sitesFile = "src/test/resources/sites.txt";
+
+                    NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
+                    when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                    App.setNewsRepository(mockRepository);
+
+                    App.main(new String[] { sitesFile, email });
+
+                    mockedEmailConfiguration.verify(
+                            () -> EmailConfiguration.setEmailProtocolProperties(any(Properties.class)), times(0));
+                });
+            });
+        });
+    }
+
+    @Test
+    void uses_email_configuration_from_email_properties() throws Exception {
+        runWithMockedHttpResponses(() -> {
+            runWithMockedMailProvider(mailProviderMock -> {
+                runWithMockedEmailConfiguration(mockedEmailConfiguration -> {
+                    String email = "sample@email.com";
+                    String sitesFile = "src/test/resources/sites.txt";
+                    String emailPropertiesFile = "src/test/resources/emailProtocol.properties";
+
+                    NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
+                    when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                    App.setNewsRepository(mockRepository);
+
+                    App.main(new String[] { sitesFile, email, "Monday", null, emailPropertiesFile });
+
+                    ArgumentCaptor<Properties> emailPropertiesCaptor = ArgumentCaptor.forClass(Properties.class);
+                    mockedEmailConfiguration.verify(
+                            () -> EmailConfiguration.setEmailProtocolProperties(emailPropertiesCaptor.capture()),
+                            times(1));
+
+                    assertEquals("some_host_name.com", emailPropertiesCaptor.getValue().getProperty("mail.smtp.host"));
+                    assertEquals("666", emailPropertiesCaptor.getValue().getProperty("mail.smtp.port"));
+                    assertEquals("true", emailPropertiesCaptor.getValue().getProperty("mail.smtp.starttls.enable"));
+                    assertEquals("false", emailPropertiesCaptor.getValue().getProperty("mail.smtp.auth"));
                 });
             });
         });
