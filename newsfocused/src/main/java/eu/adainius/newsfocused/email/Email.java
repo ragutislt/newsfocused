@@ -77,17 +77,17 @@ public class Email {
             LocalDate date = LocalDate.now().minusDays(i);
             String dateString = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            List<Headline> headlinesFromTheDay = headlines.from(dateString).stream().limit(headlineDailyCount)
-                    .collect(Collectors.toList());
+            List<Headline> headlinesFromTheDay = headlines.from(dateString).stream().collect(Collectors.toList());
 
             if (headlinesFromTheDay.isEmpty()) {
                 continue;
             }
 
-            List<HeadlineDto> headlinesForEmail = new ArrayList<>();
-            for (Headline headline : headlinesFromTheDay) {
-                headlinesForEmail.add(new HeadlineDto(headline.urlLink(), headline.htmlLink(), headline.website()));
-            }
+            List<String> sites = headlinesFromTheDay.stream().map(headline -> headline.website()).distinct()
+                    .collect(Collectors.toList());
+
+            List<HeadlineDto> headlinesForEmail = collectHeadlinesFromEachSite(headlinesFromTheDay, sites);
+
             DayDto day = new DayDto(headlinesForEmail, dateString);
             days.add(day);
         }
@@ -103,5 +103,18 @@ public class Email {
         } catch (Exception e) {
             throw new ApplicationException(e);
         }
+    }
+
+    private List<HeadlineDto> collectHeadlinesFromEachSite(List<Headline> headlinesFromTheDay, List<String> sites) {
+        List<HeadlineDto> headlinesForEmail = new ArrayList<>();
+        
+        for (String site : sites) {
+            List<Headline> headlinesFromSite = headlinesFromTheDay.stream().filter(h -> h.website().equals(site))
+                    .limit(headlineDailyCount).collect(Collectors.toList());
+            headlinesForEmail.addAll(headlinesFromSite.stream()
+                    .map(h -> new HeadlineDto(h.urlLink(), h.htmlLink(), h.website())).collect(Collectors.toList()));
+        }
+
+        return headlinesForEmail;
     }
 }

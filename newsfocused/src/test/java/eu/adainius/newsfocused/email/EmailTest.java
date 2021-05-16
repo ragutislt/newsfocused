@@ -83,8 +83,6 @@ public class EmailTest {
         Headlines headlines = Headlines.of(headline1, headline2);
         Email email = new Email(template, headlines, address);
 
-        System.out.println(email.body());
-
         assertTrue(email.body().contains("www.bbc.com/favicon.ico"));
         assertTrue(email.body().contains("www.lrt.lt/favicon.ico"));
     }
@@ -127,8 +125,6 @@ public class EmailTest {
         int headlineDailyCount = 1;
         Email email = new Email(template, headlines, address, headlineDailyCount);
 
-        System.out.println(email.body());
-
         assertTrue(email.body().contains(headline1.htmlLink()));
         assertTrue(email.body().contains(headline2.htmlLink()));
         assertFalse(email.body().contains(headline3.htmlLink()));
@@ -167,8 +163,6 @@ public class EmailTest {
         int headlineDailyCount = 1;
         Email email = new Email(template, headlines, address, headlineDailyCount);
 
-        System.out.println(email.body());
-
         assertTrue(email.body().contains(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
         assertTrue(
                 email.body().contains(LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
@@ -182,5 +176,22 @@ public class EmailTest {
                 email.body().contains(LocalDate.now().minusDays(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
         assertFalse(
                 email.body().contains(LocalDate.now().minusDays(6).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+    }
+
+    @Test
+    void includesHeadlinesFromEachSite() {
+        String template = "email_template.ftl";
+        Headline headline1 = Headline.builder().title("news 1").htmlLink("<a href=\"www.mysite.com\\news\">news 1</a>")
+                .urlLink("www.mysite.com\\news").date(LocalDate.now()).website(Sites.BBC).build();
+        Headline headline2 = Headline.builder().title("news 2").htmlLink("<a href=\"www.mysite2.com\\news\">news 2</a>")
+                .urlLink("www.mysite2.com\\news").date(LocalDate.now()).website(Sites.LRT).build();
+        String address = "aaa@aaa.com";
+
+        Headlines headlines = Headlines.of(headline1, headline2);
+        int headlineDailyCount = 1;
+        Email email = new Email(template, headlines, address, headlineDailyCount);
+
+        assertTrue(email.body().contains(headline1.htmlLink()));
+        assertTrue(email.body().contains(headline2.htmlLink()));
     }
 }

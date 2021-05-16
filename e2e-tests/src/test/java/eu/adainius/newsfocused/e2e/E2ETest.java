@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import eu.adainius.newsfocused.App;
 
-public class BBCe2eTest {
+public class E2ETest {
     private static Process mailServer;
     private static String mailServerName = "mailcatcher.bat --smtp-port 10025";
 
