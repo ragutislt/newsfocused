@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class LRTParser implements HeadlineParser {
-    private static final String LRT_URL = "www.lrt.lt";
+    private static final String LRT_URL = "https://www.lrt.lt";
 
     private static final String HEADLINE_TAG = "h3";
 
@@ -17,14 +17,14 @@ public class LRTParser implements HeadlineParser {
     public List<Headline> parseFrom(String htmlContent) {
         Document doc = Jsoup.parse(htmlContent);
 
-        return doc.getElementsByTag(HEADLINE_TAG).stream().map(h -> h.html()).filter(h->isHeadline(h)).map(h -> htmlToHeadline(h))
-                .collect(Collectors.toList());
+        return doc.getElementsByTag(HEADLINE_TAG).stream().map(h -> h.html()).filter(h -> isHeadline(h))
+                .map(h -> htmlToHeadline(h)).collect(Collectors.toList());
     }
 
     private boolean isHeadline(String headlineHtml) {
         Document doc = Jsoup.parse(headlineHtml);
         Element linkElement = doc.selectFirst("a");
-        if(linkElement == null) {
+        if (linkElement == null) {
             return false;
         }
         return true;
@@ -33,7 +33,7 @@ public class LRTParser implements HeadlineParser {
     private Headline htmlToHeadline(String headlineHtml) {
         String urlLink = htmlToUrl(headlineHtml);
         String title = htmlToTitle(headlineHtml);
-        String htmlLink = htmlToHtmlLink(headlineHtml);
+        String htmlLink = buildHtmlLink(title, urlLink);
         if (htmlLink == null || urlLink == null || title == null) {
             return null;
         }
@@ -48,13 +48,12 @@ public class LRTParser implements HeadlineParser {
         return title;
     }
 
-    private String htmlToHtmlLink(String headlineHtml) {
-        Document doc = Jsoup.parse(headlineHtml);
-        Element linkElement = doc.selectFirst("a");
-        if (linkElement != null) {
-            return linkElement.outerHtml();
-        }
-        return null;
+    private String buildHtmlLink(String title, String urlLink) {
+        Element linkElement = new Element("a");
+        linkElement.text(title);
+        linkElement.attr("href", urlLink);
+        linkElement.attr("title", title);
+        return linkElement.outerHtml();
     }
 
     private String htmlToUrl(String headlineHtml) {

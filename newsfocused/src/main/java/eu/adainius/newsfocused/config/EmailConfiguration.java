@@ -45,7 +45,7 @@ public class EmailConfiguration {
             emailProtocolProperties = new Properties();
 
             // by default, mailcatcher - smtp://127.0.0.1:10025
-            emailProtocolProperties.setProperty("mail.smtp.auth", "true");
+            emailProtocolProperties.setProperty("mail.smtp.auth", "false");
             emailProtocolProperties.setProperty("mail.smtp.starttls.enable", "true");
             emailProtocolProperties.setProperty("mail.smtp.host", "127.0.0.1");
             emailProtocolProperties.setProperty("mail.smtp.port", "10025");

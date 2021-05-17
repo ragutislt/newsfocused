@@ -13,7 +13,7 @@ public class LRTParserTest {
     @Test
     public void parses_lrt_headlines() throws IOException {
         List<String> headlinesExpected = List.of(
-                "<a href=\"https://www.lrt.lt/naujienos/lietuvoje/2/1369517/profesorius-janeliunas-vertybiniai-klausimai-ateityje-gali-sukelti-didelius-nesutarimus-koalicijoje\" title=\"Profesorius Janeliūnas: vertybiniai klausimai ateityje gali sukelti didelius nesutarimus koalicijoje\"> Profesorius Janeliūnas: vertybiniai klausimai ateityje gali sukelti didelius nesutarimus koalicijoje</a>");
+                "<a href=\"https://www.lrt.lt/naujienos/lietuvoje/2/1369517/profesorius-janeliunas-vertybiniai-klausimai-ateityje-gali-sukelti-didelius-nesutarimus-koalicijoje\" title=\"Profesorius Janeliūnas: vertybiniai klausimai ateityje gali sukelti didelius nesutarimus koalicijoje\">Profesorius Janeliūnas: vertybiniai klausimai ateityje gali sukelti didelius nesutarimus koalicijoje</a>");
 
         String lrtContentLocation = "src/test/resources/lrt.html";
         String lrtContent = Files.readString(Paths.get(lrtContentLocation));
@@ -21,6 +21,20 @@ public class LRTParserTest {
         HeadlineParser lrtParser = new LRTParser();
 
         List<Headline> headlines = lrtParser.parseFrom(lrtContent);
+
+        assertTrue(headlines.stream().anyMatch(headline -> headlinesExpected.get(0).equals(headline.htmlLink())));
+    }
+
+    @Test
+    public void constructs_new_html_based_on_link_and_title() throws IOException {
+        List<String> headlinesExpected = List.of(
+                "<a href=\"https://www.lrt.lt/naujienos/sveikata/682/1411516/mediku-sajudzio-vadove-remia-siauliu-ligonines-vadova-prie-sienos-ar-zinote-kiek-darbuotoju-paliko-sirdies-ir-kraujagysliu-centra\" title=\"Medikų sąjūdžio vadovė remia Šiaulių ligoninės vadovą prie sienos: ar žinote, kiek darbuotojų paliko Širdies ir kraujagyslių centrą?\">Medikų sąjūdžio vadovė remia Šiaulių ligoninės vadovą prie sienos: ar žinote, kiek darbuotojų paliko Širdies ir kraujagyslių centrą?</a>");
+
+        String content = "<h3 class=\"news__title\"><a someAttribute=\"aaaa\" href=\"/naujienos/sveikata/682/1411516/mediku-sajudzio-vadove-remia-siauliu-ligonines-vadova-prie-sienos-ar-zinote-kiek-darbuotoju-paliko-sirdies-ir-kraujagysliu-centra\" title=\"Medikų sąjūdžio vadovė remia Šiaulių ligoninės vadovą prie sienos: ar žinote, kiek darbuotojų paliko Širdies ir kraujagyslių centrą?\">Medikų sąjūdžio vadovė remia Šiaulių ligoninės vadovą prie sienos: ar žinote, kiek darbuotojų paliko Širdies ir kraujagyslių centrą?</a></h3>";
+
+        HeadlineParser lrtParser = new LRTParser();
+
+        List<Headline> headlines = lrtParser.parseFrom(content);
 
         assertTrue(headlines.stream().anyMatch(headline -> headlinesExpected.get(0).equals(headline.htmlLink())));
     }
