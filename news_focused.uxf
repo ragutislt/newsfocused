@@ -1,297 +1,59 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="14.3.0">
-  <zoom_level>10</zoom_level>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>260</x>
-      <y>190</y>
-      <w>220</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>Headlines
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;230&lt;/x&gt;&lt;y&gt;290&lt;/y&gt;&lt;w&gt;190&lt;/w&gt;&lt;h&gt;30&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;&amp;lt;&amp;lt;&amp;lt;-&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;10;170;10&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>40</x><y>190</y><w>220</w><h>70</h></coordinates><panel_attributes>Headlines
 --
 from(String date): List&lt;Headline&gt;
-store(List&lt;Headline&gt;)</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>520</x>
-      <y>190</y>
-      <w>180</w>
-      <h>150</h>
-    </coordinates>
-    <panel_attributes>BBCSite
+add(List&lt;Headline&gt;)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>300</x><y>190</y><w>180</w><h>150</h></coordinates><panel_attributes>BBCSite
 --
 -url
 -Headlines headlines
 -SiteReader siteReader
 --
 read()
-headlines()</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLInterface</id>
-    <coordinates>
-      <x>570</x>
-      <y>0</y>
-      <w>80</w>
-      <h>100</h>
-    </coordinates>
-    <panel_attributes>Site
+headlines()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLInterface</id><coordinates><x>350</x><y>0</y><w>80</w><h>100</h></coordinates><panel_attributes>Site
 --
 read
-headlines</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLInterface</id>
-    <coordinates>
-      <x>330</x>
-      <y>10</y>
-      <w>80</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>Headlines
+headlines</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLInterface</id><coordinates><x>110</x><y>10</y><w>80</w><h>90</h></coordinates><panel_attributes>Headlines
 --
-from</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>600</x>
-      <y>80</y>
-      <w>30</w>
-      <h>130</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>360</x>
-      <y>80</y>
-      <w>30</w>
-      <h>130</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>690</x>
-      <y>350</y>
-      <w>140</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>Contains parsing of 
+from</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>380</x><y>80</y><w>30</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;110</additional_attributes></element><element><id>Relation</id><coordinates><x>140</x><y>80</y><w>30</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;110</additional_attributes></element><element><id>UMLNote</id><coordinates><x>470</x><y>350</y><w>140</w><h>70</h></coordinates><panel_attributes>Contains parsing of 
 headlines
-bg=blue</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>690</x>
-      <y>270</y>
-      <w>170</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>Retrieval logic 
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>470</x><y>270</y><w>170</w><h>80</h></coordinates><panel_attributes>Retrieval logic 
 from the site
 Uses some object which 
 encapsulates http calls
-bg=blue</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>840</x>
-      <y>80</y>
-      <w>200</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>SiteReader
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>620</x><y>80</y><w>200</w><h>70</h></coordinates><panel_attributes>SiteReader
 --
-readFrom(String url): String</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>220</x>
-      <y>620</y>
-      <w>150</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>BBCParser
+readFrom(String url): String</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>620</y><w>150</w><h>70</h></coordinates><panel_attributes>BBCParser
 --
-parse(htmlContent)</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>420</x>
-      <y>620</y>
-      <w>150</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>LRTParser
+parseFrom(htmlContent)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>200</x><y>620</y><w>150</w><h>70</h></coordinates><panel_attributes>LRTParser
 --
-parse(htmlContent)</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLInterface</id>
-    <coordinates>
-      <x>270</x>
-      <y>490</y>
-      <w>240</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>Parser
+parseFrom(htmlContent)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLInterface</id><coordinates><x>50</x><y>490</y><w>240</w><h>90</h></coordinates><panel_attributes>HeadlineParser
 --
-parse(htmlContent):List&lt;Headline&gt;</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>290</x>
-      <y>560</y>
-      <w>70</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>50.0;10.0;10.0;60.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>450</x>
-      <y>560</y>
-      <w>80</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;60.0;60.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>710</x>
-      <y>600</y>
-      <w>150</w>
-      <h>100</h>
-    </coordinates>
-    <panel_attributes>Site
+parseFrom(htmlContent):List&lt;Headline&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>70</x><y>560</y><w>70</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>50;10;10;60</additional_attributes></element><element><id>Relation</id><coordinates><x>230</x><y>560</y><w>80</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;60;60</additional_attributes></element><element><id>UMLClass</id><coordinates><x>490</x><y>550</y><w>150</w><h>150</h></coordinates><panel_attributes>Site
 --
--Parser
--Headlines
++HeadlineParser
++Headlines
++SiteUrl: String
+-HttpClient: from factory
 --
-readSite
+read
 parseHeadlines
 
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>920</x>
-      <y>600</y>
-      <w>160</w>
-      <h>100</h>
-    </coordinates>
-    <panel_attributes>Sites
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>600</y><w>160</w><h>100</h></coordinates><panel_attributes>Sites
 --
 -List&lt;Site&gt;
 --
 init()
-collectHeadlines()</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1160</x>
-      <y>600</y>
-      <w>100</w>
-      <h>100</h>
-    </coordinates>
-    <panel_attributes>App
+collectHeadlines()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>940</x><y>600</y><w>100</w><h>100</h></coordinates><panel_attributes>App
 --
 --
-main()</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>1250</x>
-      <y>690</y>
-      <w>210</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>readSites
+main()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>1030</x><y>690</y><w>210</w><h>120</h></coordinates><panel_attributes>Orchestration:
+read running week's headlines from repo
+readSites
 Headlines = collectHeadlines
-if(saturday)
+if(dayToSendOn)
     sendEmail(headlines)
-bg=gray</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>950</x>
-      <y>700</y>
-      <w>150</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>acts as a factory 
+bg=gray</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>730</x><y>700</y><w>150</w><h>90</h></coordinates><panel_attributes>acts as a factory 
 to build correct sites 
-(with the right strategy)</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>430</x>
-      <y>500</y>
-      <w>300</w>
-      <h>150</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>280.0;130.0;200.0;130.0;200.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>850</x>
-      <y>620</y>
-      <w>90</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>760</x>
-      <y>890</y>
-      <w>130</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>Headline
+(with the right parser)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>500</y><w>300</w><h>150</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>280;130;200;130;200;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>630</x><y>620</y><w>90</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>70;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>540</x><y>890</y><w>130</w><h>120</h></coordinates><panel_attributes>Headline
 --
 String website
 String title
@@ -299,66 +61,14 @@ String htmlLink
 String urlLink
 Date date
 --
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>840</x>
-      <y>820</y>
-      <w>30</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>650</x>
-      <y>760</y>
-      <w>220</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>Headlines
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>620</x><y>820</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>430</x><y>760</y><w>220</w><h>70</h></coordinates><panel_attributes>Headlines
 --
 from(String date): List&lt;Headline&gt;
-add(List&lt;Headline&gt;)</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1070</x>
-      <y>610</y>
-      <w>110</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>lt=-
-&lt; invokes</panel_attributes>
-    <additional_attributes>10.0;20.0;90.0;20.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>820</x>
-      <y>690</y>
-      <w>30</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>680</x>
-      <y>140</y>
-      <w>260</w>
-      <h>100</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;80.0;240.0;80.0;240.0;10.0</additional_attributes>
-  </element>
-</diagram>
+add(List&lt;Headline&gt;)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>850</x><y>610</y><w>110</w><h>40</h></coordinates><panel_attributes>lt=-
+&lt; invokes</panel_attributes><additional_attributes>10;20;90;20</additional_attributes></element><element><id>Relation</id><coordinates><x>600</x><y>690</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>460</x><y>140</y><w>260</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;80;240;80;240;10</additional_attributes></element><element><id>UMLInterface</id><coordinates><x>1155</x><y>514</y><w>180</w><h>120</h></coordinates><panel_attributes>NewsRepository
+--
+getRunningWeek: Headlines
+saveRunningWeek
+resetRunningWeek</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1029</x><y>564</y><w>140</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;80;120;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>910</x><y>854</y><w>150</w><h>50</h></coordinates><panel_attributes>EmailProvider
+--
+sendEmail(Email) &lt;&lt;static&gt;&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>960</x><y>694</y><w>30</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element></diagram>
