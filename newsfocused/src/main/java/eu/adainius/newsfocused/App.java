@@ -24,6 +24,7 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         // TODO add validation of args
+        // TODO make application batchable - each user shouldn't get a separate java process
 
         String sitesFile = args[0];
         String emailAddress = args[1];
