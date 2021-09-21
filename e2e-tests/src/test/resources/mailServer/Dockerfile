@@ -24,3 +24,11 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 COPY . .
+
+RUN gem install mailcatcher
+RUN apk del g++ make
+
+EXPOSE 1025 1080
+
+#ENTRYPOINT ["entrypoint"]
+CMD ["mailcatcher", "-f", "--ip", "0.0.0.0"]
