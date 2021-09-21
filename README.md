@@ -32,4 +32,6 @@ This avoids breakdown of parsing a site
 
 ### Non-Functional requirements
 * Integrate in AWS, use lambda to run
+* Run integration tests in AWS every day against each different site registered in the system, send email with results
+* * Things to test: correctly parsed headlines (can easily check email format), correct encoding (easily checked again), whether email even exists
 
