@@ -28,7 +28,7 @@ COPY . .
 RUN gem install mailcatcher
 RUN apk del g++ make
 
-EXPOSE 1025 1080
+EXPOSE 10025 1080
 
 #ENTRYPOINT ["entrypoint"]
-CMD ["mailcatcher", "-f", "--ip", "0.0.0.0"]
+CMD ["mailcatcher", "-f", "--ip", "0.0.0.0","--smtp-port","10025"]
