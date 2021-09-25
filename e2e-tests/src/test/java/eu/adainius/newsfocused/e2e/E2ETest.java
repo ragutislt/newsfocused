@@ -2,12 +2,13 @@ package eu.adainius.newsfocused.e2e;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -15,6 +16,7 @@ import com.google.gson.JsonArray;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import eu.adainius.newsfocused.App;
 import lombok.extern.slf4j.Slf4j;
@@ -53,15 +55,17 @@ public class E2ETest {
     }
 
     @Test
-    public void parses_headlines_from_BBC_and_sends_email() throws Exception {
+    public void parses_headlines_from_BBC_and_sends_email(@TempDir Path tempDir) throws Exception {
         HttpClient httpClient = HttpClient.newHttpClient();
         String mailServerUrl = "http://127.0.0.1:1080/";
-
+        
         String siteFile = "src/test/resources/sites.txt";
         String email = "some@email.com";
         String daysToSendOn = "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday";
-        String dataStorageFile = "C:\\Users\\senel\\AppData\\Local\\Temp\\tests\\headlines_save_running_week.json";
-        createStorageFile(dataStorageFile);
+        String dataStorageFile = "headlines_save_running_week.json";
+
+        createStorageFile(tempDir, dataStorageFile);
+
         App.main(new String[] { siteFile, email, daysToSendOn, dataStorageFile });
 
         // create a request
@@ -74,25 +78,10 @@ public class E2ETest {
         JsonArray messageArray = new Gson().fromJson(response.body(), JsonArray.class);
 
         assertTrue(messageArray.size() > 0);
-
-        deleteStorageFile(dataStorageFile);
     }
 
-    private void deleteStorageFile(String dataStorageFile) {
-        File repoFile = new File(dataStorageFile);
-
-        if (repoFile.exists()) {
-            repoFile.delete();
-        }
-    }
-
-    private void createStorageFile(String dataStorageFile) throws IOException {
-        File repoFile = new File(dataStorageFile);
-
-        if (repoFile.exists()) {
-            repoFile.delete();
-        }
-        repoFile.createNewFile();
+    private void createStorageFile(Path tempDir, String dataStorageFile) throws IOException {
+        Files.createFile(tempDir.resolve(dataStorageFile));
     }
 
 }
