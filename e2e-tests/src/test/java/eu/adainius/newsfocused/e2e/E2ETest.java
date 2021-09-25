@@ -42,8 +42,8 @@ public class E2ETest {
     }
 
     private static void logProcess(Process p) throws IOException {
-        log.info("Process logs: {}",new String(p.getInputStream().readAllBytes()));
-        log.info("Process error logs: {}",new String(p.getErrorStream().readAllBytes()));
+        log.info("Process logs: {}", new String(p.getInputStream().readAllBytes()));
+        log.info("Process error logs: {}", new String(p.getErrorStream().readAllBytes()));
     }
 
     @AfterAll
@@ -58,7 +58,7 @@ public class E2ETest {
     public void parses_headlines_from_BBC_and_sends_email(@TempDir Path tempDir) throws Exception {
         HttpClient httpClient = HttpClient.newHttpClient();
         String mailServerUrl = "http://127.0.0.1:1080/";
-        
+
         String siteFile = "src/test/resources/sites.txt";
         String email = "some@email.com";
         String daysToSendOn = "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday";
@@ -66,9 +66,14 @@ public class E2ETest {
 
         createStorageFile(tempDir, dataStorageFile);
 
-        App.main(new String[] { siteFile, email, daysToSendOn, dataStorageFile });
+        App.main(new String[] { siteFile, email, daysToSendOn,
+                tempDir.resolve(dataStorageFile).toAbsolutePath().toString() });
 
-        // create a request
+        assertEmailWasSent(httpClient, mailServerUrl);
+    }
+
+    private void assertEmailWasSent(HttpClient httpClient, String mailServerUrl)
+            throws IOException, InterruptedException {
         var request = HttpRequest.newBuilder(URI.create(mailServerUrl + "messages"))
                 .header("accept", "application/json").build();
 
