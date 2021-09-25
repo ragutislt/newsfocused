@@ -42,9 +42,9 @@ This avoids breakdown of parsing a site
 ```
  java -jar newsfocused-1.0-SNAPSHOT.jar "sites.txt" "email@email.com" "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday" "repo\headlines.json" "emailProtocol.properties"
 ```
-Parameters are:
-    1. Sites file
-    2. Email to send to
-    3. Days to send on, ex: "Monday,Friday"
-    4. Repository location in the file system (file name)
-    5. Email properties file
+Parameters are:<br/>
+    1. Sites file<br/>
+    2. Email to send to<br/>
+    3. Days to send on, ex: "Monday,Friday"<br/>
+    4. Repository location in the file system (file name)<br/>
+    5. Email properties file<br/>
