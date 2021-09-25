@@ -1,11 +1,10 @@
 package eu.adainius.newsfocused;
 
+import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedEmailConfiguration;
 import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedHttpResponses;
 import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedMailProvider;
 import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedTodaysDate;
-import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedEmailConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;

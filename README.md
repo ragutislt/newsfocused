@@ -36,3 +36,15 @@ This avoids breakdown of parsing a site
 * Run integration tests in AWS every day against each different site registered in the system, send email with results
 * * Things to test: correctly parsed headlines (can easily check email format), correct encoding (easily checked again), whether email even exists
 
+## How to run
+1. Compile
+2. Run using
+```
+ java -jar newsfocused-1.0-SNAPSHOT.jar "sites.txt" "email@email.com" "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday" "repo\headlines.json" "emailProtocol.properties"
+```
+Parameters are:
+    1. Sites file
+    2. Email to send to
+    3. Days to send on, ex: "Monday,Friday"
+    4. Repository location in the file system (file name)
+    5. Email properties file
