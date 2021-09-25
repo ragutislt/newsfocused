@@ -26,6 +26,7 @@ This avoids breakdown of parsing a site
     - where data is stored
     - smtp server details
 * scheduling when to send the email
+* batch users - we shouldn't have one java process per user
 * after sending email, clear running list
     
     Here don't clean data right away, instead keep the 'old' week/period and just save new headlines in the new week/period
