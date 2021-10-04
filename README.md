@@ -36,6 +36,10 @@ This avoids breakdown of parsing a site
 * Run integration tests in AWS every day against each different site registered in the system, send email with results
 * * Things to test: correctly parsed headlines (can easily check email format), correct encoding (easily checked again), whether email even exists
 
+#### Planned gitops
+When happy with dev, do a release manually (later, have a pipeline to click a button which will do a release)
+Using githooks and aws, when a new release is detected, automatically pull it in aws and update the application for the next batch run
+
 ## How to run
 1. Compile
 2. Run using
