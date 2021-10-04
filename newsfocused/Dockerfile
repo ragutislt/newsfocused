@@ -11,4 +11,4 @@ ENV daysToSendOn "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"
 ENV repoFile "/repo/headlines.json"
 ENV emailPropertiesFile "/emailProtocol.properties"
 
-CMD java -jar /usr/newsfocused/newsfocused.jar ${siteFile} ${email} ${daysToSendOn} ${repoFile} ${emailPropertiesFile}
+CMD java --add-opens java.base/java.time=ALL-UNNAMED -jar /usr/newsfocused/newsfocused.jar ${siteFile} ${email} ${daysToSendOn} ${repoFile} ${emailPropertiesFile}
