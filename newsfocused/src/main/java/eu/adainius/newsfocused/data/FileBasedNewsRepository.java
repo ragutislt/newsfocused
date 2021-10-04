@@ -65,7 +65,7 @@ public class FileBasedNewsRepository implements NewsRepository {
                 writer.close();
             } catch (Exception e) {
                 throw new ApplicationException(
-                        String.format("Failure when deserializing data from file %s", this.repoFile), e);
+                        String.format("Failure when serializing data from file %s", this.repoFile), e);
             }
         }
     }
