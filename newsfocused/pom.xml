@@ -6,7 +6,7 @@
   <parent>
     <groupId>eu.adainius</groupId>
     <artifactId>newsfocused-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <groupId>eu.adainius</groupId>
@@ -110,6 +110,39 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.37.0</version>
+
+        <executions>
+          <execution>
+            <id>docker-build</id>
+            <phase>install</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+
+            <configuration>
+              <images>
+                <image>
+                  <alias>newsfocused</alias>
+                  <name>newsfocused:${project.version}</name>
+
+                  <build>
+                    <from>java:11</from>
+                    <contextDir>${project.basedir}</contextDir>
+                  </build>
+                </image>
+              </images>
+            </configuration>
+          </execution>
+        </executions>
+
+
+      </plugin>
+
 
     </plugins>
   </build>

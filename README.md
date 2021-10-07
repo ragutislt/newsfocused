@@ -44,7 +44,7 @@ Using githooks and aws, when a new release is detected, automatically pull it in
 1. Compile
 2. Run using
 ```
- java -jar newsfocused-1.0-SNAPSHOT.jar "sites.txt" "email@email.com" "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday" "repo\headlines.json" "emailProtocol.properties"
+ java -jar newsfocused-1.0.0-SNAPSHOT.jar "sites.txt" "email@email.com" "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday" "repo\headlines.json" "emailProtocol.properties"
 ```
 Parameters are:<br/>
     1. Sites file<br/>
