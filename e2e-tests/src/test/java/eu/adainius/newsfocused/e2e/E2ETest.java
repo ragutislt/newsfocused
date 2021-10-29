@@ -59,15 +59,13 @@ public class E2ETest {
         HttpClient httpClient = HttpClient.newHttpClient();
         String mailServerUrl = "http://127.0.0.1:1080/";
 
-        String siteFile = "src/test/resources/sites.txt";
-        String email = "some@email.com";
-        String daysToSendOn = "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday";
-        String dataStorageFile = "headlines_save_running_week.json";
+        String usersPropertiesFile = "src/test/resources/usersProperties.json";
+        UsersProperties usersProperties = UsersProperties.parseFrom(usersPropertiesFile);
 
-        createStorageFile(tempDir, dataStorageFile);
+        createStorageFile(tempDir, usersProperties.dataStorageFile());
 
-        App.main(new String[] { siteFile, email, daysToSendOn,
-                tempDir.resolve(dataStorageFile).toAbsolutePath().toString() });
+        App.main(new String[] { usersProperties.siteFile(), usersProperties.email(), usersProperties.daysToSendOn(),
+                tempDir.resolve(usersProperties.dataStorageFile()).toAbsolutePath().toString() });
 
         assertEmailWasSent(httpClient, mailServerUrl);
     }
