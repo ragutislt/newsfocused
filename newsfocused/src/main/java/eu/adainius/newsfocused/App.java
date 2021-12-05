@@ -1,9 +1,12 @@
 package eu.adainius.newsfocused;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+
+import com.google.gson.Gson;
 
 import eu.adainius.newsfocused.config.EmailConfiguration;
 import eu.adainius.newsfocused.data.FileBasedNewsRepository;
@@ -13,6 +16,7 @@ import eu.adainius.newsfocused.email.EmailProvider;
 import eu.adainius.newsfocused.headline.Headlines;
 import eu.adainius.newsfocused.site.Site;
 import eu.adainius.newsfocused.site.Sites;
+import eu.adainius.newsfocused.user.User;
 import eu.adainius.newsfocused.util.Today;
 import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
@@ -24,51 +28,63 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         // TODO add validation of args
-        // TODO make application batchable - each user shouldn't get a separate java process
 
-        String sitesFile = args[0];
-        String emailAddress = args[1];
-        List<String> daysToSendOn = (args.length > 2 && !args[2].isEmpty()) ? List.of(args[2].split(","))
-                : List.of("Saturday");
+        String usersLocation = args[0];
 
-        if (App.newsRepository == null) {
-            String repositoryFile = args[3];
-            log.info("Initializing news repository to FileBasedNewsRepository with file at: {}", repositoryFile);
-            App.setNewsRepository(new FileBasedNewsRepository(repositoryFile));
+        List<User> users = User.parseFromUsing(usersLocation, new Gson());
+        log.info("All users' properties have been read from {}", usersLocation);
+
+        initializeRepository(args);
+
+        setEmailProperties(args);
+
+        runFor(users);
+    }
+
+    private static void runFor(List<User> users) {
+        log.info("Going to process {} users", users.size());
+
+        for (User user : users) {
+            Sites sites = new Sites(user.sites()); // TODO adapt sites
+            log.info("Sites for user {} are: {}", user.email(), user.sites());
+
+            Headlines headlinesOfTheWeek = newsRepository.getRunningWeekFor(user.email());
+
+            List<Site> siteList = sites.getSites();
+            for (Site site : siteList) {
+                Headlines headlines = site.headlines();
+                headlinesOfTheWeek.add(headlines.getList());
+            }
+
+            newsRepository.saveRunningWeekFor(headlinesOfTheWeek, user.email());
+
+            if (Today.isOneOf(user.daysToSendOn())) {
+                Email email = new Email("email_template.ftl", headlinesOfTheWeek, user.email());
+                EmailProvider.sendEmail(email);
+                newsRepository.resetRunningWeekFor(user.email());
+            } else {
+                log.info("Today is not one of {}, email will not be sent to {}", user.daysToSendOn(), user.email());
+            }
         }
+    }
 
-        log.info("Sites will be read from: {}", sitesFile);
-        log.info("News will be sent to: {}", emailAddress);
-        log.info("News will be sent on days: {}", daysToSendOn);
-
-        if(args.length > 4 && args[4] != null) {
-            String emailProtocolPropertiesFile = args[4];
+    private static void setEmailProperties(String[] args) throws IOException, FileNotFoundException {
+        if (args.length > 2 && args[2] != null) {
+            String emailProtocolPropertiesFile = args[2];
             Properties emailProtocolProperties = new Properties();
             emailProtocolProperties.load(new FileReader(emailProtocolPropertiesFile));
 
             EmailConfiguration.setEmailProtocolProperties(emailProtocolProperties);
-            log.info("Email protocol properties will be used from file {}, they are: {}", emailProtocolPropertiesFile, emailProtocolProperties);
+            log.info("Email protocol properties will be used from file {}, they are: {}", emailProtocolPropertiesFile,
+                    emailProtocolProperties);
         }
+    }
 
-        Sites sites = new Sites(sitesFile);
-        log.info("Sites read from {} are: {}", sitesFile, sites.list());
-
-        Headlines headlinesOfTheWeek = newsRepository.getRunningWeek();
-
-        List<Site> siteList = sites.getSites();
-        for (Site site : siteList) {
-            Headlines headlines = site.headlines();
-            headlinesOfTheWeek.add(headlines.getList());
-        }
-
-        newsRepository.saveRunningWeek(headlinesOfTheWeek);
-
-        if (Today.isOneOf(daysToSendOn)) {
-            Email email = new Email("email_template.ftl", headlinesOfTheWeek, emailAddress);
-            EmailProvider.sendEmail(email);
-            newsRepository.resetRunningWeek();
-        } else {
-            log.info("Today is not one of {}, email will not be sent to {}", daysToSendOn, emailAddress);
+    private static void initializeRepository(String[] args) {
+        if (App.newsRepository == null) {
+            String repositoryFile = args[1];
+            log.info("Initializing news repository to FileBasedNewsRepository with file at: {}", repositoryFile);
+            App.setNewsRepository(new FileBasedNewsRepository(repositoryFile));
         }
     }
 

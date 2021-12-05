@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import com.google.gson.Gson;
 
@@ -16,27 +17,31 @@ import lombok.extern.slf4j.Slf4j;
 public class FileBasedNewsRepository implements NewsRepository {
 
     final Gson gson = new Gson();
-    final String repoFile;
+    final String repoFolder;
 
-    public FileBasedNewsRepository(String repoFile) {
-        this.repoFile = repoFile;
+    final static String FILE_STORAGE_PREFIX = "headlines_running_week___";
+
+    public FileBasedNewsRepository(String repoFolder) {
+        this.repoFolder = repoFolder;
     }
 
     @Override
-    public Headlines getRunningWeek() {
+    public Headlines getRunningWeekFor(String email) {
         FileReader reader = null;
+        String userFilename = FileBasedNewsRepository.emailToFilename(email);
+        String fullRepoPath = Paths.get(this.repoFolder, userFilename).toAbsolutePath().toString();
         try {
             Headlines headlines = null;
 
-            if (new File(repoFile).exists()) {
-                reader = new FileReader(repoFile);
+            if (new File(fullRepoPath).exists()) {
+                reader = new FileReader(fullRepoPath);
                 headlines = gson.fromJson(reader, Headlines.class);
             }
 
             return headlines != null ? headlines : new Headlines();
         } catch (IOException e) {
             log.error("Exception when reading file", e);
-            throw new ApplicationException(String.format("Failure when deserializing data from file %s", this.repoFile),
+            throw new ApplicationException(String.format("Failure when deserializing data from file %s", fullRepoPath),
                     e);
         } finally {
             try {
@@ -45,38 +50,46 @@ public class FileBasedNewsRepository implements NewsRepository {
                 }
             } catch (Exception e) {
                 throw new ApplicationException(
-                        String.format("Failure when deserializing data from file %s", this.repoFile), e);
+                        String.format("Failure when deserializing data from file %s", fullRepoPath), e);
             }
         }
     }
 
     @Override
-    public void saveRunningWeek(Headlines headlines) {
+    public void saveRunningWeekFor(Headlines headlines, String email) {
         FileWriter writer = null;
+        String userFilename = FileBasedNewsRepository.emailToFilename(email);
+        String fullRepoPath = Paths.get(this.repoFolder, userFilename).toAbsolutePath().toString();
         try {
-            writer = new FileWriter(repoFile);
+            writer = new FileWriter(fullRepoPath);
             gson.toJson(headlines, writer);
             writer.flush();
         } catch (IOException e) {
             log.error("Exception when writing file", e);
-            throw new ApplicationException(String.format("Failure when serializing data to file %s", this.repoFile), e);
+            throw new ApplicationException(String.format("Failure when serializing data to file %s", fullRepoPath), e);
         } finally {
             try {
-                writer.close();
+                if (writer != null) {
+                    writer.close();
+                }
             } catch (Exception e) {
-                throw new ApplicationException(
-                        String.format("Failure when serializing data from file %s", this.repoFile), e);
+                throw new ApplicationException(String.format("Failure when serializing data to file %s", fullRepoPath),
+                        e);
             }
         }
     }
 
     @Override
-    public void resetRunningWeek() {
+    public void resetRunningWeekFor(String email) {
         // "archive" the old file
-        File oldHeadlinesFile = new File(
-                String.format("%s_%s.json", removeFileExtension(repoFile), Today.getDateString()));
+        // TODO - zip the file (or zip with a bash)
+        String userFilename = FileBasedNewsRepository.emailToFilename(email);
+        String fullRepoPath = Paths.get(this.repoFolder, userFilename).toAbsolutePath().toString();
 
-        File currentFile = new File(repoFile);
+        File oldHeadlinesFile = new File(
+                String.format("%s_%s.json", removeFileExtension(fullRepoPath), Today.getDateString()));
+
+        File currentFile = new File(fullRepoPath);
         currentFile.renameTo(oldHeadlinesFile);
     }
 
@@ -87,6 +100,10 @@ public class FileBasedNewsRepository implements NewsRepository {
 
         String extPattern = "(?<!^)[.][^.]*$";
         return filename.replaceAll(extPattern, "");
+    }
+
+    public static String emailToFilename(String userEmail) {
+        return FILE_STORAGE_PREFIX + userEmail.replace("@", "__at__") + ".json";
     }
 
 }

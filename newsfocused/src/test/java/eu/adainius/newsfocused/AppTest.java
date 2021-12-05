@@ -6,15 +6,20 @@ import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedMailProvi
 import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedTodaysDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
@@ -26,61 +31,65 @@ import eu.adainius.newsfocused.headline.Headlines;
 import eu.adainius.newsfocused.util.Today;
 
 public class AppTest {
+    @TempDir
+    Path tempRepoFile;
+    
     @Test
-    public void loadsHeadlinesFromRunningWeek() throws Exception {
+    public void loads_headlines_from_running_week() throws Exception {
         runWithMockedHttpResponses(() -> {
             runWithMockedMailProvider(mailProviderMock -> {
-                String email = "sample@email.com";
-                String sitesFile = "src/test/resources/sites.txt";
+                String usersLocation = "src/test/resources/users.json";
 
                 NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
-                when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                when(mockRepository.getRunningWeekFor(anyString())).thenReturn(Headlines.of(List.of()));
                 App.setNewsRepository(mockRepository);
-                App.main(new String[] { sitesFile, email });
+                App.main(new String[] { usersLocation });
 
                 mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(1));
 
-                Mockito.verify(mockRepository).getRunningWeek();
+                Mockito.verify(mockRepository).getRunningWeekFor("some@email.com");
+                Mockito.verify(mockRepository).getRunningWeekFor("some@email222.com");
             });
         });
     }
 
     @Test
-    public void savesHeadlinesToRunningWeek() throws Exception {
+    public void saves_headlines_to_running_week() throws Exception {
         runWithMockedHttpResponses(() -> {
             runWithMockedMailProvider(mailProviderMock -> {
-                String email = "sample@email.com";
-                String sitesFile = "src/test/resources/sites.txt";
+                String usersLocation = "src/test/resources/users.json";
 
                 NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
-                when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                when(mockRepository.getRunningWeekFor(anyString())).thenReturn(Headlines.of(List.of()));
                 App.setNewsRepository(mockRepository);
-                App.main(new String[] { sitesFile, email });
+                App.main(new String[] { usersLocation });
 
                 mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(1));
 
-                Mockito.verify(mockRepository).saveRunningWeek(Mockito.any(Headlines.class));
+                Mockito.verify(mockRepository).saveRunningWeekFor(Mockito.any(Headlines.class), eq("some@email.com"));
+                Mockito.verify(mockRepository).saveRunningWeekFor(Mockito.any(Headlines.class), eq("some@email222.com"));
             });
         });
     }
 
     @Test
-    public void resetsRunningWeekHeadlinesUponSendingEmail() throws Exception {
+    public void resets_running_week_headlines_upon_sending_email() throws Exception {
         runWithMockedHttpResponses(() -> {
             runWithMockedMailProvider(mailProviderMock -> {
                 runWithMockedTodaysDate(mockedToday -> {
-                    String email = "sample@email.com";
-                    String sitesFile = "src/test/resources/sites.txt";
+                    String usersLocation = "src/test/resources/users.json";
 
                     mockedToday.when(() -> Today.isOneOf(any(List.class))).thenReturn(true);
+                    mockedToday.when(() -> Today.getToday()).thenReturn(LocalDate.of(2021,05,15));
 
                     NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
-                    when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                    when(mockRepository.getRunningWeekFor(anyString())).thenReturn(Headlines.of(List.of()));
                     App.setNewsRepository(mockRepository);
-                    App.main(new String[] { sitesFile, email });
+                    App.main(new String[] { usersLocation });
 
-                    mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(1));
-                    Mockito.verify(mockRepository).resetRunningWeek();
+                    mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(2));
+                    Mockito.verify(mockRepository).resetRunningWeekFor("some@email.com");
+                    Mockito.verify(mockRepository).resetRunningWeekFor("some@email222.com");
                 });
             });
         });
@@ -91,17 +100,17 @@ public class AppTest {
         runWithMockedHttpResponses(() -> {
             runWithMockedMailProvider(mailProviderMock -> {
                 runWithMockedTodaysDate(mockedToday -> {
-                    String email = "sample@email.com";
-                    String sitesFile = "src/test/resources/sites.txt";
+                    String usersLocation = "src/test/resources/users_bbc.json";
                     String expectedEmail = "src/test/resources/emailSample.html";
 
                     mockedToday.when(() -> Today.isOneOf(any(List.class))).thenReturn(true);
+                    mockedToday.when(() -> Today.getToday()).thenReturn(LocalDate.of(2021,05,15));
 
                     NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
-                    when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                    when(mockRepository.getRunningWeekFor(anyString())).thenReturn(Headlines.of(List.of()));
                     App.setNewsRepository(mockRepository);
 
-                    App.main(new String[] { sitesFile, email });
+                    App.main(new String[] { usersLocation });
 
                     ArgumentCaptor<Email> emailCaptor = ArgumentCaptor.forClass(Email.class);
                     mailProviderMock.verify(() -> EmailProvider.sendEmail(emailCaptor.capture()), times(1));
@@ -116,17 +125,17 @@ public class AppTest {
         runWithMockedHttpResponses(() -> {
             runWithMockedMailProvider(mailProviderMock -> {
                 runWithMockedTodaysDate(mockedToday -> {
-                    String email = "sample@email.com";
-                    String sitesFile = "src/test/resources/sites.txt";
-                    List<String> daysToSendOn = List.of("Saturday", "Wednesday");
+                    String usersLocation = "src/test/resources/users_bbc_daysToSendOn.json";
+                    List<String> daysToSendOn = List.of("Wednesday", "Saturday");
 
                     NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
-                    when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                    when(mockRepository.getRunningWeekFor(anyString())).thenReturn(Headlines.of(List.of()));
                     App.setNewsRepository(mockRepository);
 
                     mockedToday.when(() -> Today.isOneOf(daysToSendOn)).thenReturn(true);
+                    mockedToday.when(() -> Today.getToday()).thenReturn(LocalDate.now());
 
-                    App.main(new String[] { sitesFile, email, String.join(",", daysToSendOn) });
+                    App.main(new String[] { usersLocation });
 
                     mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(1));
                 });
@@ -139,17 +148,17 @@ public class AppTest {
         runWithMockedHttpResponses(() -> {
             runWithMockedMailProvider(mailProviderMock -> {
                 runWithMockedTodaysDate(mockedToday -> {
-                    String email = "sample@email.com";
-                    String sitesFile = "src/test/resources/sites.txt";
+                    String usersLocation = "src/test/resources/users.json";
                     List<String> daysToSendOn = List.of("Saturday", "Wednesday");
 
                     NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
-                    when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                    when(mockRepository.getRunningWeekFor(anyString())).thenReturn(Headlines.of(List.of()));
                     App.setNewsRepository(mockRepository);
 
                     mockedToday.when(() -> Today.isOneOf(daysToSendOn)).thenReturn(false);
+                    mockedToday.when(() -> Today.getToday()).thenReturn(LocalDate.of(2021,05,15));
 
-                    App.main(new String[] { sitesFile, email, String.join(",", daysToSendOn) });
+                    App.main(new String[] { usersLocation });
 
                     mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(0));
                 });
@@ -162,14 +171,13 @@ public class AppTest {
         runWithMockedHttpResponses(() -> {
             runWithMockedMailProvider(mailProviderMock -> {
                 runWithMockedEmailConfiguration(mockedEmailConfiguration -> {
-                    String email = "sample@email.com";
-                    String sitesFile = "src/test/resources/sites.txt";
+                    String usersLocation = "src/test/resources/users.json";
 
                     NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
-                    when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                    when(mockRepository.getRunningWeekFor(anyString())).thenReturn(Headlines.of(List.of()));
                     App.setNewsRepository(mockRepository);
 
-                    App.main(new String[] { sitesFile, email });
+                    App.main(new String[] { usersLocation });
 
                     mockedEmailConfiguration.verify(
                             () -> EmailConfiguration.setEmailProtocolProperties(any(Properties.class)), times(0));
@@ -183,15 +191,16 @@ public class AppTest {
         runWithMockedHttpResponses(() -> {
             runWithMockedMailProvider(mailProviderMock -> {
                 runWithMockedEmailConfiguration(mockedEmailConfiguration -> {
-                    String email = "sample@email.com";
-                    String sitesFile = "src/test/resources/sites.txt";
+                    String usersLocation = "src/test/resources/users.json";
+                    Path repoFolder = Files.createDirectory(tempRepoFile.resolve("repo"));
+                    String repoLocation = repoFolder.toString();
                     String emailPropertiesFile = "src/test/resources/emailProtocol.properties";
 
                     NewsRepository mockRepository = Mockito.mock(NewsRepository.class);
-                    when(mockRepository.getRunningWeek()).thenReturn(Headlines.of(List.of()));
+                    when(mockRepository.getRunningWeekFor(anyString())).thenReturn(Headlines.of(List.of()));
                     App.setNewsRepository(mockRepository);
 
-                    App.main(new String[] { sitesFile, email, "Monday", null, emailPropertiesFile });
+                    App.main(new String[] { usersLocation, repoLocation, emailPropertiesFile });
 
                     ArgumentCaptor<Properties> emailPropertiesCaptor = ArgumentCaptor.forClass(Properties.class);
                     mockedEmailConfiguration.verify(

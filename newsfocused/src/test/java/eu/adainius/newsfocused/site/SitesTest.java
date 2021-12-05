@@ -1,6 +1,7 @@
 package eu.adainius.newsfocused.site;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mockStatic;
 
@@ -20,13 +21,27 @@ import org.mockito.Mockito;
 import eu.adainius.newsfocused.config.HttpClientFactory;
 import eu.adainius.newsfocused.headline.Headlines;
 
+import static eu.adainius.newsfocused.test.util.TestUtils.runWithMockedHttpResponses;
+
 public class SitesTest {
     @Test
     public void lists_sites() throws IOException {
-        String siteFile = "src/main/resources/sites.txt";
-        Sites sites = new Sites(siteFile);
+        List<String> sitesList = List.of("www.bbc.com", "www.lrt.lt");
+        Sites sites = new Sites(sitesList);
 
         assertEquals(List.of("www.bbc.com", "www.lrt.lt"), sites.list());
+    }
+
+    @Test
+    public void should_make_each_site_parse_headlines() throws Exception {
+        runWithMockedHttpResponses(() -> {
+            List<String> sitesList = List.of("www.bbc.com", "www.lrt.lt");
+            Sites sites = new Sites(sitesList);
+
+            for (Site site : sites.getSites()) {
+                assertTrue(site.headlines().count() > 0);
+            }
+        });
     }
 
     @Test
@@ -42,17 +57,19 @@ public class SitesTest {
         Mockito.when(mockResponse.body()).thenReturn(bbcContent).thenReturn(lrtContent);
         Mockito.when(mockClient.send(any(HttpRequest.class), any(BodyHandler.class))).thenReturn(mockResponse);
 
-        try(MockedStatic<HttpClientFactory> mockedHttpClientBuilder = mockStatic(HttpClientFactory.class)) {
+        // TODO replace with runWithMockedHttpResponses
+        try (MockedStatic<HttpClientFactory> mockedHttpClientBuilder = mockStatic(HttpClientFactory.class)) {
             mockedHttpClientBuilder.when(HttpClientFactory::httpClient).thenReturn(mockClient);
 
-            String siteFile = "src/main/resources/sites.txt";
-            Sites sites = new Sites(siteFile);
+            List<String> sitesList = List.of("www.bbc.com", "www.lrt.lt");
+            Sites sites = new Sites(sitesList);
 
             Headlines bbcHeadlines = sites.getSites().get(0).headlines();
             Headlines lrtHeadlines = sites.getSites().get(1).headlines();
-    
+
             assertEquals(5, bbcHeadlines.count());
             assertEquals(22, lrtHeadlines.count());
-        };
+        }
+        ;
     }
 }

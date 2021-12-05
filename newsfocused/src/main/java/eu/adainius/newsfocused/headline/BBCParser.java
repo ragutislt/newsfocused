@@ -8,6 +8,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import eu.adainius.newsfocused.util.Today;
+
 public class BBCParser implements HeadlineParser {
     private static final String BBC_URL = "www.bbc.com";
 
@@ -37,7 +39,7 @@ public class BBCParser implements HeadlineParser {
         if (htmlLink == null || urlLink == null || title == null) {
             return null;
         }
-        return Headline.builder().date(LocalDate.now()).website(BBC_URL).title(title).urlLink(urlLink)
+        return Headline.builder().date(Today.getToday()).website(BBC_URL).title(title).urlLink(urlLink)
                 .htmlLink(htmlLink).build();
     }
 

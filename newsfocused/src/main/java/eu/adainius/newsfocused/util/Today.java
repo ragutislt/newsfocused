@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class Today {
+    public static LocalDate getToday() {
+        return LocalDate.now();
+    }
+
     public static String getDateString() {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
