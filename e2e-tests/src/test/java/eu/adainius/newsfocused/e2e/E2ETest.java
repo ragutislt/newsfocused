@@ -9,6 +9,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import eu.adainius.newsfocused.App;
+import eu.adainius.newsfocused.user.User;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -59,13 +61,10 @@ public class E2ETest {
         HttpClient httpClient = HttpClient.newHttpClient();
         String mailServerUrl = "http://127.0.0.1:1080/";
 
-        String usersPropertiesFile = "src/test/resources/usersProperties.json";
-        UsersProperties usersProperties = UsersProperties.parseFrom(usersPropertiesFile);
+        String usersFile = "src/test/resources/users.json";
+        String repoLocation = createRepoLocation(tempDir);
 
-        createStorageFile(tempDir, usersProperties.dataStorageFile());
-
-        App.main(new String[] { usersProperties.siteFile(), usersProperties.email(), usersProperties.daysToSendOn(),
-                tempDir.resolve(usersProperties.dataStorageFile()).toAbsolutePath().toString() });
+        App.main(new String[] { usersFile, repoLocation });
 
         assertEmailWasSent(httpClient, mailServerUrl);
     }
@@ -83,8 +82,8 @@ public class E2ETest {
         assertTrue(messageArray.size() > 0);
     }
 
-    private void createStorageFile(Path tempDir, String dataStorageFile) throws IOException {
-        Files.createFile(tempDir.resolve(dataStorageFile));
+    private String createRepoLocation(Path tempDir) throws IOException {
+        return Files.createDirectories(tempDir.resolve("repo")).toString();
     }
 
 }

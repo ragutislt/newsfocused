@@ -8,6 +8,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import eu.adainius.newsfocused.util.Today;
+
 public class LRTParser implements HeadlineParser {
     private static final String LRT_URL = "https://www.lrt.lt";
 
@@ -37,7 +39,7 @@ public class LRTParser implements HeadlineParser {
         if (htmlLink == null || urlLink == null || title == null) {
             return null;
         }
-        return Headline.builder().date(LocalDate.now()).website(LRT_URL).title(title).urlLink(urlLink)
+        return Headline.builder().date(Today.getToday()).website(LRT_URL).title(title).urlLink(urlLink)
                 .htmlLink(htmlLink).build();
     }
 

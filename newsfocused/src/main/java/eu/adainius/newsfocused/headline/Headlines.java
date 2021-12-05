@@ -73,4 +73,9 @@ public class Headlines {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Headlines [headlinesList=" + headlinesList + "]";
+    }
+
 }

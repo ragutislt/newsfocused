@@ -15,10 +15,10 @@ import eu.adainius.newsfocused.util.Validation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class UsersProperties {
+public class User {
     private String email;
     private String dataStorageFile;
-    private String daysToSendOn;
+    private List<String> daysToSendOn;
     private String[] sites;
 
     public String dataStorageFile() {
@@ -33,21 +33,21 @@ public class UsersProperties {
         return List.of(sites);
     }
 
-    public String daysToSendOn() {
+    public List<String> daysToSendOn() {
         return daysToSendOn;
     }
 
-    public static List<UsersProperties> parseFromUsing(String propertiesFileLocation, Gson gson) {
+    public static List<User> parseFromUsing(String propertiesFileLocation, Gson gson) {
         FileReader reader = null;
-        UsersProperties[] allUsersProperties;
+        User[] allUsers;
         try {
             if (new File(propertiesFileLocation).exists()) {
                 reader = new FileReader(propertiesFileLocation);
-                allUsersProperties = gson.fromJson(reader, UsersProperties[].class);
+                allUsers = gson.fromJson(reader, User[].class);
 
-                validateProperties(allUsersProperties, propertiesFileLocation);
+                validateProperties(allUsers, propertiesFileLocation);
 
-                return Arrays.asList(allUsersProperties);
+                return Arrays.asList(allUsers);
             } else {
                 throw new ApplicationException(
                         String.format("Users properties file %s does not exist", propertiesFileLocation));
@@ -70,27 +70,27 @@ public class UsersProperties {
         }
     }
 
-    private static void validateProperties(UsersProperties[] allUsersProperties, String propertiesFileLocation) {
-        List<UsersProperties> usersPropertiesInError = new ArrayList<>();
-        for (UsersProperties usersProperties : allUsersProperties) {
-            if (Validation.empty(usersProperties.dataStorageFile) || Validation.empty(usersProperties.daysToSendOn)
-                    || Validation.empty(usersProperties.email) || usersProperties.sites == null
-                    || usersProperties.sites.length == 0) {
-                usersPropertiesInError.add(usersProperties);
+    private static void validateProperties(User[] allUsers, String propertiesFileLocation) {
+        List<User> usersInError = new ArrayList<>();
+        for (User user : allUsers) {
+            if (Validation.empty(user.dataStorageFile) || user.daysToSendOn().isEmpty()
+                    || Validation.empty(user.email) || user.sites == null
+                    || user.sites.length == 0) {
+                usersInError.add(user);
             }
 
         }
 
-        if (!usersPropertiesInError.isEmpty()) {
+        if (!usersInError.isEmpty()) {
             throw new ApplicationException(String.format(
                     "One or more of the required users properties are missing from file %s, faulty properties entries: %s",
-                    propertiesFileLocation, usersPropertiesInError.toString()));
+                    propertiesFileLocation, usersInError.toString()));
         }
     }
 
     @Override
     public String toString() {
-        return "UsersProperties [dataStorageFile=" + dataStorageFile + ", daysToSendOn=" + daysToSendOn + ", email="
+        return "Users [dataStorageFile=" + dataStorageFile + ", daysToSendOn=" + daysToSendOn + ", email="
                 + email + ", sites=" + Arrays.toString(sites) + "]";
     }
 
@@ -113,7 +113,7 @@ public class UsersProperties {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        UsersProperties other = (UsersProperties) obj;
+        User other = (User) obj;
         if (dataStorageFile == null) {
             if (other.dataStorageFile != null)
                 return false;

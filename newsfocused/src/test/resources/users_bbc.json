@@ -1,0 +1,10 @@
+[
+    {
+        "email": "some@email.com",
+        "sites": [
+            "www.bbc.com"
+        ],
+        "daysToSendOn": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "dataStorageFile":"headlines_save_running_week_some-email.com.json"
+    }
+]

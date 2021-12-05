@@ -5,10 +5,9 @@ RUN "mkdir" "/usr/newsfocused/config"
 RUN "mkdir" "/usr/newsfocused/repo" # to be externalized as well
 COPY target/newsfocused-*.jar /usr/newsfocused/newsfocused.jar
 WORKDIR /usr/newsfocused
-ENV siteFile="/sites.txt"
-ENV email "/mail@newsfocused.com"
-ENV daysToSendOn "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"
-ENV repoFile "/repo/headlines.json"
+
+ENV usersLocation=""
+ENV repoLocation "/repo/headlines.json"
 ENV emailPropertiesFile "/emailProtocol.properties"
 
-CMD java --add-opens java.base/java.time=ALL-UNNAMED -jar /usr/newsfocused/newsfocused.jar ${siteFile} ${email} ${daysToSendOn} ${repoFile} ${emailPropertiesFile}
+CMD java --add-opens java.base/java.time=ALL-UNNAMED -jar /usr/newsfocused/newsfocused.jar ${usersLocation} ${repoLocation} ${emailPropertiesFile}

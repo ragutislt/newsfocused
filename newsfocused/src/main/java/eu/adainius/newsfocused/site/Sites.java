@@ -20,16 +20,9 @@ public class Sites {
     public static final String BBC = "www.bbc.com";
     public static final String LRT = "www.lrt.lt";
 
-    public Sites(String sitesFile) {
-        sites = new ArrayList<>();
-
-        Path path = Paths.get(sitesFile);
-        try {
-            siteNames = Files.readAllLines(path);
-        } catch (IOException e) {
-            throw new ApplicationException("Could not read sites file", e);
-        }
-
+    public Sites(List<String> sitesList) {
+        sites = new ArrayList<>(sitesList.size());
+        siteNames = List.copyOf(sitesList);
         buildSites();
     }
 

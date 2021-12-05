@@ -6,14 +6,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import eu.adainius.newsfocused.headline.Headline;
 import eu.adainius.newsfocused.headline.Headlines;
@@ -24,11 +31,16 @@ public class TestFileBasedNewsRepository {
     Path tempRepoFile;
 
     @Test
-    void returnsRunningWeek() throws Exception {
+    void returnsRunningWeekFor() throws Exception {
 
-        Path repoFilePath = Files.createFile(tempRepoFile.resolve("headlines_return_running_week.json"));
+        // GIVEN
+        Path repoFolder = Files.createDirectory(tempRepoFile.resolve("repo"));
 
-        NewsRepository repository = new FileBasedNewsRepository(repoFilePath.toString());
+        String userEmail = "returnsRunningWeekFor@test.com";
+        String storageFileName = FileBasedNewsRepository.emailToFilename(userEmail);
+        Path repoFilePath = Files.createFile(repoFolder.resolve(storageFileName));
+
+        NewsRepository repository = new FileBasedNewsRepository(repoFolder.toString());
 
         Headline headline1 = Headline.builder().date(LocalDate.parse("2018-05-05")).htmlLink("www.bbc.com")
                 .title("title").urlLink("www.bbc.com").website("www.bbc.com").build();
@@ -37,35 +49,53 @@ public class TestFileBasedNewsRepository {
         Headlines headlines = Headlines.of(headline1, headline2);
         writeToFile(headlines, repoFilePath);
 
-        Headlines runningWeek = repository.getRunningWeek();
+        // WHEN
+        Headlines runningWeek = repository.getRunningWeekFor(userEmail);
+
+        // THEN
         assertEquals(headlines, runningWeek);
     }
 
     @Test
     void returnsEmptyRunningWeekIfNoDataInFile() throws Exception {
-        Path repoFilePath = Files.createFile(tempRepoFile.resolve("headlines_return_running_week.json"));
+        // GIVEN
+        Path repoFolder = Files.createDirectory(tempRepoFile.resolve("repo"));
 
-        NewsRepository repository = new FileBasedNewsRepository(repoFilePath.toString());
+        String userEmail = "returnsEmptyRunningWeekIfNoDataInFile@test.com";
+        String storageFileName = FileBasedNewsRepository.emailToFilename(userEmail);
+        Path repoFilePath = Files.createFile(repoFolder.resolve(storageFileName));
+
+        NewsRepository repository = new FileBasedNewsRepository(repoFolder.toString());
         writeToFile(null, repoFilePath);
 
-        Headlines runningWeekHeadlines = repository.getRunningWeek();
-        assertTrue(runningWeekHeadlines.areEmpty());
+        // WHEN
+        Headlines runningWeekHeadlines = repository.getRunningWeekFor(userEmail);
 
-        new File(repoFilePath.toAbsolutePath().toString()).delete();
+        // THEN
+        assertTrue(runningWeekHeadlines.areEmpty());
     }
 
     @Test
     void returnsEmptyRunningWeekIfFileDoesNotExist() throws Exception {
-        Path repoFilePath = Files.createFile(tempRepoFile.resolve("headlines_return_running_week.json"));
+        // GIVEN
+        Path repoFolder = Files.createDirectory(tempRepoFile.resolve("repo"));
+
+        String userEmail = "returnsEmptyRunningWeekIfFileDoesNotExist@test.com";
+        String storageFileName = FileBasedNewsRepository.emailToFilename(userEmail);
+
+        Path repoFilePath = Files.createFile(repoFolder.resolve(storageFileName));
         File repoFile = new File(repoFilePath.toAbsolutePath().toString());
 
-        if(repoFile.exists()) {
+        if (repoFile.exists()) {
             repoFile.delete();
         }
-        
-        NewsRepository repository = new FileBasedNewsRepository(repoFilePath.toString());
 
-        Headlines runningWeekHeadlines = repository.getRunningWeek();
+        NewsRepository repository = new FileBasedNewsRepository(repoFolder.toString());
+
+        // WHEN
+        Headlines runningWeekHeadlines = repository.getRunningWeekFor(userEmail);
+
+        // THEN
         assertTrue(runningWeekHeadlines.areEmpty());
     }
 
@@ -78,13 +108,14 @@ public class TestFileBasedNewsRepository {
 
     @Test
     void savesRunningWeek() throws Exception {
-        File repoFile = new File("C:\\Users\\senel\\AppData\\Local\\Temp\\tests", "headlines_save_running_week.json");
+        // GIVEN
+        Path repoFolder = Files.createDirectory(tempRepoFile.resolve("repo"));
 
-        if (repoFile.exists()) {
-            repoFile.delete();
-        }
-        repoFile.createNewFile();
-        NewsRepository repository = new FileBasedNewsRepository(repoFile.getAbsolutePath());
+        String userEmail = "savesRunningWeek@test.com";
+        String storageFileName = FileBasedNewsRepository.emailToFilename(userEmail);
+
+        File repoFile = createRepoFile(repoFolder, storageFileName);
+        NewsRepository repository = new FileBasedNewsRepository(repoFolder.toString());
 
         Headline headline1 = Headline.builder().date(LocalDate.parse("2018-05-05")).htmlLink("www.bbc.com")
                 .title("title").urlLink("www.bbc.com").website("www.bbc.com").build();
@@ -92,11 +123,36 @@ public class TestFileBasedNewsRepository {
                 .title("title").urlLink("www.bbc.com").website("www.bbc.com").build();
         Headlines headlines = Headlines.of(headline1, headline2);
 
-        repository.saveRunningWeek(headlines);
+        // WHEN
+        repository.saveRunningWeekFor(headlines, userEmail);
+
+        // THEN
         Headlines headlinesFromFile = readFromFile(repoFile);
         assertEquals(headlines, headlinesFromFile);
 
         repoFile.delete();
+    }
+
+    @Test
+    void creates_repo_user_file_if_it_does_not_exist() throws Exception {
+        // GIVEN
+        Path repoFolder = Files.createDirectory(tempRepoFile.resolve("repo"));
+        String userEmail = "savesRunningWeek@test.com";
+        String storageFileName = FileBasedNewsRepository.emailToFilename(userEmail);
+        File expectedRepoFile = Paths.get(repoFolder.toString(), storageFileName).toFile();
+
+        if (expectedRepoFile.exists()) {
+            expectedRepoFile.delete();
+        }
+
+        NewsRepository repository = new FileBasedNewsRepository(repoFolder.toString());
+        Headlines headlines = new Headlines();
+
+        // WHEN
+        repository.saveRunningWeekFor(headlines, userEmail);
+
+        // THEN
+        assertTrue(expectedRepoFile.exists());
     }
 
     private Headlines readFromFile(File repoFile) throws Exception {
@@ -108,35 +164,64 @@ public class TestFileBasedNewsRepository {
 
     @Test
     void resetsRunningWeek() throws Exception {
-        File repoFile = new File("C:\\Users\\senel\\AppData\\Local\\Temp\\tests", "headlines_save_running_week.json");
+        // GIVEN
+        Path repoFolder = Files.createDirectory(tempRepoFile.resolve("repo"));
 
-        if (repoFile.exists()) {
-            repoFile.delete();
-        }
-        repoFile.createNewFile();
-        NewsRepository repository = new FileBasedNewsRepository(repoFile.getAbsolutePath());
+        String userEmail = "resetsRunningWeek@test.com";
+        String storageFileName = FileBasedNewsRepository.emailToFilename(userEmail);
+
+        File repoFile = createRepoFile(repoFolder, storageFileName);
+
+        NewsRepository repository = new FileBasedNewsRepository(repoFolder.toString());
 
         Headline headline = Headline.builder().date(LocalDate.parse("2020-09-17")).htmlLink("www.bbc.com")
                 .title("title").urlLink("www.bbc.com").website("www.bbc.com").build();
         Headlines headlines = Headlines.of(headline);
 
-        repository.saveRunningWeek(headlines);
-        repository.resetRunningWeek();
+        repository.saveRunningWeekFor(headlines, userEmail);
 
-        String oldRepoFileName = String.format("headlines_save_running_week_%s.json", Today.getDateString());
-        File oldRepoFile = new File("C:\\Users\\senel\\AppData\\Local\\Temp\\tests", oldRepoFileName);
-        // assertTrue(repoFile.exists());
+        // WHEN
+        repository.resetRunningWeekFor(userEmail);
+
+        // THEN
+        String oldRepoFileName = String.format("%s_%s.json", storageFileName.replace(".json", ""),
+                Today.getDateString());
+
+        File oldRepoFile = new File(repoFolder.resolve(oldRepoFileName).toString());
         assertTrue(oldRepoFile.exists());
-
-        /*
-         * Headlines newHeadlines = readFromFile(repoFile);
-         * assertTrue(newHeadlines.areEmpty());
-         */
 
         Headlines oldHeadlinesFromFile = readFromFile(oldRepoFile);
         assertEquals(headlines, oldHeadlinesFromFile);
 
         repoFile.delete();
         oldRepoFile.delete();
+    }
+
+    private File createRepoFile(Path repoFolder, String storageFileName) throws IOException {
+        Path repoFilePath = Files.createFile(repoFolder.resolve(storageFileName));
+        File repoFile = new File(repoFilePath.toAbsolutePath().toString());
+
+        if (repoFile.exists()) {
+            repoFile.delete();
+        }
+
+        repoFile.createNewFile();
+        return repoFile;
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideEmailsAndExpectedFilenames")
+    @DisplayName("email is converted to a correct filename")
+    public void emailToFilename(String email, String expectedFilename) {
+        assertEquals(expectedFilename, FileBasedNewsRepository.emailToFilename(email));
+    }
+
+    private static Stream<Arguments> provideEmailsAndExpectedFilenames() {
+        return Stream.of(Arguments.of("some@email.com", "headlines_running_week___some__at__email.com.json"),
+                Arguments.of("some@email_email.com", "headlines_running_week___some__at__email_email.com.json"),
+                Arguments.of("some_some@email.com", "headlines_running_week___some_some__at__email.com.json"),
+                Arguments.of("some@email.com.eu", "headlines_running_week___some__at__email.com.eu.json"),
+                Arguments.of("some@email-email.com", "headlines_running_week___some__at__email-email.com.json"),
+                Arguments.of("some.some@email.com", "headlines_running_week___some.some__at__email.com.json"));
     }
 }

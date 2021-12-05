@@ -16,6 +16,7 @@ import eu.adainius.newsfocused.ApplicationException;
 import eu.adainius.newsfocused.config.EmailConfiguration;
 import eu.adainius.newsfocused.headline.Headline;
 import eu.adainius.newsfocused.headline.Headlines;
+import eu.adainius.newsfocused.util.Today;
 import freemarker.template.Template;
 
 public class Email {
@@ -74,7 +75,7 @@ public class Email {
         List<DayDto> days = new ArrayList<>(7);
 
         for (int i = 0; i < 7; i++) {
-            LocalDate date = LocalDate.now().minusDays(i);
+            LocalDate date = Today.getToday().minusDays(i);
             String dateString = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
             List<Headline> headlinesFromTheDay = headlines.from(dateString).stream().collect(Collectors.toList());
