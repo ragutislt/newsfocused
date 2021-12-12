@@ -6,8 +6,8 @@ RUN "mkdir" "/usr/newsfocused/repo" # to be externalized as well
 COPY target/newsfocused-*.jar /usr/newsfocused/newsfocused.jar
 WORKDIR /usr/newsfocused
 
-ENV usersLocation=""
-ENV repoLocation "/repo/headlines.json"
+ENV usersLocation="/users.json"
+ENV repoLocation "/repo"
 ENV emailPropertiesFile "/emailProtocol.properties"
 
 CMD java --add-opens java.base/java.time=ALL-UNNAMED -jar /usr/newsfocused/newsfocused.jar ${usersLocation} ${repoLocation} ${emailPropertiesFile}

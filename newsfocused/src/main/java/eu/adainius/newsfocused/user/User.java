@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class User {
     private String email;
-    private String dataStorageFile;
+    private String dataStorageFile; // TODO remove
     private List<String> daysToSendOn;
     private String[] sites;
 

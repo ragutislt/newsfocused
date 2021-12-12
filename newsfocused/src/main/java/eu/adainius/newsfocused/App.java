@@ -82,9 +82,9 @@ public class App {
 
     private static void initializeRepository(String[] args) {
         if (App.newsRepository == null) {
-            String repositoryFile = args[1];
-            log.info("Initializing news repository to FileBasedNewsRepository with file at: {}", repositoryFile);
-            App.setNewsRepository(new FileBasedNewsRepository(repositoryFile));
+            String repositoryFolder = args[1];
+            log.info("Initializing news repository to FileBasedNewsRepository with folder at: {}", repositoryFolder);
+            App.setNewsRepository(new FileBasedNewsRepository(repositoryFolder));
         }
     }
 
