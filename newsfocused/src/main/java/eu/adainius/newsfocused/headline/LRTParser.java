@@ -17,6 +17,7 @@ public class LRTParser implements HeadlineParser {
 
     @Override
     public List<Headline> parseFrom(String htmlContent) {
+        // TODO review searching - top headlines are not picked
         Document doc = Jsoup.parse(htmlContent);
 
         return doc.getElementsByTag(HEADLINE_TAG).stream().map(h -> h.html()).filter(h -> isHeadline(h))

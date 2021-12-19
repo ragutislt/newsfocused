@@ -17,21 +17,25 @@ This avoids breakdown of parsing a site
 6. MailCatcher (for e2e tests)
 
 ## Requirements still left to implement (constantly changing list)
+* send emails from own domain
+* configure automatic building and deployment
+* front website for clients to register and configure their preferences
 * configurable properties
-    - email address
-    - which days to send emails
+    - + email address
+    - + which days to send emails
     - what time of the day to send email
     - when the batch runs?
     - number of headlines per site
-    - where data is stored
-    - smtp server details
+    - + where data is stored
+    - + smtp server details
 * scheduling when to send the email
 * Reading sites should have some throttle to not ddos the sites (sleep between X requests, make configurable)
-* batch users - we shouldn't have one java process per user
+* + batch users - we shouldn't have one java process per user
     property format?
         store in one json file?
 * User a business key for ideantifying users instead of email? (would help if email changes, we don't lose all history; but is it really needed?)
-* after sending email, clear running list
+    would help also with deleting CIDs? could keep the id. Also would help with debugging/tracking
+* + after sending email, clear running list
     
     Here don't clean data right away, instead keep the 'old' week/period and just save new headlines in the new week/period
 
