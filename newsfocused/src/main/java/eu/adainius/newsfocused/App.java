@@ -75,8 +75,7 @@ public class App {
             emailProtocolProperties.load(new FileReader(emailProtocolPropertiesFile));
 
             EmailConfiguration.setEmailProtocolProperties(emailProtocolProperties);
-            log.info("Email protocol properties will be used from file {}, they are: {}", emailProtocolPropertiesFile,
-                    emailProtocolProperties);
+            log.info("Email protocol properties will be used from file {}", emailProtocolPropertiesFile);
         }
     }
 
