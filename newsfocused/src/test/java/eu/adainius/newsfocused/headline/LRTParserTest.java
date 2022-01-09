@@ -1,5 +1,6 @@
 package eu.adainius.newsfocused.headline;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -23,6 +24,21 @@ public class LRTParserTest {
         List<Headline> headlines = lrtParser.parseFrom(lrtContent);
 
         assertTrue(headlines.stream().anyMatch(headline -> headlinesExpected.get(0).equals(headline.htmlLink())));
+    }
+
+    @Test
+    public void parses_lrt_headlines_ignores_horizontal_ones() throws IOException {
+        List<String> headlinesExpected = List.of(
+                "Hemingway`us turėjo 4 žmonas, mėgo gaidžių peštynes, barus ir troško, kad jį vertintų pagal kūrybą, o ne paklydimus");
+
+        String lrtContentLocation = "src/test/resources/lrt.html";
+        String lrtContent = Files.readString(Paths.get(lrtContentLocation));
+
+        HeadlineParser lrtParser = new LRTParser();
+
+        List<Headline> headlines = lrtParser.parseFrom(lrtContent);
+
+        assertFalse(headlines.stream().anyMatch(headline -> headlinesExpected.get(0).equals(headline.title())));
     }
 
     @Test
