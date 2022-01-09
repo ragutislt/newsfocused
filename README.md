@@ -17,7 +17,7 @@ This avoids breakdown of parsing a site
 6. MailCatcher (for e2e tests)
 
 ## Requirements still left to implement (constantly changing list)
-* send emails from own domain
+* + send emails from own domain
 * configure automatic building and deployment
 * front website for clients to register and configure their preferences
 * configurable properties
@@ -28,7 +28,7 @@ This avoids breakdown of parsing a site
     - number of headlines per site
     - + where data is stored
     - + smtp server details
-* scheduling when to send the email
+* scheduling when to send the email (for each client, lower priority, would need many resources)
 * Reading sites should have some throttle to not ddos the sites (sleep between X requests, make configurable)
 * + batch users - we shouldn't have one java process per user
     property format?
@@ -40,7 +40,7 @@ This avoids breakdown of parsing a site
     Here don't clean data right away, instead keep the 'old' week/period and just save new headlines in the new week/period
 
 ### Non-Functional requirements
-* Integrate in AWS, use lambda to run
+* + Integrate in AWS, use lambda to run
 * Run integration tests in AWS every day against each different site registered in the system, send email with results
 * * Things to test: correctly parsed headlines (can easily check email format), correct encoding (easily checked again), whether email even exists
 
@@ -52,11 +52,16 @@ Using githooks and aws, when a new release is detected, automatically pull it in
 1. Compile
 2. Run using
 ```
- java -jar newsfocused-1.0.0-SNAPSHOT.jar "sites.txt" "email@email.com" "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday" "repo\headlines.json" "emailProtocol.properties"
+docker run --rm \
+    -e usersLocation="/usr/newsfocused/config/users.json" \
+    -e repoLocation="/usr/newsfocused/config/repo" \
+    -e emailPropertiesFile="/usr/newsfocused/config/emailProtocol.properties" \
+    -v /some_folder_with_properties_files/newsfocused:/usr/newsfocused/config newsfocused:${version}
 ```
 Parameters are:<br/>
-    1. Sites file<br/>
-    2. Email to send to<br/>
-    3. Days to send on, ex: "Monday,Friday"<br/>
-    4. Repository location in the file system (file name)<br/>
-    5. Email properties file<br/>
+    1. usersLocation - where user settings are stored (in json)<br/>
+    2. repoLocation - repository location in the file system (file name)<br/>
+    3. emailPropertiesFile - Email properties file (smtp)<br/>
+
+
+See tests for sample properties files
