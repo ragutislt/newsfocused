@@ -21,6 +21,12 @@
     <module>e2e-tests</module>
   </modules>
 
+  <scm>
+    <connection>scm:git:https://github.com/ragutislt/news_focused.git</connection>
+    <developerConnection>scm:git:https://github.com/ragutislt/news_focused.git</developerConnection>
+    <url>scm:git:https://github.com/ragutislt/news_focused.git</url>
+  </scm>
+
   <build>
     <pluginManagement>
       <plugins>
