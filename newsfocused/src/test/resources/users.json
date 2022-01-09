@@ -5,8 +5,7 @@
             "www.bbc.com",
             "www.lrt.lt"
         ],
-        "daysToSendOn": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-        "dataStorageFile":"headlines_save_running_week_some-email.com.json"
+        "daysToSendOn": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     },
     {
         "email": "some@email222.com",
@@ -14,7 +13,6 @@
             "www.bbc.com",
             "www.lrt.lt"
         ],
-        "daysToSendOn": ["Monday","Wednesday","Friday"],
-        "dataStorageFile":"headlines_save_running_week_some-email222.com.json"
+        "daysToSendOn": ["Monday","Wednesday","Friday"]
     }
 ]

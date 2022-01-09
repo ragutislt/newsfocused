@@ -5,7 +5,6 @@
             "www.bbc.com",
             "www.lrt.lt"
         ],
-        "daysToSendOn": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-        "dataStorageFile":"headlines_save_running_week_some-email.com.json"
+        "daysToSendOn": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     }
 ]

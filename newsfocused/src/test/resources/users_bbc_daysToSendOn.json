@@ -4,7 +4,6 @@
         "sites": [
             "www.bbc.com"
         ],
-        "daysToSendOn": ["Wednesday","Saturday"],
-        "dataStorageFile":"headlines_save_running_week_some-email.com.json"
+        "daysToSendOn": ["Wednesday","Saturday"]
     }
 ]

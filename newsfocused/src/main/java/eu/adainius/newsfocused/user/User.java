@@ -17,13 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class User {
     private String email;
-    private String dataStorageFile; // TODO remove
     private List<String> daysToSendOn;
     private String[] sites;
-
-    public String dataStorageFile() {
-        return dataStorageFile;
-    }
 
     public String email() {
         return email;
@@ -73,7 +68,7 @@ public class User {
     private static void validateProperties(User[] allUsers, String propertiesFileLocation) {
         List<User> usersInError = new ArrayList<>();
         for (User user : allUsers) {
-            if (Validation.empty(user.dataStorageFile) || user.daysToSendOn().isEmpty()
+            if (user.daysToSendOn().isEmpty()
                     || Validation.empty(user.email) || user.sites == null
                     || user.sites.length == 0) {
                 usersInError.add(user);
@@ -90,7 +85,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Users [dataStorageFile=" + dataStorageFile + ", daysToSendOn=" + daysToSendOn + ", email="
+        return "Users [daysToSendOn=" + daysToSendOn + ", email="
                 + email + ", sites=" + Arrays.toString(sites) + "]";
     }
 
@@ -98,7 +93,6 @@ public class User {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((dataStorageFile == null) ? 0 : dataStorageFile.hashCode());
         result = prime * result + ((daysToSendOn == null) ? 0 : daysToSendOn.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + Arrays.hashCode(sites);
@@ -114,11 +108,6 @@ public class User {
         if (getClass() != obj.getClass())
             return false;
         User other = (User) obj;
-        if (dataStorageFile == null) {
-            if (other.dataStorageFile != null)
-                return false;
-        } else if (!dataStorageFile.equals(other.dataStorageFile))
-            return false;
         if (daysToSendOn == null) {
             if (other.daysToSendOn != null)
                 return false;

@@ -22,7 +22,6 @@ public class UserTest {
         List<User> usersList = User.parseFromUsing(fileLocation, gson);
         User users = usersList.get(0);
 
-        assertEquals("headlines_save_running_week_some-email.com.json", users.dataStorageFile());
         assertEquals("some@email.com", users.email());
         assertEquals(List.of("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), users.daysToSendOn());
         assertEquals(List.of("www.bbc.com", "www.lrt.lt"), users.sites());
