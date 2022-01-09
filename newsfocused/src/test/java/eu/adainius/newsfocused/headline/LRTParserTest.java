@@ -42,6 +42,21 @@ public class LRTParserTest {
     }
 
     @Test
+    public void parses_lrt_headlines_ignores_video_feed() throws IOException {
+        List<String> headlinesExpected = List.of(
+                "Panorama");
+
+        String lrtContentLocation = "src/test/resources/lrt.html";
+        String lrtContent = Files.readString(Paths.get(lrtContentLocation));
+
+        HeadlineParser lrtParser = new LRTParser();
+
+        List<Headline> headlines = lrtParser.parseFrom(lrtContent);
+
+        assertFalse(headlines.stream().anyMatch(headline -> headlinesExpected.get(0).equals(headline.title())));
+    }
+
+    @Test
     public void constructs_new_html_based_on_link_and_title() throws IOException {
         List<String> headlinesExpected = List.of(
                 "<a href=\"https://www.lrt.lt/naujienos/sveikata/682/1411516/mediku-sajudzio-vadove-remia-siauliu-ligonines-vadova-prie-sienos-ar-zinote-kiek-darbuotoju-paliko-sirdies-ir-kraujagysliu-centra\" title=\"Medikų sąjūdžio vadovė remia Šiaulių ligoninės vadovą prie sienos: ar žinote, kiek darbuotojų paliko Širdies ir kraujagyslių centrą?\">Medikų sąjūdžio vadovė remia Šiaulių ligoninės vadovą prie sienos: ar žinote, kiek darbuotojų paliko Širdies ir kraujagyslių centrą?</a>");

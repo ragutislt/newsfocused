@@ -14,13 +14,17 @@ public class LRTParser implements HeadlineParser {
     private static final String LRT_URL = "https://www.lrt.lt";
 
     private static final String HEADLINE_TAG = "h3";
-    private static final String IGNORE_SECTION_NAME = ".news-feed-horizontal";
+    private static final String IGNORE_HORIZONTAL_SECTION_NAME = ".news-feed-horizontal";
+    private static final String IGNORE_LIVE_FEED_SECTION_NAME = ".live-channel-list__container";
 
     @Override
     public List<Headline> parseFrom(String htmlContent) {
         Document doc = Jsoup.parse(htmlContent);
 
-        return doc.getElementsByTag(HEADLINE_TAG).stream().filter(h -> h.closest(IGNORE_SECTION_NAME) == null). map(h -> h.html()).filter(h -> isHeadline(h))
+        return doc.getElementsByTag(HEADLINE_TAG).stream()
+                .filter(h -> h.closest(IGNORE_HORIZONTAL_SECTION_NAME) == null)
+                .filter(h -> h.closest(IGNORE_LIVE_FEED_SECTION_NAME) == null)
+                .map(h -> h.html()).filter(h -> isHeadline(h))
                 .map(h -> htmlToHeadline(h)).collect(Collectors.toList());
     }
 
