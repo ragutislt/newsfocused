@@ -26,10 +26,24 @@ describe('login to the admin app', () => {
     })
 
     it('enables login button if credentials are not empty', () => {
-        cy.get('#login-button').then((button) => {
-            cy.get('#username-input').type('username')
-            cy.get('#password-input').type('password')
-            cy.get(button).should('not.be.disabled')
-        })
+        cy.get('#username-input').type('username')
+        cy.get('#password-input').type('password')
+        cy.get('#login-button').should('not.be.disabled')
+    })
+
+    it('calls login endpoint upon login button click', () => {
+        cy.get('#username-input').type('username')
+        cy.get('#password-input').type('password')
+        cy.get('#login-button').click()
+
+        cy.intercept('POST', 'http://localhost:3000/api/login', {
+            statusCode: 200
+        }).as('postLogin')
+        cy.wait('@postLogin');
+        // cy.wait('@postLogin').should(({ request }) => {
+        //     expect(request.body).to.equal({ username: "username", password: "password" })
+        // })
+
+        cy.get('#username-input').should('have.length', 0)
     })
 })

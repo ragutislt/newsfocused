@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import { useState } from "react"
+import { login } from "../Api"
 
 const loginEnabled = (username, password) => {
     return username && password;
@@ -36,7 +37,7 @@ function AdminAppLogin() {
                     borderRadius: 1,
                 }}
             >
-                <LockOpen fontSize="large"/>
+                <LockOpen fontSize="large" />
                 <Typography component="h1" variant="h5" marginTop={4}>
                     Sign in
                 </Typography>
@@ -50,9 +51,9 @@ function AdminAppLogin() {
                         id="username-input"
                         label="Username"
                         variant="outlined"
-                        margin="normal" 
+                        margin="normal"
                         onChange={event => setUsername(event.target.value)}
-                        />
+                    />
                     <TextField
                         margin="normal"
                         id="password-input"
@@ -68,7 +69,13 @@ function AdminAppLogin() {
                     flexDirection: "column",
                     alignItems: "center"
                 }}>
-                    <Button id="login-button" variant="outlined" disabled={!loginEnabled(username, password)}>Login</Button>
+                    <Button id="login-button"
+                        variant="outlined"
+                        disabled={!loginEnabled(username, password)}
+                        onClick={() => { 
+                            login(username, password) 
+                        }}
+                    >Login</Button>
                 </Box>
             </Box>
         </Container>
