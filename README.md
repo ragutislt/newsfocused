@@ -1,5 +1,7 @@
 # news_focused
 
+[![wakatime](https://wakatime.com/badge/github/ragutislt/newsfocused.svg)](https://wakatime.com/badge/github/ragutislt/newsfocused) (time spent working on the repository)
+
 ## Functionality
 1. Runs everyday as a batch
 2. Collects headlines from different news sites
