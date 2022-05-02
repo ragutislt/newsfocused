@@ -1,7 +1,7 @@
 
 describe('login to the admin app', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000')
+        cy.visit('http://localhost:3000/#login')
     })
 
     it('displays username input', () => {
@@ -31,7 +31,7 @@ describe('login to the admin app', () => {
         cy.get('#login-button').should('not.be.disabled')
     })
 
-    it('calls login endpoint upon login button click', () => {
+    it('redirects to home on successful login', () => {
         cy.get('#username-input').type('username')
         cy.get('#password-input').type('password')
 
@@ -49,6 +49,26 @@ describe('login to the admin app', () => {
             expect(request.body).property('password').to.equal('password');
         })
 
-        cy.get('#username-input').should('have.length', 0)
+        cy.location().should((location) => {
+            expect(location.hash).to.equal('home')
+        })
+    })
+
+    it('displays error message on failed login', () => {
+        cy.get('#username-input').type('username')
+        cy.get('#password-input').type('password')
+
+        cy.intercept({
+            method: 'POST',
+            url: '**/api/login'
+        }, {
+            statusCode: 401
+        }).as('postLogin')
+
+        cy.get('#login-button').click()
+
+        cy.wait('@postLogin')
+
+        cy.get('#login-error').should('have.length', 1)
     })
 })
