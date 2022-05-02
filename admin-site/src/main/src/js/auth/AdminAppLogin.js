@@ -14,16 +14,20 @@ const loginEnabled = (username, password) => {
     return username && password;
 }
 
-function AdminAppLogin() {
+function AdminAppLogin(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const login = (username, password) => {
+    const onLogin = props.onLogin;
+
+    const login = () => {
         callLogin(username, password)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(response.status)
+                } else {
+                    onLogin()
                 }
             })
             .catch(statusCode => {
@@ -98,7 +102,7 @@ function AdminAppLogin() {
                         variant="outlined"
                         disabled={!loginEnabled(username, password)}
                         onClick={() => {
-                            login(username, password)
+                            login()
                         }}
                     >Login</Button>
                 </Box>

@@ -1,12 +1,13 @@
 import logo from './../img/logo.svg';
 import './../css/AdminApp.css';
 import AdminAppLogin from './auth/AdminAppLogin';
+import { useState } from 'react';
 
 function AdminApp() {
-  const loggedIn = false;
+  const [loggedIn, setLoggedIn] = useState(false);
 
   if (!loggedIn) {
-    return <AdminAppLogin />
+    return <AdminAppLogin onLogin={() => setLoggedIn(true)}/>
   } else {
     return (
       <div className="AdminApp">

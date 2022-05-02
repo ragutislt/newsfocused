@@ -1,7 +1,7 @@
 
 describe('login to the admin app', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/#login')
+        cy.visit('http://localhost:3000')
     })
 
     it('displays username input', () => {
@@ -31,7 +31,7 @@ describe('login to the admin app', () => {
         cy.get('#login-button').should('not.be.disabled')
     })
 
-    it('redirects to home on successful login', () => {
+    it('does not render anymore login page on successful login', () => {
         cy.get('#username-input').type('username')
         cy.get('#password-input').type('password')
 
@@ -49,9 +49,8 @@ describe('login to the admin app', () => {
             expect(request.body).property('password').to.equal('password');
         })
 
-        cy.location().should((location) => {
-            expect(location.hash).to.equal('home')
-        })
+        cy.get('#username-input').should('have.length', 0)
+        cy.get('#password-input').should('have.length', 0)
     })
 
     it('displays error message on failed login', () => {
