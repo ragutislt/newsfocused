@@ -12,7 +12,7 @@
 	<groupId>eu.adainius</groupId>
 	<artifactId>newsfocused-admin-site-back</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>admin-site-back</name>
 
 	<properties>
@@ -26,10 +26,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.session</groupId>
