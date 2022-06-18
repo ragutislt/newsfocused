@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import org.springframework.stereotype.Component;
 
 @Component
-@Path("/auth")
+@Path("api/auth")
 public class AuthenticationController {
     @GET
     @Produces("text/plain")
