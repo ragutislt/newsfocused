@@ -50,24 +50,27 @@ public class WebSecurityConfig {
 	// @Order(1)
 	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 		log.info("initializing SecurityFilterChain");
-		http. anonymous().disable()
-				.authorizeRequests().antMatchers("/**").denyAll()
-				.and()
+		http.anonymous().disable()
+				//.authorizeRequests().antMatchers("/**").denyAll()
+				//.and()
 				.authorizeRequests()
 				.antMatchers("/admin/api/**")
-				.permitAll().and()
+				.hasRole(ROLE_ADMIN).and()
 				.httpBasic()
-				.authenticationEntryPoint(authenticationEntryPoint());
-				// .authorizeRequests()
-				// .antMatchers("/admin/api/**")
-				// // .authorizeHttpRequests(authorize -> authorize
-				// // .anyRequest().hasRole(ROLE_ADMIN)
-				// // )
-				// .hasRole(ROLE_ADMIN)
-				// .and()
-				// .httpBasic()
-				// .authenticationEntryPoint(authenticationEntryPoint())
-				// .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+				.authenticationEntryPoint(authenticationEntryPoint())
+				.and()
+				.authorizeRequests().anyRequest().authenticated();
+				//.authorizeRequests().antMatchers("/**").denyAll();
+		// .authorizeRequests()
+		// .antMatchers("/admin/api/**")
+		// // .authorizeHttpRequests(authorize -> authorize
+		// // .anyRequest().hasRole(ROLE_ADMIN)
+		// // )
+		// .hasRole(ROLE_ADMIN)
+		// .and()
+		// .httpBasic()
+		// .authenticationEntryPoint(authenticationEntryPoint())
+		// .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 		SecurityFilterChain securityFilterChain = http.build();
 		log.info("Security: {}", http);
 		log.info("Security: {}", securityFilterChain);
