@@ -51,7 +51,12 @@ public class WebSecurityConfig {
 	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 		log.info("initializing SecurityFilterChain");
 		http. anonymous().disable()
-				.authorizeRequests().antMatchers("/**").denyAll();
+				.authorizeRequests().antMatchers("/**").denyAll()
+				.and()
+				.authorizeRequests()
+				.antMatchers("/admin/api/**")
+				.permitAll().and()
+				.httpBasic();
 				// .authorizeRequests()
 				// .antMatchers("/admin/api/**")
 				// // .authorizeHttpRequests(authorize -> authorize
