@@ -56,7 +56,8 @@ public class WebSecurityConfig {
 				.authorizeRequests()
 				.antMatchers("/admin/api/**")
 				.permitAll().and()
-				.httpBasic();
+				.httpBasic()
+				.authenticationEntryPoint(authenticationEntryPoint());
 				// .authorizeRequests()
 				// .antMatchers("/admin/api/**")
 				// // .authorizeHttpRequests(authorize -> authorize
