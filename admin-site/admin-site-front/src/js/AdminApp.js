@@ -1,5 +1,5 @@
 import logo from './../img/logo.svg';
-import './../css/AdminApp.css';
+import '../css/AdminApp.css';
 import AdminAppLogin from './auth/AdminAppLogin';
 import { useState } from 'react';
 

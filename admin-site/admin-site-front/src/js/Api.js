@@ -1,7 +1,5 @@
-const BASE_URL = "http://localhost:3000"
-
 export const callLogin = (username, password) => {
-    return fetch(`${BASE_URL}/api/login`, {
+    return fetch(`admin/api/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
