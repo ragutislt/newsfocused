@@ -11,6 +11,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.core.userdetails.User;
@@ -25,16 +26,15 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 import lombok.extern.slf4j.Slf4j;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(jsr250Enabled = true)
 @Slf4j
 public class WebSecurityConfig {
-
-	private static final String ROLE_ADMIN = "ADMIN";
 
 	@Bean
 	public UserDetailsService userDetailsService() {
 		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 		manager.createUser(
-				User.withDefaultPasswordEncoder().username("user").password("password").roles(ROLE_ADMIN).build());
+				User.withDefaultPasswordEncoder().username("user").password("password").roles("shit").build());
 		log.info("initializing userDetailsService");
 		return manager;
 	}
@@ -51,16 +51,16 @@ public class WebSecurityConfig {
 	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 		log.info("initializing SecurityFilterChain");
 		http.anonymous().disable()
-				//.authorizeRequests().antMatchers("/**").denyAll()
-				//.and()
+				// .authorizeRequests().antMatchers("/**").denyAll()
+				// .and()
 				.authorizeRequests()
-				.antMatchers("/admin/api/**")
-				.hasRole(ROLE_ADMIN).and()
+				.antMatchers("/admin/api/**").authenticated()
+				.and()
 				.httpBasic()
 				.authenticationEntryPoint(authenticationEntryPoint())
 				.and()
 				.authorizeRequests().anyRequest().authenticated();
-				//.authorizeRequests().antMatchers("/**").denyAll();
+		// .authorizeRequests().antMatchers("/**").denyAll();
 		// .authorizeRequests()
 		// .antMatchers("/admin/api/**")
 		// // .authorizeHttpRequests(authorize -> authorize
