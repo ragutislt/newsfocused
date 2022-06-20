@@ -18,23 +18,22 @@ import eu.adainius.newsfocused.admin.site.back.config.Roles;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Path("api/index")
-@Slf4j
+@Path("index")
 public class IndexController {
     @GET
-    @Produces("text/plain")
+    @Produces(" text/html")
     @RolesAllowed(Roles.ROLE_ADMIN)
     public String index() throws IOException {
+        String indexHtmlFile;
+
         InputStream resource = new ClassPathResource(
-            "public/index.html").getInputStream();
-          try ( BufferedReader reader = new BufferedReader(
-            new InputStreamReader(resource)) ) {
-              String indexHtmlFile = reader.lines()
-                .collect(Collectors.joining("\n"));
+                "public/index.html").getInputStream();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(resource))) {
+            indexHtmlFile = reader.lines()
+                    .collect(Collectors.joining("\n"));
+        }
 
-            log.info(indexHtmlFile);
-          }
-
-        return "Hi";
+        return indexHtmlFile;
     }
 }
