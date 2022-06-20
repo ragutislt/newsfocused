@@ -20,11 +20,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
-
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,7 +72,7 @@ public class WebSecurityConfig {
 	public SecurityFilterChain unauthenticatedFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.antMatchers("/admin/index").permitAll();
+				.mvcMatchers("/admin/index").permitAll();
 		return http.build();
 	}
 

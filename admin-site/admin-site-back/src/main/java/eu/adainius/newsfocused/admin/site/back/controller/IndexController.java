@@ -22,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 public class IndexController {
     @GET
     @Produces(" text/html")
-    @RolesAllowed(Roles.ROLE_ADMIN)
     public String index() throws IOException {
         String indexHtmlFile;
 
