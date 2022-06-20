@@ -9,11 +9,12 @@ import eu.adainius.newsfocused.admin.site.back.controller.IndexController;
 import eu.adainius.newsfocused.admin.site.back.controller.auth.AuthenticationController;
 
 @Configuration
-public class ControllerConfig extends ResourceConfig {
+public class JerseyConfig extends ResourceConfig {
 
-    public ControllerConfig() {
+    public JerseyConfig() {
         register(AuthenticationController.class);
         register(IndexController.class);
+        // register(GenericExceptionMapper.class);
         setProperties(Collections.singletonMap(
                 "jersey.config.server.response.setStatusOverSendError", true));
     }

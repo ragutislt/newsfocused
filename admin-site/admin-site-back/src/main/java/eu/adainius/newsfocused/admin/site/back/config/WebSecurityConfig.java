@@ -21,6 +21,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic;
@@ -42,32 +43,26 @@ public class WebSecurityConfig {
 		return manager;
 	}
 
-	private class BasicAuthenticationEntryPointLogged extends BasicAuthenticationEntryPoint {
+	private class BasicAuthenticationEntryPointNonHtml implements AuthenticationEntryPoint {
 		@Override
 		public void commence(HttpServletRequest request, HttpServletResponse response,
 				AuthenticationException authException) throws IOException {
-			log.info("BasicAuthenticationEntryPointLogged is reached");
-			response.addHeader("WWW-Authenticate", "Basic realm=\"" + "Newsfocused Admin Site" + "\"");
-			response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+			response.addHeader("WWW-Authenticate", "Basic realm=Newsfocused Admin Site");
+			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		}
 	}
 
 	@Bean
 	AuthenticationEntryPoint authenticationEntryPoint() {
-		BasicAuthenticationEntryPoint authenticationEntryPoint = new BasicAuthenticationEntryPointLogged();
-		authenticationEntryPoint.setRealmName("Newsfocused Admin Site");
-		return authenticationEntryPoint;
+		return new BasicAuthenticationEntryPointNonHtml();
 	}
 
 	@Bean
 	@Order(1)
 	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
-		//http.authorizeRequests().antMatchers(&quot;/**&quot;).hasRole(&quot;USER&quot;).and().httpBasic();
-		//ExceptionTranslationFilter
-		//AuthenticationCredentialsNotFoundException
 		http
 				.authorizeRequests()
-				.mvcMatchers("/admin/api/auth")
+				.mvcMatchers("/admin/api/**")
 				.authenticated()
 				.and()
 				.anonymous().disable()
@@ -77,14 +72,14 @@ public class WebSecurityConfig {
 		return http.build();
 	}
 
-	// @Bean
-	// @Order(2)
-	// public SecurityFilterChain unauthenticatedFilterChain(HttpSecurity http) throws Exception {
-	// 	http
-	// 			.authorizeRequests()
-	// 			.antMatchers("/admin/index").permitAll();
-	// 	return http.build();
-	// }
+	@Bean
+	@Order(2)
+	public SecurityFilterChain unauthenticatedFilterChain(HttpSecurity http) throws Exception {
+		http
+				.authorizeRequests()
+				.antMatchers("/admin/index").permitAll();
+		return http.build();
+	}
 
 	private AccessDeniedHandler accessDeniedHandler() {
 		AccessDeniedHandler handler = new AccessDeniedHandler() {
