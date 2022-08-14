@@ -1,6 +1,6 @@
 package eu.adainius.newsfocused.admin.site.back.config;
 
-import java.util.Collections;
+import java.util.Map;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +14,10 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         register(AuthenticationController.class);
         register(IndexController.class);
-        // register(GenericExceptionMapper.class);
-        setProperties(Collections.singletonMap(
-                "jersey.config.server.response.setStatusOverSendError", true));
+        setProperties(
+                Map.of(
+                        "jersey.config.server.response.setStatusOverSendError", true,
+                        "jersey.config.servlet.filter.forwardOn404", true));
     }
 
 }
