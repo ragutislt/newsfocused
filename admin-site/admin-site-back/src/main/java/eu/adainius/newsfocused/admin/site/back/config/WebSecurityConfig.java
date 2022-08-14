@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -86,5 +87,14 @@ public class WebSecurityConfig {
 			}
 		};
 		return handler;
+	}
+
+	@Bean
+	public ServletRegistrationBean customServletRegistrationBean() {
+		ServletRegistrationBean bean = new ServletRegistrationBean(
+				new StaticResourceServlet(), "/static/*");
+				log.info("Registering servlet StaticResourceServlet");
+		bean.setLoadOnStartup(1);
+		return bean;
 	}
 }
