@@ -15,11 +15,12 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         register(AuthenticationController.class);
         register(IndexController.class);
-        // register(GenericExceptionMapper.class);
+        register(GenericExceptionMapper.class);
         setProperties(
                 Map.of(
                         "jersey.config.server.response.setStatusOverSendError", true,
-                        ServletProperties.FILTER_FORWARD_ON_404, true));
+                        ServletProperties.FILTER_FORWARD_ON_404, false,
+                        ServletProperties.FILTER_STATIC_CONTENT_REGEX, "/static/.*"));
     }
 
 }

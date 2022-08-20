@@ -46,6 +46,7 @@ public class StaticResourceServlet extends HttpServlet {
             responseBodyWriter.print(fileContentToServe);
             responseBodyWriter.flush();
         } catch (IOException e) {
+            // TODO implement custom error page
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
