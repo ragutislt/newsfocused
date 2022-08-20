@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Provider
 @Configuration
 @Slf4j
-public class GenericExceptionMapper implements ExceptionMapper<NotFoundException> {
+public class JerseyNotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
     @Override
     public Response toResponse(NotFoundException exception) {
         log.info("Treating exception {}", exception.getMessage());

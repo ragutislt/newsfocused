@@ -15,7 +15,7 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         register(AuthenticationController.class);
         register(IndexController.class);
-        register(GenericExceptionMapper.class);
+        register(JerseyNotFoundExceptionMapper.class);
         setProperties(
                 Map.of(
                         "jersey.config.server.response.setStatusOverSendError", true,
