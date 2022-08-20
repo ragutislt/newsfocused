@@ -5,23 +5,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
-import org.springframework.core.io.ClassPathResource;
 
-import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-
-import eu.adainius.newsfocused.admin.site.back.config.Roles;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Path("index")
 public class IndexController {
     @GET
-    @Produces(" text/html")
+    @Produces("text/html")
     public String index() throws IOException {
         String indexHtmlFile;
 
