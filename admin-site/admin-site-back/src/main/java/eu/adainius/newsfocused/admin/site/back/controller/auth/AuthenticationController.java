@@ -1,9 +1,9 @@
 package eu.adainius.newsfocused.admin.site.back.controller.auth;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
 
@@ -12,10 +12,9 @@ import eu.adainius.newsfocused.admin.site.back.config.Roles;
 @Component
 @Path("api/auth")
 public class AuthenticationController {
-    @GET
-    @Produces("text/plain")
+    @POST
     @RolesAllowed(Roles.ROLE_ADMIN)
-    public String login() {
-        return "Hello";
+    public Response login() {
+        return Response.ok().build(); // nothing to do here since spring security will have already authenticated the user
     }
 }

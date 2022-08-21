@@ -18,6 +18,7 @@ public class JerseyNotFoundExceptionMapper implements ExceptionMapper<NotFoundEx
     @Override
     public Response toResponse(NotFoundException exception) {
         log.info("Treating exception {}", exception.getMessage());
+        // TODO implement custom error page ? Is it worth it for the API? Still better than default one from container
         return Response.status(Status.NOT_FOUND).build();
     }
 }

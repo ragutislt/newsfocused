@@ -6,6 +6,8 @@ import { useState } from 'react';
 function AdminApp() {
   const [loggedIn, setLoggedIn] = useState(false);
 
+  // TODO do a preflight call to know if we are already authenticated and set the session accordingly
+
   if (!loggedIn) {
     return <AdminAppLogin onLogin={() => setLoggedIn(true)}/>
   } else {

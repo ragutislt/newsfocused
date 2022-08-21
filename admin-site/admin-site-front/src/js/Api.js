@@ -1,13 +1,11 @@
 export const callLogin = (username, password) => {
-    return fetch(`admin/api/login`, {
+    const credentials = btoa(`${username}:${password}`);
+    return fetch(`admin/api/auth`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username,
-            password
-        })
+            'Authorization': `Basic ${credentials}`
+        }
     })
 }
 

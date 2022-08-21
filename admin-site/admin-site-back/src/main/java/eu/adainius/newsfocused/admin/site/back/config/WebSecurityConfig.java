@@ -1,6 +1,7 @@
 package eu.adainius.newsfocused.admin.site.back.config;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,6 +58,17 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost")); 
+		// TODO add domain name eventually read from a property file
+		configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","OPTIONS"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/api/**", configuration);
+		return source;
+	}
+
+	@Bean
 	@Order(1)
 	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 		http
@@ -64,7 +79,9 @@ public class WebSecurityConfig {
 				.anonymous().disable()
 				.httpBasic()
 				.authenticationEntryPoint(authenticationEntryPoint())
-				.and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+				.and().cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.csrf().disable() // TODO configure csrf
+				.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 		return http.build();
 	}
 
