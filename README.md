@@ -16,33 +16,36 @@ This avoids breakdown of parsing a site
 3. Junit
 4. Mockito
 5. Jakarta mail
-6. MailCatcher (for e2e tests)
+6. Jsoup (for html response parsing)
+7. MailCatcher (for e2e tests)
+8. Jersey (for websites)
+9. Spring and Spring boot (for websites)
 
 ## Requirements still left to implement (constantly changing list)
-* + send emails from own domain
+* ~~send emails from own domain~~ DONE
 * configure automatic building and deployment
 * front website for clients to register and configure their preferences
 * configurable properties
-    - + email address
-    - + which days to send emails
+    - ~~email address~~ DONE
+    - ~~which days to send emails~~ DONE
     - what time of the day to send email
     - when the batch runs?
     - number of headlines per site
-    - + where data is stored
-    - + smtp server details
+    - ~~where data is stored~~ DONE
+    - ~~smtp server details~~ DONE
 * scheduling when to send the email (for each client, lower priority, would need many resources)
 * Reading sites should have some throttle to not ddos the sites (sleep between X requests, make configurable)
-* + batch users - we shouldn't have one java process per user
+* ~~batch users - we shouldn't have one java process per user~~ DONE
     property format?
         store in one json file?
 * User a business key for ideantifying users instead of email? (would help if email changes, we don't lose all history; but is it really needed?)
     would help also with deleting CIDs? could keep the id. Also would help with debugging/tracking
-* + after sending email, clear running list
+* ~~after sending email, clear running list~~ DONE
     
     Here don't clean data right away, instead keep the 'old' week/period and just save new headlines in the new week/period
 
 ### Non-Functional requirements
-* + Integrate in AWS, use lambda to run
+* ~~Integrate in AWS, use lambda to run~~ DONE
 * Run integration tests in AWS every day against each different site registered in the system, send email with results
 * * Things to test: correctly parsed headlines (can easily check email format), correct encoding (easily checked again), whether email even exists
 

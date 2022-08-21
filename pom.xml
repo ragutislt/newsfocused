@@ -19,6 +19,7 @@
   <modules>
     <module>newsfocused</module>
     <module>e2e-tests</module>
+    <module>admin-site</module>
   </modules>
 
   <scm>
