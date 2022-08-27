@@ -48,8 +48,12 @@ We could use here, for example, Spring Data Rest, to have mostly a procedural ap
 2. It's a proper business application with a clear domain. In this case a more complex approach makes sense, like Domain-Driven-Design (DDD).
 <br><br>Upsides: As the business (domain) grows, we get new requirements, evolutions, etc... it can become difficult to maintain a procedural application and not end up with it becoming a big ball of mud. DDD helps to flush out a clear domain which is highly maintainable and readable.
 <br><br>Downsides: It is more difficult to get started with. We need more analysis at the beginning to discover the entities within our domain. It might also be costly later if we identify our domain entities incorrectly. Last but not least, it requires a bit more effort to avoid any infrastructure-related code or dependencies being used in our domain.
+
 ### Decision
-2022-08-27 - As I'm not sure that the domain of the admin app will not evolve much in the future, I think it is more valuable in the long-term to go with an architecture based on DDD. It will also be good from a personal growth point of view - I can learn and practice more of DDD patterns.
+ As I'm not sure that the domain of the admin app will not evolve much in the future, I think it is more valuable in the long-term to go with an architecture based on DDD. It will also be good from a personal growth point of view - I can learn and practice more of DDD patterns.
+
+### Status
+2022-08-27 - Accepted
 ### Consequences
 To be filled later...
 
