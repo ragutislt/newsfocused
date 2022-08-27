@@ -1,7 +1,9 @@
 package eu.adainius.newsfocused.admin.site.back.domain;
 
 import java.util.List;
+import java.util.Optional;
 
+import io.vavr.control.Either;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,16 +12,18 @@ import lombok.Getter;
 public class Admin {
     private String username;
 
-    public User registerNewUser(String email, List<String> daysToSendOn, String[] sites, int headlineCount) {
+    public Either<String,User> registerNewUser(String email, List<String> daysToSendOn, String[] sites, int headlineCount) {
         // build user from params
         // raiseEvent new user
 
         return null;
     }
 
-    public void updateUser(User modifiedUser) {
+    public Either<String,Void> updateUser(User modifiedUser) {
         // build user from params
         // raiseEvent modified user
+        
+        return null;
     }
 
     public List<User> searchForUser(String email, List<User> allUsers) {
@@ -30,7 +34,7 @@ public class Admin {
         return null;
     }
 
-    public User openUserDetails(String email, List<User> allUsers) {
+    public Optional<User> openUserDetails(String email, List<User> allUsers) {
         // just find the right user and return it
         return null;
     }
