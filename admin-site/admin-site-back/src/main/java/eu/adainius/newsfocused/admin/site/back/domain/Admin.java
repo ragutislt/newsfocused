@@ -24,14 +24,12 @@ public class Admin {
         }
     }
 
-    public Either<String, Void> updateUser(User modifiedUser) {
-        // build user from params
-        // raiseEvent modified user
-
-        return null;
+    public Either<String, User> updateUser(String email, Set<String> daysToSendOn, Set<String> sites,
+    int headlineCount) {
+        return registerNewUser(email, daysToSendOn, sites, headlineCount);
     }
 
-    public List<User> searchForUser(String email, List<User> allUsers) {
+    public List<User> searchForUser(String email, Set<User> allUsers) {
         // performs search against allUsers
 
         // then returns the n results based on the pagination settings
@@ -39,8 +37,7 @@ public class Admin {
         return null;
     }
 
-    public Optional<User> openUserDetails(String email, List<User> allUsers) {
-        // just find the right user and return it
-        return null;
+    public Optional<User> openUserDetails(String email, Set<User> allUsers) {
+        return allUsers.stream().filter(user -> email.equals(user.email())).findFirst();
     }
 }
