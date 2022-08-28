@@ -38,7 +38,7 @@ public class AdminSiteApplicationServiceTest {
     @Test
     public void registers_a_new_user_through_the_admin_and_saves() {
         // GIVEN
-        String userEmail = "email";
+        String userEmail = "email@email.com";
         Set<String> daysToSendOn = Set.of("Monday");
         Set<String> sites = Set.of("BBC");
         int headlineCount = 8;

@@ -2,6 +2,7 @@ package eu.adainius.newsfocused.admin.site.back.services;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,8 @@ public class AdminSiteApplicationService {
             return Either.left("Email is not valid");
         }
 
-        Optional<Admin> adminResult = adminRepository.retrieveByUsername(adminUsername);
-
-        if (adminResult.isPresent()) {
-            Either<String, User> registration = adminResult.get().registerNewUser(email, daysToSendOn, sites,
+        return ifAdminExists(adminUsername, admin -> {
+            Either<String, User> registration = admin.registerNewUser(email, daysToSendOn, sites,
                     headlineCount);
 
             if (registration.isRight()) {
@@ -39,19 +38,14 @@ public class AdminSiteApplicationService {
             }
 
             return registration;
-        } else {
-            return Either.left(String.format("Admin with a username %s was not found!", adminUsername));
-        }
+        });
     }
 
     public Either<String, User> updateUser(String adminUsername, String userToUpdate, Set<String> daysToSendOn,
             Set<String> sites,
             int headlineCount) {
-        // TODO make general this admin search
-        Optional<Admin> adminResult = adminRepository.retrieveByUsername(adminUsername);
-
-        if (adminResult.isPresent()) {
-            Either<String, User> updatedUser = adminResult.get().updateUser(userToUpdate, daysToSendOn, sites,
+        return ifAdminExists(adminUsername, admin -> {
+            Either<String, User> updatedUser = admin.updateUser(userToUpdate, daysToSendOn, sites,
                     headlineCount);
 
             if (updatedUser.isRight()) {
@@ -59,35 +53,32 @@ public class AdminSiteApplicationService {
             }
 
             return updatedUser;
-        } else {
-            return Either.left(String.format("Admin with a username %s was not found!", adminUsername));
-        }
+        });
     }
 
     public Either<String, UserSearchResults> searchUser(String adminUsername, String emailSearchTerm,
             int pageSize, int pageRequested) {
-        // TODO make general this admin search, also rename adminResult to admin
-        Optional<Admin> adminResult = adminRepository.retrieveByUsername(adminUsername);
-
-        if (adminResult.isPresent()) {
+        return ifAdminExists(adminUsername, admin -> {
             Set<User> allUsers = userRepository.retrieveAll();
-            UserSearchResults searchResults = adminResult.get().searchForUser(emailSearchTerm, allUsers, pageSize,
+            UserSearchResults searchResults = admin.searchForUser(emailSearchTerm, allUsers, pageSize,
                     pageRequested);
-
             return Either.right(searchResults);
-        } else {
-            return Either.left(String.format("Admin with a username %s was not found!", adminUsername));
-        }
+        });
     }
 
     public Either<String, Optional<User>> retrieveUser(String adminUsername, String userToRetrieve) {
-        // TODO make general this admin search, also rename adminResult to admin
+        return ifAdminExists(adminUsername, admin -> {
+            Set<User> allUsers = userRepository.retrieveAll();
+            Optional<User> retrievedUser = admin.openUserDetails(userToRetrieve, allUsers);
+            return Either.right(retrievedUser);
+        });
+    }
+
+    private <K> Either<String, K> ifAdminExists(String adminUsername, Function<Admin, Either<String, K>> ifYes) {
         Optional<Admin> adminResult = adminRepository.retrieveByUsername(adminUsername);
 
         if (adminResult.isPresent()) {
-            Set<User> allUsers = userRepository.retrieveAll();
-            Optional<User> retrievedUser = adminResult.get().openUserDetails(userToRetrieve, allUsers);
-            return Either.right(retrievedUser);
+            return ifYes.apply(adminResult.get());
         } else {
             return Either.left(String.format("Admin with a username %s was not found!", adminUsername));
         }
