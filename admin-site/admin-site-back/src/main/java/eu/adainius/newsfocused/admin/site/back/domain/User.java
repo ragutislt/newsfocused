@@ -25,7 +25,7 @@ public class User {
 
     @Getter
     @ToString
-    static class Preferences {
+    public static class Preferences {
         private Set<String> daysToSendOn;
         private Set<String> sites;
         private int headlineCount;

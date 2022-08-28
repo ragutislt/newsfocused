@@ -38,7 +38,7 @@ public class AdminTest {
     }
 
     @Test
-    public void validates_days_to_send_on_is_not_empty() {
+    public void error_is_returned_if_some_parameters_were_not_valid_during_user_creation() {
         // GIVEN
         Admin admin = new Admin("admin");
         Set<String> daysToSendOn = Set.of();

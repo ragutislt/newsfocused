@@ -10,8 +10,10 @@ import java.util.stream.Collectors;
 import io.vavr.control.Either;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 @Getter
+@Accessors(fluent = true)
 @Builder
 public class Admin {
     private String username;

@@ -27,6 +27,8 @@ Additionally, it allows admin rights to change users' preferences or even manual
     * Any other settings that will be implemented in the future
 * 'Register New User' button, which will open a page to register a new user. Very similar to the details one except modifiable
 
+* ? Should we implement who created the user? (i.e. which admin, or 'client' if it was done by the user themselves)
+
 
 # Documentation
 
