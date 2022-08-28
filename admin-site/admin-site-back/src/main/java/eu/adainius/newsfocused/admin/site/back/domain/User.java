@@ -19,6 +19,7 @@ public class User {
     private final Preferences preferences;
 
     @Getter
+    @ToString
     static class Preferences {
         private Set<String> daysToSendOn;
         private Set<String> sites;

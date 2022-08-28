@@ -1,8 +1,11 @@
 package eu.adainius.newsfocused.admin.site.back.domain;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import io.vavr.control.Either;
 import lombok.Builder;
@@ -25,16 +28,36 @@ public class Admin {
     }
 
     public Either<String, User> updateUser(String email, Set<String> daysToSendOn, Set<String> sites,
-    int headlineCount) {
+            int headlineCount) {
         return registerNewUser(email, daysToSendOn, sites, headlineCount);
     }
 
-    public List<User> searchForUser(String email, Set<User> allUsers) {
-        // performs search against allUsers
+    public UserSearchResults searchForUser(String email, Set<User> allUsers, int pageSize, int pageRequested) {
+        Set<User> searchResults = allUsers.stream()
+                .filter(user -> user.email().contains(email)).collect(Collectors.toSet());
 
-        // then returns the n results based on the pagination settings
-        // also returns the total count
-        return null;
+        int index = 1;
+        int indexOfPageStart = pageSize * pageRequested - pageSize + 1;
+        int indexOfPageEnd = indexOfPageStart + pageSize - 1;
+
+        Set<User> pageToReturn = new HashSet<>(pageSize);
+
+        Iterator<User> resultsIterator = searchResults.iterator();
+        while (resultsIterator.hasNext()) {
+            User currentUser = resultsIterator.next();
+            if (index < indexOfPageStart) {
+                index++;
+                continue;
+            }
+            if (index > indexOfPageEnd) {
+                index++;
+                break;
+            }
+            index++;
+            pageToReturn.add(currentUser);
+        }
+
+        return UserSearchResults.of(Collections.unmodifiableSet(pageToReturn), pageRequested, allUsers.size());
     }
 
     public Optional<User> openUserDetails(String email, Set<User> allUsers) {
