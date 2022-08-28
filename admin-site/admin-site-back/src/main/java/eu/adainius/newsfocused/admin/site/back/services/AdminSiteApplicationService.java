@@ -3,6 +3,7 @@ package eu.adainius.newsfocused.admin.site.back.services;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
 
 import eu.adainius.newsfocused.admin.site.back.domain.Admin;
@@ -23,6 +24,9 @@ public class AdminSiteApplicationService {
     public Either<String, User> registerUser(String adminUsername, String email, Set<String> daysToSendOn,
             Set<String> sites,
             int headlineCount) {
+        if (!EmailValidator.getInstance().isValid(email)) {
+            return Either.left("Email is not valid");
+        }
 
         Optional<Admin> adminResult = adminRepository.retrieveByUsername(adminUsername);
 

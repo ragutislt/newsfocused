@@ -2,6 +2,7 @@ package eu.adainius.newsfocused.admin.site.back.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 
@@ -60,7 +61,8 @@ public class AdminSiteApplicationServiceTest {
                 .thenReturn(newUser);
 
         // WHEN
-        Either<String, User> registration = adminSiteApplicationService.registerUser(adminUsername, userEmail, daysToSendOn, sites, headlineCount);
+        Either<String, User> registration = adminSiteApplicationService.registerUser(adminUsername, userEmail,
+                daysToSendOn, sites, headlineCount);
 
         // THEN
         assertThat(registration).isEqualTo(newUser);
@@ -86,7 +88,7 @@ public class AdminSiteApplicationServiceTest {
                 daysToSendOn, sites, headlineCount);
 
         // THEN
-        Mockito.verify(userRepository, never()).save(any(User.class));
+        Mockito.verifyNoInteractions(userRepository);
         assertThat(registration.isLeft()).isTrue();
     }
 
@@ -95,14 +97,13 @@ public class AdminSiteApplicationServiceTest {
     @NullSource
     public void register_user_returns_an_error_if_email_is_not_valid(String invalidEmail) {
         // GIVEN
-
         // WHEN
         Either<String, User> registration = adminSiteApplicationService
                 .registerUser("admin", invalidEmail, Set.of(), Set.of(), 1);
 
         // THEN
-        Mockito.verify(adminRepository, never());
-        Mockito.verify(userRepository, never());
+        Mockito.verifyNoInteractions(adminRepository);
+        Mockito.verifyNoInteractions(userRepository);
         assertThat(registration.isLeft()).isTrue();
     }
 
@@ -110,14 +111,13 @@ public class AdminSiteApplicationServiceTest {
     public void register_user_returns_an_error_if_admin_does_not_exist() {
         // GIVEN
         String nonExistingAdmin = "badAdmin";
-        Mockito.when(adminRepository.retrieveByUsername(nonExistingAdmin)).thenReturn(Optional.empty());
 
         // WHEN
         Either<String, User> registration = adminSiteApplicationService
                 .registerUser(nonExistingAdmin, "email", Set.of(), Set.of(), 1);
 
         // THEN
-        Mockito.verify(userRepository, never());
+        Mockito.verifyNoInteractions(userRepository);
         assertThat(registration.isLeft()).isTrue();
     }
 
