@@ -1,10 +1,7 @@
 package eu.adainius.newsfocused.admin.site.back.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 
 import java.util.Optional;
 import java.util.Set;
@@ -14,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -128,7 +124,7 @@ public class AdminSiteApplicationServiceTest {
         Set<String> daysToSendOn = Set.of("Monday");
         Set<String> sites = Set.of("BBC");
         int headlineCount = 8;
-        User updatedUser = User.builder().email(userEmail).preferences(
+        User userToUpdate = User.builder().email(userEmail).preferences(
                 User.Preferences.builder()
                         .daysToSendOn(daysToSendOn)
                         .headlineCount(headlineCount)
@@ -139,13 +135,13 @@ public class AdminSiteApplicationServiceTest {
         Admin mockAdmin = mock(Admin.class);
         Mockito.when(adminRepository.retrieveByUsername(adminUsername)).thenReturn(Optional.of(mockAdmin));
         Mockito.when(mockAdmin.updateUser(userEmail, daysToSendOn, sites, headlineCount))
-                .thenReturn(Either.right(updatedUser));
+                .thenReturn(Either.right(userToUpdate));
 
         // WHEN
         adminSiteApplicationService.updateUser(adminUsername, userEmail, daysToSendOn, sites, headlineCount);
 
         // THEN
-        userRepository.save(updatedUser);
+        Mockito.verify(userRepository).save(userToUpdate);
     }
 
     @Test
@@ -163,12 +159,26 @@ public class AdminSiteApplicationServiceTest {
                 .thenReturn(Either.left("some system error happened"));
 
         // WHEN
-        Either<String, User> registration = adminSiteApplicationService.updateUser(adminUsername, userEmail,
+        Either<String, User> updatedUser = adminSiteApplicationService.updateUser(adminUsername, userEmail,
                 daysToSendOn, sites, headlineCount);
 
         // THEN
-        Mockito.verify(userRepository, never());
-        assertThat(registration.isLeft()).isTrue();
+        Mockito.verifyNoInteractions(userRepository);
+        assertThat(updatedUser.isLeft()).isTrue();
+    }
+
+    @Test
+    public void update_user_returns_an_error_if_admin_does_not_exist() {
+        // GIVEN
+        String nonExistingAdmin = "badAdmin";
+
+        // WHEN
+        Either<String, User> updatedUser = adminSiteApplicationService
+                .updateUser(nonExistingAdmin, "email", Set.of(), Set.of(), 1);
+
+        // THEN
+        Mockito.verifyNoInteractions(userRepository);
+        assertThat(updatedUser.isLeft()).isTrue();
     }
 
     @Test
@@ -191,13 +201,29 @@ public class AdminSiteApplicationServiceTest {
         Mockito.when(adminRepository.retrieveByUsername(adminUsername)).thenReturn(Optional.of(mockAdmin));
         Mockito.when(mockAdmin.searchForUser(userEmail, allUsers, pageSize, pageRequested))
                 .thenReturn(UserSearchResults.of(allUsers, pageRequested, 1));
+        Mockito.when(userRepository.retrieveAll()).thenReturn(allUsers);
 
         // WHEN
-        UserSearchResults searchResults = adminSiteApplicationService
+        Either<String, UserSearchResults> searchResults = adminSiteApplicationService
                 .searchUser(adminUsername, "email", 10, 1);
 
         // THEN
-        assertThat(searchResults).isEqualTo(UserSearchResults.of(allUsers, pageRequested, 1));
+        Mockito.verify(userRepository).retrieveAll();
+        assertThat(searchResults.get()).isEqualTo(UserSearchResults.of(allUsers, pageRequested, 1));
+    }
+
+    @Test
+    public void search_user_returns_an_error_if_admin_does_not_exist() {
+        // GIVEN
+        String nonExistingAdmin = "badAdmin";
+
+        // WHEN
+        Either<String, UserSearchResults> searchResults = adminSiteApplicationService
+                .searchUser(nonExistingAdmin, "email", 10, 1);
+
+        // THEN
+        Mockito.verifyNoInteractions(userRepository);
+        assertThat(searchResults.isLeft()).isTrue();
     }
 
     @Test
@@ -216,12 +242,13 @@ public class AdminSiteApplicationServiceTest {
         Mockito.when(adminRepository.retrieveByUsername(adminUsername)).thenReturn(Optional.of(mockAdmin));
         Mockito.when(mockAdmin.openUserDetails(userEmail, Set.of(registeredUser)))
                 .thenReturn(Optional.of(registeredUser));
+        Mockito.when(userRepository.retrieveAll()).thenReturn(Set.of(registeredUser));
 
         // WHEN
-        Optional<User> user = adminSiteApplicationService.retrieveUser(adminUsername, userEmail);
+        Either<String, Optional<User>> user = adminSiteApplicationService.retrieveUser(adminUsername, userEmail);
 
         // THEN
-        assertThat(user.get().email()).isEqualTo(userEmail);
+        assertThat(user.get().get()).isEqualTo(registeredUser);
     }
 
     @Test
@@ -240,11 +267,26 @@ public class AdminSiteApplicationServiceTest {
         Mockito.when(adminRepository.retrieveByUsername(adminUsername)).thenReturn(Optional.of(mockAdmin));
         Mockito.when(mockAdmin.openUserDetails(userEmail, Set.of(registeredUser)))
                 .thenReturn(Optional.empty());
+        Mockito.when(userRepository.retrieveAll()).thenReturn(Set.of(registeredUser));
 
         // WHEN
-        Optional<User> user = adminSiteApplicationService.retrieveUser(adminUsername, userEmail);
+        Either<String, Optional<User>> user = adminSiteApplicationService.retrieveUser(adminUsername, userEmail);
 
         // THEN
-        assertThat(user.isPresent()).isFalse();
+        assertThat(user.get().isPresent()).isFalse();
+    }
+
+    @Test
+    public void retrieve_user_returns_an_error_if_admin_does_not_exist() {
+        // GIVEN
+        String nonExistingAdmin = "badAdmin";
+
+        // WHEN
+        Either<String, Optional<User>> searchResult = adminSiteApplicationService
+                .retrieveUser(nonExistingAdmin, "email");
+
+        // THEN
+        Mockito.verifyNoInteractions(userRepository);
+        assertThat(searchResult.isLeft()).isTrue();
     }
 }

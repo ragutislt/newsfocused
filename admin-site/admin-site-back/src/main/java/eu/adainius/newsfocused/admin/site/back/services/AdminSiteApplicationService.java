@@ -47,15 +47,49 @@ public class AdminSiteApplicationService {
     public Either<String, User> updateUser(String adminUsername, String userToUpdate, Set<String> daysToSendOn,
             Set<String> sites,
             int headlineCount) {
-        return null;
+        // TODO make general this admin search
+        Optional<Admin> adminResult = adminRepository.retrieveByUsername(adminUsername);
+
+        if (adminResult.isPresent()) {
+            Either<String, User> updatedUser = adminResult.get().updateUser(userToUpdate, daysToSendOn, sites,
+                    headlineCount);
+
+            if (updatedUser.isRight()) {
+                userRepository.save(updatedUser.get());
+            }
+
+            return updatedUser;
+        } else {
+            return Either.left(String.format("Admin with a username %s was not found!", adminUsername));
+        }
     }
 
-    public UserSearchResults searchUser(String adminUsername, String emailSearchTerm,
+    public Either<String, UserSearchResults> searchUser(String adminUsername, String emailSearchTerm,
             int pageSize, int pageRequested) {
-        return null;
+        // TODO make general this admin search, also rename adminResult to admin
+        Optional<Admin> adminResult = adminRepository.retrieveByUsername(adminUsername);
+
+        if (adminResult.isPresent()) {
+            Set<User> allUsers = userRepository.retrieveAll();
+            UserSearchResults searchResults = adminResult.get().searchForUser(emailSearchTerm, allUsers, pageSize,
+                    pageRequested);
+
+            return Either.right(searchResults);
+        } else {
+            return Either.left(String.format("Admin with a username %s was not found!", adminUsername));
+        }
     }
 
-    public Optional<User> retrieveUser(String adminUsername, String email) {
-        return null;
+    public Either<String, Optional<User>> retrieveUser(String adminUsername, String userToRetrieve) {
+        // TODO make general this admin search, also rename adminResult to admin
+        Optional<Admin> adminResult = adminRepository.retrieveByUsername(adminUsername);
+
+        if (adminResult.isPresent()) {
+            Set<User> allUsers = userRepository.retrieveAll();
+            Optional<User> retrievedUser = adminResult.get().openUserDetails(userToRetrieve, allUsers);
+            return Either.right(retrievedUser);
+        } else {
+            return Either.left(String.format("Admin with a username %s was not found!", adminUsername));
+        }
     }
 }

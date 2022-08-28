@@ -2,6 +2,7 @@ package eu.adainius.newsfocused.admin.site.back.domain;
 
 import java.util.Set;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -9,6 +10,7 @@ import lombok.experimental.Accessors;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@EqualsAndHashCode
 public final class UserSearchResults {
     private Set<User> usersFound;
     private int pageNumber;
