@@ -3,7 +3,6 @@ package eu.adainius.newsfocused.admin.site.back.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;

@@ -1,7 +1,6 @@
 package eu.adainius.newsfocused.admin.site.back.domain;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
