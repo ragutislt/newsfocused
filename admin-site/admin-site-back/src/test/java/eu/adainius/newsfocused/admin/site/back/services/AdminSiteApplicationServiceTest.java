@@ -1,6 +1,7 @@
 package eu.adainius.newsfocused.admin.site.back.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 
@@ -8,12 +9,15 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import eu.adainius.newsfocused.admin.site.back.domain.Admin;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
@@ -22,6 +26,7 @@ import eu.adainius.newsfocused.admin.site.back.repositories.AdminRepository;
 import eu.adainius.newsfocused.admin.site.back.repositories.UserRepository;
 import io.vavr.control.Either;
 
+@ExtendWith(MockitoExtension.class)
 public class AdminSiteApplicationServiceTest {
 
     @Mock
@@ -49,15 +54,17 @@ public class AdminSiteApplicationServiceTest {
 
         String adminUsername = "admin";
         Admin mockAdmin = mock(Admin.class);
+        Either<String, User> newUser = Either.right(registeredUser);
         Mockito.when(adminRepository.retrieveByUsername(adminUsername)).thenReturn(Optional.of(mockAdmin));
         Mockito.when(mockAdmin.registerNewUser(userEmail, daysToSendOn, sites, headlineCount))
-                .thenReturn(Either.right(registeredUser));
+                .thenReturn(newUser);
 
         // WHEN
-        adminSiteApplicationService.registerUser(adminUsername, userEmail, daysToSendOn, sites, headlineCount);
+        Either<String, User> registration = adminSiteApplicationService.registerUser(adminUsername, userEmail, daysToSendOn, sites, headlineCount);
 
         // THEN
-        userRepository.save(registeredUser);
+        assertThat(registration).isEqualTo(newUser);
+        Mockito.verify(userRepository).save(registeredUser);
     }
 
     @Test
@@ -79,7 +86,7 @@ public class AdminSiteApplicationServiceTest {
                 daysToSendOn, sites, headlineCount);
 
         // THEN
-        Mockito.verify(userRepository, never());
+        Mockito.verify(userRepository, never()).save(any(User.class));
         assertThat(registration.isLeft()).isTrue();
     }
 
