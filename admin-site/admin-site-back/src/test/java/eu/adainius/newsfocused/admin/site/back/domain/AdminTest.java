@@ -155,7 +155,7 @@ public class AdminTest {
     }
 
     @Test
-    public void opens_user_details_returns_error_message_if_user_not_found() {
+    public void opens_user_details_returns_empty_if_user_not_found() {
         // GIVEN
         Admin admin = new Admin("admin");
         String nonExistingUserEmail = "lksdngw8094gneiudrgne";
