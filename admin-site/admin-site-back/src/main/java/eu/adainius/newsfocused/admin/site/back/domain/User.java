@@ -1,8 +1,9 @@
 package eu.adainius.newsfocused.admin.site.back.domain;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,11 +12,15 @@ import lombok.experimental.Accessors;
 
 @Getter
 @Accessors(fluent = true)
-@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Builder
 public class User {
     private final String email;
+    @Builder.Default
+    private final Date registrationDate = new Date();
+    @Builder.Default
+    private final Set<EmailSent> emailsSent = Collections.emptySet();
     private final Preferences preferences;
 
     @Getter

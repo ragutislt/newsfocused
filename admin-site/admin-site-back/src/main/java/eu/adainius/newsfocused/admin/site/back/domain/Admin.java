@@ -1,6 +1,7 @@
 package eu.adainius.newsfocused.admin.site.back.domain;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
@@ -20,8 +21,11 @@ public class Admin {
             int headlineCount) {
         try {
             return Either.right(
-                    new User(email, User.Preferences.builder().daysToSendOn(daysToSendOn).sites(sites)
-                            .headlineCount(headlineCount).build()));
+                    User.builder().email(email)
+                            .preferences(
+                                    User.Preferences.builder().daysToSendOn(daysToSendOn).sites(sites)
+                                            .headlineCount(headlineCount).build())
+                            .build());
         } catch (IllegalArgumentException e) {
             return Either.left(e.getMessage());
         }

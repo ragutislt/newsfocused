@@ -2,6 +2,9 @@ package eu.adainius.newsfocused.admin.site.back.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -31,6 +34,8 @@ public class AdminTest {
         assertThat(userRegistered.preferences().daysToSendOn()).isEqualTo(daysToSendOn);
         assertThat(userRegistered.preferences().sites()).isEqualTo(sites);
         assertThat(userRegistered.preferences().headlineCount()).isEqualTo(headlineCount);
+        assertThat(dateToString(userRegistered.registrationDate())).isEqualTo(dateToString(new Date()));
+        assertThat((userRegistered.emailsSent())).isEmpty();
     }
 
     @Test
@@ -167,32 +172,52 @@ public class AdminTest {
         Set<User> users = new HashSet<>();
 
         users.add(
-                new User("email111", User.Preferences.builder().daysToSendOn(Set.of("Monday")).sites(Set.of("BBC"))
-                        .headlineCount(123).build()));
+                User.builder().email("email111")
+                        .preferences(
+                                User.Preferences.builder().daysToSendOn(Set.of("Monday")).sites(Set.of("BBC"))
+                                        .headlineCount(123).build())
+                        .build());
 
         users.add(
-                new User("email12222",
-                        User.Preferences.builder().daysToSendOn(Set.of("Monday", "Friday")).sites(Set.of("BBC"))
-                                .headlineCount(157).build()));
+                User.builder().email("email12222")
+                        .preferences(
+                                User.Preferences.builder().daysToSendOn(Set.of("Monday", "Friday")).sites(Set.of("BBC"))
+                                        .headlineCount(157).build())
+                        .build());
 
         users.add(
-                new User("email8984984", User.Preferences.builder().daysToSendOn(Set.of("Sunday")).sites(Set.of("LRT"))
-                        .headlineCount(19999).build()));
+                User.builder().email("email8984984")
+                        .preferences(
+                                User.Preferences.builder().daysToSendOn(Set.of("Sunday")).sites(Set.of("LRT"))
+                                        .headlineCount(19999).build())
+                        .build());
 
         users.add(
-                new User("email21321313", User.Preferences.builder().daysToSendOn(Set.of("Sunday")).sites(Set.of("LRT"))
-                        .headlineCount(19999).build()));
+                User.builder().email("email21321313")
+                        .preferences(
+                                User.Preferences.builder().daysToSendOn(Set.of("Sunday")).sites(Set.of("LRT"))
+                                        .headlineCount(19999).build())
+                        .build());
 
         users.add(
-                new User("email6666666",
-                        User.Preferences.builder().daysToSendOn(Set.of("Thursday")).sites(Set.of("LRT"))
-                                .headlineCount(19999).build()));
+                User.builder().email("email6666666")
+                        .preferences(
+                                User.Preferences.builder().daysToSendOn(Set.of("Thursday")).sites(Set.of("LRT"))
+                                        .headlineCount(19999).build())
+                        .build());
 
         users.add(
-                new User("email777777", User.Preferences.builder().daysToSendOn(Set.of("Friday")).sites(Set.of("LRT"))
-                        .headlineCount(19999).build()));
+                User.builder().email("email777777")
+                        .preferences(
+                                User.Preferences.builder().daysToSendOn(Set.of("Friday")).sites(Set.of("LRT"))
+                                        .headlineCount(19999).build())
+                        .build());
 
         return users;
+    }
+
+    private String dateToString(Date date) {
+        return new SimpleDateFormat("yyyy-mm-dd").format(date);
     }
 
 }
