@@ -1,0 +1,18 @@
+[
+    {
+        "email": "some@email.com",
+        "sites": [
+            "www.bbc.com",
+            "www.lrt.lt"
+        ],
+        "daysToSendOn": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+    },
+    {
+        "email": "some@email222.com",
+        "sites": [
+            "www.bbc.com",
+            "www.lrt.lt"
+        ],
+        "daysToSendOn": ["Monday","Wednesday","Friday"]
+    }
+]

@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors(fluent = true)
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"email"})
 @Builder
 public class User {
     private final String email;
