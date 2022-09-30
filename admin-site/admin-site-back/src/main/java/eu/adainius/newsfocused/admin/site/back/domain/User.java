@@ -22,9 +22,11 @@ public class User {
     @Builder.Default
     private final Set<EmailSent> emailsSent = Collections.emptySet();
     private final Preferences preferences;
+    // TODO we need to harmonize this with User class from the newsfocused domain (or import it)
 
     @Getter
     @ToString
+    @EqualsAndHashCode
     public static class Preferences {
         private Set<String> daysToSendOn;
         private Set<String> sites;
