@@ -33,7 +33,7 @@ public class AdminSiteApplicationServiceTest {
     AdminRepository adminRepository;
 
     @InjectMocks
-    AdminSiteApplicationService adminSiteApplicationService;
+    AdminSiteApplicationServiceImpl adminSiteApplicationService;
 
     @Test
     public void registers_a_new_user_through_the_admin_and_saves() {

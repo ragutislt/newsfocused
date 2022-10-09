@@ -15,72 +15,17 @@ import eu.adainius.newsfocused.admin.site.back.repositories.UserRepository;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 
-@Service
-@AllArgsConstructor
-public class AdminSiteApplicationService {
-
-    private final AdminRepository adminRepository;
-    private final UserRepository userRepository;
-
+public interface AdminSiteApplicationService {
     public Either<String, User> registerUser(String adminUsername, String email, Set<String> daysToSendOn,
             Set<String> sites,
-            int headlineCount) {
-        if (!EmailValidator.getInstance().isValid(email)) {
-            return Either.left("Email is not valid");
-        }
-
-        return ifAdminExists(adminUsername, admin -> {
-            Either<String, User> registration = admin.registerNewUser(email, daysToSendOn, sites,
-                    headlineCount);
-
-            if (registration.isRight()) {
-                userRepository.save(registration.get());
-            }
-
-            return registration;
-        });
-    }
+            int headlineCount);
 
     public Either<String, User> updateUser(String adminUsername, String userToUpdate, Set<String> daysToSendOn,
             Set<String> sites,
-            int headlineCount) {
-        return ifAdminExists(adminUsername, admin -> {
-            Either<String, User> updatedUser = admin.updateUser(userToUpdate, daysToSendOn, sites,
-                    headlineCount);
-
-            if (updatedUser.isRight()) {
-                userRepository.save(updatedUser.get());
-            }
-
-            return updatedUser;
-        });
-    }
+            int headlineCount);
 
     public Either<String, UserSearchResults> searchUser(String adminUsername, String emailSearchTerm,
-            int pageSize, int pageRequested) {
-        return ifAdminExists(adminUsername, admin -> {
-            Set<User> allUsers = userRepository.retrieveAll();
-            UserSearchResults searchResults = admin.searchForUser(emailSearchTerm, allUsers, pageSize,
-                    pageRequested);
-            return Either.right(searchResults);
-        });
-    }
+            int pageSize, int pageRequested);
 
-    public Either<String, Optional<User>> retrieveUser(String adminUsername, String userToRetrieve) {
-        return ifAdminExists(adminUsername, admin -> {
-            Set<User> allUsers = userRepository.retrieveAll();
-            Optional<User> retrievedUser = admin.openUserDetails(userToRetrieve, allUsers);
-            return Either.right(retrievedUser);
-        });
-    }
-
-    private <K> Either<String, K> ifAdminExists(String adminUsername, Function<Admin, Either<String, K>> ifYes) {
-        Optional<Admin> adminResult = adminRepository.retrieveByUsername(adminUsername);
-
-        if (adminResult.isPresent()) {
-            return ifYes.apply(adminResult.get());
-        } else {
-            return Either.left(String.format("Admin with a username %s was not found!", adminUsername));
-        }
-    }
+    public Either<String, Optional<User>> retrieveUser(String adminUsername, String userToRetrieve);
 }

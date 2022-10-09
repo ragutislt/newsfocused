@@ -16,7 +16,7 @@ public final class UserSearchResults {
     private int pageNumber;
     private int totalCount;
 
-    private UserSearchResults() {
+    public UserSearchResults() {
     }
 
     public static UserSearchResults of(Set<User> usersFound, int pageNumber, int totalCount) {
