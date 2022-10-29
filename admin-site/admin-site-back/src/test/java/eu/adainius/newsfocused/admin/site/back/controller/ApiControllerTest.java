@@ -4,10 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchException;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.security.Principal;
-import java.util.Collections;
-import java.util.Date;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,24 +17,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-
-import eu.adainius.newsfocused.admin.site.back.controller.MyUser.MyPreferences;
-import eu.adainius.newsfocused.admin.site.back.domain.EmailSent;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.domain.User.Preferences;
 import eu.adainius.newsfocused.admin.site.back.domain.UserSearchResults;
 import eu.adainius.newsfocused.admin.site.back.services.AdminSiteApplicationService;
 import io.vavr.control.Either;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
 @ExtendWith(MockitoExtension.class)
 public class ApiControllerTest {
@@ -57,7 +41,9 @@ public class ApiControllerTest {
         int pageRequested = 1;
         String sampleEmail = "email@email.com";
 
-        Mockito.when(adminSiteApplicationService.searchUser(adminUsername, emailSearchTerm, pageSize, pageRequested)).thenReturn(Either.right(UserSearchResults.of(Set.of(User.builder().email(sampleEmail).build()), pageSize, pageRequested)));
+        Mockito.when(adminSiteApplicationService.searchUser(adminUsername, emailSearchTerm, pageSize, pageRequested))
+                .thenReturn(Either.right(UserSearchResults.of(Set.of(User.builder().email(sampleEmail).build()),
+                        pageSize, pageRequested)));
 
         HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
         Principal principal = Mockito.mock(Principal.class);
@@ -66,11 +52,11 @@ public class ApiControllerTest {
 
         // WHEN
         UserSearchResults results = apiController.searchUser(emailSearchTerm, pageSize, pageRequested, httpRequest);
-        
+
         // THEN
         assertThat(results.usersFound()).isNotEmpty();
         assertThat(results.usersFound())
-        .filteredOn(user -> user.email().equals(sampleEmail)).isNotEmpty();
+                .filteredOn(user -> user.email().equals(sampleEmail)).isNotEmpty();
     }
 
     @Test
@@ -80,14 +66,15 @@ public class ApiControllerTest {
         String adminUsername = "admin";
         int pageSize = 2;
         int pageRequested = 1;
-        
-        Mockito.when(adminSiteApplicationService.searchUser(adminUsername, emailSearchTerm, pageSize, pageRequested)).thenReturn(Either.left("Admin not found"));
+
+        Mockito.when(adminSiteApplicationService.searchUser(adminUsername, emailSearchTerm, pageSize, pageRequested))
+                .thenReturn(Either.left("Admin not found"));
 
         HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
         Principal principal = Mockito.mock(Principal.class);
         when(httpRequest.getUserPrincipal()).thenReturn(principal);
         when(principal.getName()).thenReturn(adminUsername);
-        
+
         // WHEN
         Exception thrown = catchException(() -> {
             apiController.searchUser(emailSearchTerm, pageSize, pageRequested, httpRequest);
@@ -96,7 +83,7 @@ public class ApiControllerTest {
         // THEN
         assertThat(thrown).isInstanceOf(WebApplicationException.class);
         assertThat(thrown).hasMessage("Admin not found");
-        assertThat(thrown).extracting(ex -> ((WebApplicationException)ex).getResponse().getStatus()).isEqualTo(400);
+        assertThat(thrown).extracting(ex -> ((WebApplicationException) ex).getResponse().getStatus()).isEqualTo(400);
     }
 
     @Test
@@ -107,28 +94,26 @@ public class ApiControllerTest {
         Set<String> daysToSendOn = Set.of("Monday");
         Set<String> sites = Set.of("www.bbc.com");
         int headlineCount = 4;
-        
-        Mockito.when(
-            adminSiteApplicationService.registerUser(adminUsername, email, daysToSendOn, sites, headlineCount)
-            )
-            .thenReturn(Either.right(
-                User.builder().email(email).preferences(
-                        Preferences.builder().daysToSendOn(daysToSendOn).sites(sites).headlineCount(headlineCount)
-                        .build()
-                    ).build()
-                )
-            );
 
-            HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
-            Principal principal = Mockito.mock(Principal.class);
-            when(httpRequest.getUserPrincipal()).thenReturn(principal);
-            when(principal.getName()).thenReturn(adminUsername);
+        Mockito.when(
+                adminSiteApplicationService.registerUser(adminUsername, email, daysToSendOn, sites, headlineCount))
+                .thenReturn(Either.right(
+                        User.builder().email(email).preferences(
+                                Preferences.builder().daysToSendOn(daysToSendOn).sites(sites)
+                                        .headlineCount(headlineCount)
+                                        .build())
+                                .build()));
+
+        HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
+        Principal principal = Mockito.mock(Principal.class);
+        when(httpRequest.getUserPrincipal()).thenReturn(principal);
+        when(principal.getName()).thenReturn(adminUsername);
 
         RegisterUserRequest request = new RegisterUserRequest(email, daysToSendOn, sites, headlineCount);
-        
+
         // WHEN
         User userCreated = apiController.registerUser(request, httpRequest);
-        
+
         // THEN
         assertThat(userCreated.email()).isEqualTo(email);
     }
@@ -141,9 +126,9 @@ public class ApiControllerTest {
         Set<String> daysToSendOn = Set.of("Monday");
         Set<String> sites = Set.of("www.bbc.com");
         int headlineCount = 4;
-        
-        Mockito.when(adminSiteApplicationService.registerUser(adminUsername, email, daysToSendOn, sites, headlineCount)
-        ).thenReturn(Either.left("Admin not found"));
+
+        Mockito.when(adminSiteApplicationService.registerUser(adminUsername, email, daysToSendOn, sites, headlineCount))
+                .thenReturn(Either.left("Admin not found"));
 
         HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
         Principal principal = Mockito.mock(Principal.class);
@@ -151,7 +136,7 @@ public class ApiControllerTest {
         when(principal.getName()).thenReturn(adminUsername);
 
         RegisterUserRequest request = new RegisterUserRequest(email, daysToSendOn, sites, headlineCount);
-        
+
         // WHEN
         Exception thrown = catchException(() -> {
             apiController.registerUser(request, httpRequest);
@@ -160,7 +145,7 @@ public class ApiControllerTest {
         // THEN
         assertThat(thrown).isInstanceOf(WebApplicationException.class);
         assertThat(thrown).hasMessage("Admin not found");
-        assertThat(thrown).extracting(ex -> ((WebApplicationException)ex).getResponse().getStatus()).isEqualTo(400);
+        assertThat(thrown).extracting(ex -> ((WebApplicationException) ex).getResponse().getStatus()).isEqualTo(400);
     }
 
     @Test
@@ -171,28 +156,26 @@ public class ApiControllerTest {
         Set<String> daysToSendOn = Set.of("Monday");
         Set<String> sites = Set.of("www.bbc.com");
         int headlineCount = 4;
-        
-        Mockito.when(
-            adminSiteApplicationService.updateUser(adminUsername, email, daysToSendOn, sites, headlineCount)
-            )
-            .thenReturn(Either.right(
-                User.builder().email(email).preferences(
-                        Preferences.builder().daysToSendOn(daysToSendOn).sites(sites).headlineCount(headlineCount)
-                        .build()
-                    ).build()
-                )
-            );
 
-            HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(
+                adminSiteApplicationService.updateUser(adminUsername, email, daysToSendOn, sites, headlineCount))
+                .thenReturn(Either.right(
+                        User.builder().email(email).preferences(
+                                Preferences.builder().daysToSendOn(daysToSendOn).sites(sites)
+                                        .headlineCount(headlineCount)
+                                        .build())
+                                .build()));
+
+        HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
         Principal principal = Mockito.mock(Principal.class);
         when(httpRequest.getUserPrincipal()).thenReturn(principal);
         when(principal.getName()).thenReturn(adminUsername);
 
         RegisterUserRequest request = new RegisterUserRequest(email, daysToSendOn, sites, headlineCount);
-        
+
         // WHEN
         User userCreated = apiController.updateUser(request, httpRequest);
-        
+
         // THEN
         assertThat(userCreated.email()).isEqualTo(email);
     }
@@ -205,9 +188,9 @@ public class ApiControllerTest {
         Set<String> daysToSendOn = Set.of("Monday");
         Set<String> sites = Set.of("www.bbc.com");
         int headlineCount = 4;
-        
-        Mockito.when(adminSiteApplicationService.updateUser(adminUsername, email, daysToSendOn, sites, headlineCount)
-        ).thenReturn(Either.left("Admin not found"));
+
+        Mockito.when(adminSiteApplicationService.updateUser(adminUsername, email, daysToSendOn, sites, headlineCount))
+                .thenReturn(Either.left("Admin not found"));
 
         HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
         Principal principal = Mockito.mock(Principal.class);
@@ -215,7 +198,7 @@ public class ApiControllerTest {
         when(principal.getName()).thenReturn(adminUsername);
 
         RegisterUserRequest request = new RegisterUserRequest(email, daysToSendOn, sites, headlineCount);
-        
+
         // WHEN
         Exception thrown = catchException(() -> {
             apiController.updateUser(request, httpRequest);
@@ -224,43 +207,6 @@ public class ApiControllerTest {
         // THEN
         assertThat(thrown).isInstanceOf(WebApplicationException.class);
         assertThat(thrown).hasMessage("Admin not found");
-        assertThat(thrown).extracting(ex -> ((WebApplicationException)ex).getResponse().getStatus()).isEqualTo(400);
-    }
-
-    @Test
-    public void testJackson() throws JsonProcessingException {
-        ObjectMapper om = new ObjectMapper();
-
-        UserSearchResults results = UserSearchResults.of(Set.of(User.builder().email("aaa@bbb.ccc").build()), 2, 1);
-
-        String json = om.writeValueAsString(results);
-
-        System.out.println(json);
-    }
-
-    @Test
-    public void testJackson2() throws IOException {
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
-        om.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(MyUser.class, new MyUserDeserializer());
-        om.registerModule(module);
-
-        MyUser user = MyUser.builder().email("aaa@bbb.ccc").emailsSent(Set.of(new EmailSent(new Date()))).preferences(MyPreferences.builder().daysToSendOn(Set.of("Monday")).sites(Set.of("bbc")).headlineCount(7).build()).build();
-
-        String json = om.writeValueAsString(user);
-
-        System.out.println(json);
-
-        MyUser sameUser = om.readValue(json.getBytes(), MyUser.class);
-
-        System.out.println(sameUser);
-    }
-
-    @Getter
-    public class MyTest {
-        Set<String> myStrings;
+        assertThat(thrown).extracting(ex -> ((WebApplicationException) ex).getResponse().getStatus()).isEqualTo(400);
     }
 }

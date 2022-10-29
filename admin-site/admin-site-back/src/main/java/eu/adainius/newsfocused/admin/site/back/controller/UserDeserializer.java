@@ -1,7 +1,5 @@
 package eu.adainius.newsfocused.admin.site.back.controller;
 
-import static org.junit.jupiter.api.DynamicTest.stream;
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
@@ -16,23 +14,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import eu.adainius.newsfocused.admin.site.back.controller.MyUser.MyPreferences;
 import eu.adainius.newsfocused.admin.site.back.domain.EmailSent;
+import eu.adainius.newsfocused.admin.site.back.domain.User;
+import eu.adainius.newsfocused.admin.site.back.domain.User.Preferences;
 
-public class MyUserDeserializer extends StdDeserializer<MyUser> {
+public class UserDeserializer extends StdDeserializer<User> {
 
     ObjectMapper collectionMapper = new ObjectMapper();
 
-    public MyUserDeserializer() {
+    public UserDeserializer() {
         this(null);
     }
 
-    public MyUserDeserializer(Class<?> vc) {
+    public UserDeserializer(Class<?> vc) {
         super(vc);
     }
 
     @Override
-    public MyUser deserialize(JsonParser jp, DeserializationContext ctxt)
+    public User deserialize(JsonParser jp, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
 
         JsonNode productNode = jp.getCodec().readTree(jp);
@@ -59,9 +58,9 @@ public class MyUserDeserializer extends StdDeserializer<MyUser> {
 
         }
 
-        return MyUser.builder().email(email).emailsSent(emailsSent).registrationDate(registrationDate)
+        return User.builder().email(email).emailsSent(emailsSent).registrationDate(registrationDate)
                 .preferences(
-                        MyPreferences.builder()
+                        Preferences.builder()
                                 .daysToSendOn(daysToSendOn)
                                 .sites(sites)
                                 .headlineCount(headlineCount).build())

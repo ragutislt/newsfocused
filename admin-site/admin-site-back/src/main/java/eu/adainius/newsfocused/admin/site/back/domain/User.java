@@ -28,9 +28,9 @@ public class User {
     @ToString
     @EqualsAndHashCode
     public static class Preferences {
-        private Set<String> daysToSendOn;
-        private Set<String> sites;
-        private int headlineCount;
+        private final Set<String> daysToSendOn;
+        private final Set<String> sites;
+        private final int headlineCount;
         // TODO private LocalTime time to send at
 
         @Builder
