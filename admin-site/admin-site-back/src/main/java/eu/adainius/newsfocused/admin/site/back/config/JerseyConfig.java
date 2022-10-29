@@ -6,6 +6,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletProperties;
 import org.springframework.context.annotation.Configuration;
 
+import eu.adainius.newsfocused.admin.site.back.controller.ApiController;
 import eu.adainius.newsfocused.admin.site.back.controller.IndexController;
 import eu.adainius.newsfocused.admin.site.back.controller.auth.AuthenticationController;
 
@@ -15,6 +16,7 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         register(AuthenticationController.class);
         register(IndexController.class);
+        register(ApiController.class);
         register(JerseyNotFoundExceptionMapper.class);
         setProperties(
                 Map.of(

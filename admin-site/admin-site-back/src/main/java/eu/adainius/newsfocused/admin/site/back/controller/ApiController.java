@@ -11,7 +11,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.domain.UserSearchResults;
@@ -19,7 +19,10 @@ import eu.adainius.newsfocused.admin.site.back.services.AdminSiteApplicationServ
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 
-@Component
+
+
+// TODO make infrastructure package and move this as a sub package there
+@Controller
 @Path("api")
 @AllArgsConstructor
 public class ApiController {
