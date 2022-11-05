@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 public class User {
     private final String email;
     @Builder.Default
-    private final Date registrationDate = new Date();
+    private final Date registrationDate = new Date(); // TODO - make this actually immutable after we save it in storage
     @Builder.Default
     private final Set<EmailSent> emailsSent = Collections.emptySet();
     private final Preferences preferences;

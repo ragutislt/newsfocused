@@ -1,6 +1,7 @@
 package eu.adainius.newsfocused.admin.site.back.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -53,6 +54,7 @@ public class ApiController {
     @Path("user")
     @POST
     @Produces("application/json")
+    @Consumes("application/json")
     public User registerUser(RegisterUserRequest request, @Context HttpServletRequest httpRequest) {
 
         String adminUsername = httpRequest.getUserPrincipal().getName();
@@ -70,6 +72,7 @@ public class ApiController {
     @Path("user")
     @PUT
     @Produces("application/json")
+    @Consumes("application/json")
     public User updateUser(RegisterUserRequest request, @Context HttpServletRequest httpRequest) {
 
         String adminUsername = httpRequest.getUserPrincipal().getName();
