@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused.admin.site.back.services;
+package eu.adainius.newsfocused.admin.site.back.domain.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import eu.adainius.newsfocused.admin.site.back.domain.Admin;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.domain.UserSearchResults;
+import eu.adainius.newsfocused.admin.site.back.domain.services.AdminSiteApplicationServiceImpl;
 import eu.adainius.newsfocused.admin.site.back.repositories.AdminRepository;
 import eu.adainius.newsfocused.admin.site.back.repositories.UserRepository;
 import io.vavr.control.Either;

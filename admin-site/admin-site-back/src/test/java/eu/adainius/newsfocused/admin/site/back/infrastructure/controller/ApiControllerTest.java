@@ -19,8 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.domain.User.Preferences;
+import eu.adainius.newsfocused.admin.site.back.domain.services.AdminSiteApplicationService;
 import eu.adainius.newsfocused.admin.site.back.domain.UserSearchResults;
-import eu.adainius.newsfocused.admin.site.back.services.AdminSiteApplicationService;
 import io.vavr.control.Either;
 
 @ExtendWith(MockitoExtension.class)

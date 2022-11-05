@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused.admin.site.back.services;
+package eu.adainius.newsfocused.admin.site.back.domain.services;
 
 import java.util.Optional;
 import java.util.Set;
@@ -15,7 +15,7 @@ import eu.adainius.newsfocused.admin.site.back.repositories.UserRepository;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 
-@Service
+@Service // TODO remove
 @AllArgsConstructor
 public class AdminSiteApplicationServiceImpl implements AdminSiteApplicationService {
 

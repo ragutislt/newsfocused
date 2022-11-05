@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused.admin.site.back.services;
+package eu.adainius.newsfocused.admin.site.back.domain.services;
 
 import java.util.Optional;
 import java.util.Set;
