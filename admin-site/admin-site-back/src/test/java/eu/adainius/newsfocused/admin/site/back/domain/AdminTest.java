@@ -83,6 +83,7 @@ public class AdminTest {
         // THEN
         assertThat(searchResults.usersFound().size()).isEqualTo(1);
         assertThat(searchResults.usersFound()).extracting("email").containsExactly(userEmail);
+        assertThat(searchResults.totalCount()).isEqualTo(1);
     }
 
     @Test

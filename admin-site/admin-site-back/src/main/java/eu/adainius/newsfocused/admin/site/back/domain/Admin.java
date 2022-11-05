@@ -62,7 +62,7 @@ public class Admin {
             pageToReturn.add(currentUser);
         }
 
-        return UserSearchResults.of(Collections.unmodifiableSet(pageToReturn), pageRequested, allUsers.size());
+        return UserSearchResults.of(Collections.unmodifiableSet(pageToReturn), pageRequested, searchResults.size());
     }
 
     public Optional<User> openUserDetails(String email, Set<User> allUsers) {
