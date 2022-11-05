@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused.admin.site.back.controller;
+package eu.adainius.newsfocused.admin.site.back.infrastructure.controller;
 
 import java.util.Set;
 

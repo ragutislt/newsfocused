@@ -14,8 +14,8 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import eu.adainius.newsfocused.admin.site.back.controller.UserDeserializer;
-import eu.adainius.newsfocused.admin.site.back.controller.UserSerializer;
+import eu.adainius.newsfocused.admin.site.back.infrastructure.controller.UserDeserializer;
+import eu.adainius.newsfocused.admin.site.back.infrastructure.controller.UserSerializer;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.repositories.AdminFromPropertiesRepository;
 import eu.adainius.newsfocused.admin.site.back.repositories.UserFileBasedJsonRepository;
