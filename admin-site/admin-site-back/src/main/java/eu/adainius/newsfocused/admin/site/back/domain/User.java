@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors(fluent = true)
 @ToString
-@EqualsAndHashCode(of = {"email"})
+@EqualsAndHashCode(of = { "email" })
 @Builder
 public class User {
     private final String email;
@@ -22,7 +22,8 @@ public class User {
     @Builder.Default
     private final Set<EmailSent> emailsSent = Collections.emptySet();
     private final Preferences preferences;
-    // TODO we need to harmonize this with User class from the newsfocused domain (or import it)
+    // TODO we need to harmonize this with User class from the newsfocused domain
+    // (or import it)
 
     @Getter
     @ToString
@@ -38,10 +39,13 @@ public class User {
             if (daysToSendOn == null || daysToSendOn.isEmpty()) {
                 throw new IllegalArgumentException("Days to send emails on is mandatory!");
             }
+            if (sites == null || sites.isEmpty()) {
+                throw new IllegalArgumentException("Sites are mandatory!");
+            }
 
             this.daysToSendOn = daysToSendOn;
             this.sites = sites;
-            this.headlineCount = headlineCount;
+            this.headlineCount = headlineCount == 0 ? 5 : headlineCount;
         }
     }
 }

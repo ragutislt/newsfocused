@@ -22,4 +22,19 @@ public class UserTest {
                             .build();
                 });
     }
+
+    @Test
+    public void validates_sites_is_not_empty() {
+        // GIVEN
+        // WHEN
+        // THEN
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> {
+                    User.builder().email("email")
+                            .preferences(
+                                    User.Preferences.builder().daysToSendOn(Set.of("Monday"))
+                                            .headlineCount(19999).build())
+                            .build();
+                });
+    }
 }

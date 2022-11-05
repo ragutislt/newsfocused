@@ -19,22 +19,46 @@ import eu.adainius.newsfocused.admin.site.back.domain.User.Preferences;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TestUserDeserializer {
+public class TestUserSerializer {
 
     @Test
-    void deserializes_correctly_from_serialized_form() throws StreamReadException, DatabindException, IOException {
+    void serializes_all_fields_to_json() throws StreamReadException, DatabindException, IOException {
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
         om.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 
         SimpleModule module = new SimpleModule();
-        module.addDeserializer(User.class, new UserDeserializer());
         module.addSerializer(User.class, new UserSerializer());
+        module.addDeserializer(User.class, new UserDeserializer());
         om.registerModule(module);
 
         User user = User
                 .builder().email("aaa@bbb.ccc").emailsSent(Set.of(new EmailSent(new Date()))).preferences(Preferences
                         .builder().daysToSendOn(Set.of("Monday")).sites(Set.of("bbc")).headlineCount(7).build())
+                .build();
+        String json = om.writeValueAsString(user);
+
+        User sameUser = om.readValue(json.getBytes(), User.class);
+
+        assertThat(user).isEqualTo(sameUser);
+    }
+
+    @Test
+    void serializers_correctly_if_there_are_null_field_values()
+            throws StreamReadException, DatabindException, IOException {
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
+        om.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(User.class, new UserSerializer());
+        module.addDeserializer(User.class, new UserDeserializer());
+        om.registerModule(module);
+
+        User user = User
+                .builder().email("aaa@bbb.ccc").preferences(Preferences
+                        .builder().daysToSendOn(Set.of("Monday"))
+                        .sites(Set.of("BBC")).build())
                 .build();
         String json = om.writeValueAsString(user);
 

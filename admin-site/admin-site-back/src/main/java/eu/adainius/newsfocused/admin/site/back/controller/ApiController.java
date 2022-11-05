@@ -22,6 +22,7 @@ import lombok.AllArgsConstructor;
 
 
 // TODO make infrastructure package and move this as a sub package there
+// TODO protect these endpoints, now we get NPE when retrieving the principal, but we shouldn' arrive until there
 @Controller
 @Path("api")
 @AllArgsConstructor

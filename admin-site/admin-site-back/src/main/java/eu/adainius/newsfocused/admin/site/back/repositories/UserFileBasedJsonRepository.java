@@ -18,7 +18,8 @@ import eu.adainius.newsfocused.admin.site.back.domain.User;
 
 public class UserFileBasedJsonRepository implements UserRepository {
     private final String repoFilePath;
-    private final Gson gson = new Gson();
+    // TODO - use jackson instead with the same object mapper as is used for HTTP API
+    private final Gson gson = new Gson(); 
 
     public UserFileBasedJsonRepository(String repoFilePath) {
         this.repoFilePath = repoFilePath;

@@ -32,6 +32,11 @@ Additionally, it allows admin rights to change users' preferences or even manual
 
 # Documentation
 
+## How to run
+1. mvn clean install
+2. http://localhost:8080/admin/index
+## Domain
+
 * Admin - aggregate root. Performs operating associated to a user, like registering new users, modifying them, viewing them...
 * User - an entity
 * Site - a value object

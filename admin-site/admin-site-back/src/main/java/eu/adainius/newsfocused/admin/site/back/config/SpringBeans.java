@@ -13,6 +13,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
+import eu.adainius.newsfocused.admin.site.back.controller.UserDeserializer;
+import eu.adainius.newsfocused.admin.site.back.controller.UserSerializer;
+import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.repositories.AdminFromPropertiesRepository;
 import eu.adainius.newsfocused.admin.site.back.repositories.UserFileBasedJsonRepository;
 
@@ -41,7 +44,12 @@ public class SpringBeans {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
-        return builder -> builder.serializationInclusion(JsonInclude.Include.NON_NULL).visibility(PropertyAccessor.ALL, Visibility.NONE).visibility(PropertyAccessor.FIELD, Visibility.ANY);
-        //.failOnEmptyBeans(false);
+        return builder -> builder
+                .serializationInclusion(JsonInclude.Include.NON_NULL)
+                .visibility(PropertyAccessor.ALL, Visibility.NONE)
+                .visibility(PropertyAccessor.FIELD, Visibility.ANY)
+                .deserializerByType(User.class, new UserDeserializer())
+                .serializerByType(User.class, new UserSerializer())
+                .failOnEmptyBeans(true);
     }
 }
