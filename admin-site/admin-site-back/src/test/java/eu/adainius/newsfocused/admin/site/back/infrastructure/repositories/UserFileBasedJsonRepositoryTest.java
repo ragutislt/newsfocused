@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused.admin.site.back.repositories;
+package eu.adainius.newsfocused.admin.site.back.infrastructure.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import eu.adainius.newsfocused.admin.site.back.infrastructure.controller.UserDeserializer;
 import eu.adainius.newsfocused.admin.site.back.infrastructure.controller.UserSerializer;
+import eu.adainius.newsfocused.admin.site.back.infrastructure.repositories.UserFileBasedJsonRepository;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.domain.User.Preferences;
 

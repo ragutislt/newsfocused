@@ -15,6 +15,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors(fluent = true)
 @Builder
+// TODO implement a delete
 public class Admin {
     private String username;
 

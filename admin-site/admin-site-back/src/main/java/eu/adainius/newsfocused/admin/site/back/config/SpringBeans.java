@@ -16,9 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.adainius.newsfocused.admin.site.back.infrastructure.controller.UserDeserializer;
 import eu.adainius.newsfocused.admin.site.back.infrastructure.controller.UserSerializer;
+import eu.adainius.newsfocused.admin.site.back.infrastructure.repositories.AdminFromPropertiesRepository;
+import eu.adainius.newsfocused.admin.site.back.infrastructure.repositories.UserFileBasedJsonRepository;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
-import eu.adainius.newsfocused.admin.site.back.repositories.AdminFromPropertiesRepository;
-import eu.adainius.newsfocused.admin.site.back.repositories.UserFileBasedJsonRepository;
 
 @Configuration
 public class SpringBeans {

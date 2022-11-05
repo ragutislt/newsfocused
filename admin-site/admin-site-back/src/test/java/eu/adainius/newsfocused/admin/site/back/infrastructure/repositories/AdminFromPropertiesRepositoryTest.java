@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused.admin.site.back.repositories;
+package eu.adainius.newsfocused.admin.site.back.infrastructure.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

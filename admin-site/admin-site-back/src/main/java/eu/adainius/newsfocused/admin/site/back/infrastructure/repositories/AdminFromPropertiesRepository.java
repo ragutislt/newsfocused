@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused.admin.site.back.repositories;
+package eu.adainius.newsfocused.admin.site.back.infrastructure.repositories;
 
 import java.util.Optional;
 import java.util.Properties;
