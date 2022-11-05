@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.domain.User.Preferences;
-import eu.adainius.newsfocused.admin.site.back.domain.services.AdminSiteApplicationService;
+import eu.adainius.newsfocused.admin.site.back.domain.services.AdminSiteDomainService;
 import eu.adainius.newsfocused.admin.site.back.domain.UserSearchResults;
 import io.vavr.control.Either;
 
@@ -27,7 +27,7 @@ import io.vavr.control.Either;
 public class ApiControllerTest {
 
     @Mock
-    AdminSiteApplicationService adminSiteApplicationService;
+    AdminSiteDomainService adminSiteApplicationService;
 
     @InjectMocks
     ApiController apiController;

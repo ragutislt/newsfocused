@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 
 @Service // TODO remove
 @AllArgsConstructor
-public class AdminSiteApplicationServiceImpl implements AdminSiteApplicationService {
+public class AdminSiteDomainServiceImpl implements AdminSiteDomainService {
 
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;

@@ -19,13 +19,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import eu.adainius.newsfocused.admin.site.back.domain.Admin;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.domain.UserSearchResults;
-import eu.adainius.newsfocused.admin.site.back.domain.services.AdminSiteApplicationServiceImpl;
 import eu.adainius.newsfocused.admin.site.back.repositories.AdminRepository;
 import eu.adainius.newsfocused.admin.site.back.repositories.UserRepository;
 import io.vavr.control.Either;
 
 @ExtendWith(MockitoExtension.class)
-public class AdminSiteApplicationServiceTest {
+public class AdminSiteDomainServiceTest {
 
     @Mock
     UserRepository userRepository;
@@ -34,7 +33,7 @@ public class AdminSiteApplicationServiceTest {
     AdminRepository adminRepository;
 
     @InjectMocks
-    AdminSiteApplicationServiceImpl adminSiteApplicationService;
+    AdminSiteDomainServiceImpl adminSiteApplicationService;
 
     @Test
     public void registers_a_new_user_through_the_admin_and_saves() {

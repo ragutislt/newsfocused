@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.domain.UserSearchResults;
-import eu.adainius.newsfocused.admin.site.back.domain.services.AdminSiteApplicationService;
+import eu.adainius.newsfocused.admin.site.back.domain.services.AdminSiteDomainService;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 
@@ -28,7 +28,7 @@ import lombok.AllArgsConstructor;
 @Path("api")
 @AllArgsConstructor
 public class ApiController {
-    private AdminSiteApplicationService adminSiteApplicationService;
+    private AdminSiteDomainService adminSiteApplicationService;
 
     @Path("user/search")
     @GET

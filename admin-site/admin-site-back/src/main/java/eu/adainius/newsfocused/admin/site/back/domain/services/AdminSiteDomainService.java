@@ -15,7 +15,7 @@ import eu.adainius.newsfocused.admin.site.back.repositories.UserRepository;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 
-public interface AdminSiteApplicationService {
+public interface AdminSiteDomainService {
     public Either<String, User> registerUser(String adminUsername, String email, Set<String> daysToSendOn,
             Set<String> sites,
             int headlineCount);
