@@ -2,26 +2,23 @@ package eu.adainius.newsfocused.admin.site.back.repositories;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 
 public class UserFileBasedJsonRepository implements UserRepository {
     private final String repoFilePath;
-    // TODO - use jackson instead with the same object mapper as is used for HTTP API
-    private final Gson gson = new Gson(); 
+    private final ObjectMapper objectMapper; 
 
-    public UserFileBasedJsonRepository(String repoFilePath) {
+    public UserFileBasedJsonRepository(String repoFilePath, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         this.repoFilePath = repoFilePath;
 
         String fullRepoPath = Paths.get(this.repoFilePath).toAbsolutePath().toString();
@@ -32,7 +29,6 @@ public class UserFileBasedJsonRepository implements UserRepository {
 
     @Override
     public void save(User registeredUser) {
-        FileWriter writer = null;
         String fullRepoPath = Paths.get(this.repoFilePath).toAbsolutePath().toString();
 
         Set<User> allUsers = this.retrieveAll();
@@ -47,19 +43,10 @@ public class UserFileBasedJsonRepository implements UserRepository {
         }
 
         try {
-            writer = new FileWriter(fullRepoPath);
-            gson.toJson(allUsers, writer);
-            writer.flush();
+            File file = new File(fullRepoPath);
+            objectMapper.writeValue(file, allUsers);
         } catch (IOException e) {
             throw new RuntimeException("Exception when writing file", e);
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (Exception e) {
-                throw new RuntimeException("Exception when writing file", e);
-            }
         }
     }
 
@@ -71,10 +58,9 @@ public class UserFileBasedJsonRepository implements UserRepository {
             Set<User> users = null;
 
             if (new File(fullRepoPath).exists()) {
-                Type setWithUserType = new TypeToken<HashSet<User>>() {
-                }.getType();
                 reader = new FileReader(fullRepoPath);
-                users = gson.fromJson(reader, setWithUserType);
+                users = objectMapper.readValue(reader, new TypeReference<Set<User>>() {
+                });
             }
 
             return users != null ? users : Collections.emptySet();

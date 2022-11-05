@@ -46,6 +46,7 @@ public class AdminSiteApplicationServiceTest {
                 User.Preferences.builder()
                         .daysToSendOn(daysToSendOn)
                         .headlineCount(headlineCount)
+                        .sites(sites)
                         .build())
                 .build();
 
@@ -128,6 +129,7 @@ public class AdminSiteApplicationServiceTest {
                 User.Preferences.builder()
                         .daysToSendOn(daysToSendOn)
                         .headlineCount(headlineCount)
+                        .sites(sites)
                         .build())
                 .build();
 
@@ -189,6 +191,7 @@ public class AdminSiteApplicationServiceTest {
                 User.Preferences.builder()
                         .daysToSendOn(Set.of("Monday"))
                         .headlineCount(111)
+                        .sites(Set.of("BBC"))
                         .build())
                 .build();
 
@@ -234,6 +237,7 @@ public class AdminSiteApplicationServiceTest {
                 User.Preferences.builder()
                         .daysToSendOn(Set.of("Monday"))
                         .headlineCount(111)
+                        .sites(Set.of("BBC"))
                         .build())
                 .build();
 
@@ -259,6 +263,7 @@ public class AdminSiteApplicationServiceTest {
                 User.Preferences.builder()
                         .daysToSendOn(Set.of("Monday"))
                         .headlineCount(111)
+                        .sites(Set.of("BBC"))
                         .build())
                 .build();
 

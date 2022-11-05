@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.adainius.newsfocused.admin.site.back.controller.UserDeserializer;
 import eu.adainius.newsfocused.admin.site.back.controller.UserSerializer;
@@ -36,10 +37,10 @@ public class SpringBeans {
     }
 
     @Bean
-    public UserFileBasedJsonRepository userRepository() throws IOException {
+    public UserFileBasedJsonRepository userRepository(@Autowired ObjectMapper objectMapper) throws IOException {
         Properties applicationProperties = new Properties();
         applicationProperties.load(SpringBeans.class.getClassLoader().getResourceAsStream("application.properties"));
-        return new UserFileBasedJsonRepository(applicationProperties.getProperty("userRepoPath"));
+        return new UserFileBasedJsonRepository(applicationProperties.getProperty("userRepoPath"), objectMapper);
     }
 
     @Bean

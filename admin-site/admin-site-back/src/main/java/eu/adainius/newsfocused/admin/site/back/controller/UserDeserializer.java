@@ -1,6 +1,7 @@
 package eu.adainius.newsfocused.admin.site.back.controller;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,15 +48,21 @@ public class UserDeserializer extends StdDeserializer<User> {
         reader = collectionMapper.readerFor(new TypeReference<Set<EmailSent>>() {
         });
 
-        Date registrationDate = collectionMapper.readValue(productNode.get("registrationDate").asText(), Date.class);
+        Date registrationDate = new Date();
+
+        if (productNode.get("registrationDate") != null) {
+            registrationDate = collectionMapper.readValue(productNode.get("registrationDate").asText(), Date.class);
+        }
 
         JsonNode emailsSentArray = productNode.get("emailsSent");
-        Set<EmailSent> emailsSent = new HashSet<EmailSent>(emailsSentArray.size());
+        Set<EmailSent> emailsSent = Collections.emptySet();
+        if(emailsSentArray != null) {
+            emailsSent = new HashSet<EmailSent>(emailsSentArray.size());
 
-        for (JsonNode jsonNode : emailsSentArray) {
-            Date sentOn = collectionMapper.readValue(jsonNode.get("sentOn").asText(), Date.class);
-            emailsSent.add(new EmailSent(sentOn));
-
+            for (JsonNode jsonNode : emailsSentArray) {
+                Date sentOn = collectionMapper.readValue(jsonNode.get("sentOn").asText(), Date.class);
+                emailsSent.add(new EmailSent(sentOn));
+            }
         }
 
         return User.builder().email(email).emailsSent(emailsSent).registrationDate(registrationDate)
