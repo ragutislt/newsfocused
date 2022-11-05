@@ -6,6 +6,7 @@ import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 
 import eu.adainius.newsfocused.admin.site.back.domain.Admin;
+import eu.adainius.newsfocused.admin.site.back.domain.repositories.AdminRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

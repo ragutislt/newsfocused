@@ -11,6 +11,7 @@ import java.util.Properties;
 import org.junit.jupiter.api.Test;
 
 import eu.adainius.newsfocused.admin.site.back.domain.Admin;
+import eu.adainius.newsfocused.admin.site.back.domain.repositories.AdminRepository;
 
 public class AdminFromPropertiesRepositoryTest {
     @Test
@@ -19,7 +20,6 @@ public class AdminFromPropertiesRepositoryTest {
         String adminUsername = "adminUsername";
         Properties properties = new Properties();
         properties.put("admin", adminUsername);
-
         AdminRepository adminRepository = new AdminFromPropertiesRepository(properties);
 
         // WHEN

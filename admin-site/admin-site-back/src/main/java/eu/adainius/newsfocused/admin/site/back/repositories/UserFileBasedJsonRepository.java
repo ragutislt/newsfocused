@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.adainius.newsfocused.admin.site.back.domain.User;
+import eu.adainius.newsfocused.admin.site.back.domain.repositories.UserRepository;
 
 public class UserFileBasedJsonRepository implements UserRepository {
     private final String repoFilePath;

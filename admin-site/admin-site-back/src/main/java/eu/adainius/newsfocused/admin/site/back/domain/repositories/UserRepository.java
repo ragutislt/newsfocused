@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused.admin.site.back.repositories;
+package eu.adainius.newsfocused.admin.site.back.domain.repositories;
 
 import java.util.Set;
 

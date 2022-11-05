@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import eu.adainius.newsfocused.admin.site.back.domain.Admin;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
 import eu.adainius.newsfocused.admin.site.back.domain.UserSearchResults;
-import eu.adainius.newsfocused.admin.site.back.repositories.AdminRepository;
-import eu.adainius.newsfocused.admin.site.back.repositories.UserRepository;
+import eu.adainius.newsfocused.admin.site.back.domain.repositories.AdminRepository;
+import eu.adainius.newsfocused.admin.site.back.domain.repositories.UserRepository;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 
