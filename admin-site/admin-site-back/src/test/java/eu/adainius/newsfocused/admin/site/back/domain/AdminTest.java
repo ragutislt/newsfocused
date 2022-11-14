@@ -3,7 +3,6 @@ package eu.adainius.newsfocused.admin.site.back.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -39,7 +38,7 @@ public class AdminTest {
     }
 
     @Test
-    public void validates_days_to_send_on_is_not_empty() {
+    public void error_is_returned_if_some_parameters_were_not_valid_during_user_creation() {
         // GIVEN
         Admin admin = new Admin("admin");
         Set<String> daysToSendOn = Set.of();
@@ -84,6 +83,7 @@ public class AdminTest {
         // THEN
         assertThat(searchResults.usersFound().size()).isEqualTo(1);
         assertThat(searchResults.usersFound()).extracting("email").containsExactly(userEmail);
+        assertThat(searchResults.totalCount()).isEqualTo(1);
     }
 
     @Test

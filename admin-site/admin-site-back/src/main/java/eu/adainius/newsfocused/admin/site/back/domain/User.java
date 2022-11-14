@@ -13,22 +13,25 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors(fluent = true)
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = { "email" })
 @Builder
 public class User {
     private final String email;
     @Builder.Default
-    private final Date registrationDate = new Date();
+    private final Date registrationDate = new Date(); // TODO - make this actually immutable after we save it in storage
     @Builder.Default
     private final Set<EmailSent> emailsSent = Collections.emptySet();
     private final Preferences preferences;
+    // TODO we need to harmonize this with User class from the newsfocused domain
+    // (or import it)
 
     @Getter
     @ToString
-    static class Preferences {
-        private Set<String> daysToSendOn;
-        private Set<String> sites;
-        private int headlineCount;
+    @EqualsAndHashCode
+    public static class Preferences {
+        private final Set<String> daysToSendOn;
+        private final Set<String> sites;
+        private final int headlineCount;
         // TODO private LocalTime time to send at
 
         @Builder
@@ -36,10 +39,13 @@ public class User {
             if (daysToSendOn == null || daysToSendOn.isEmpty()) {
                 throw new IllegalArgumentException("Days to send emails on is mandatory!");
             }
+            if (sites == null || sites.isEmpty()) {
+                throw new IllegalArgumentException("Sites are mandatory!");
+            }
 
             this.daysToSendOn = daysToSendOn;
             this.sites = sites;
-            this.headlineCount = headlineCount;
+            this.headlineCount = headlineCount == 0 ? 5 : headlineCount;
         }
     }
 }

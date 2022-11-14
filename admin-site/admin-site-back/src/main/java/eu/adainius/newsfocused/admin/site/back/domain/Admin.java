@@ -1,7 +1,6 @@
 package eu.adainius.newsfocused.admin.site.back.domain;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
@@ -11,9 +10,12 @@ import java.util.stream.Collectors;
 import io.vavr.control.Either;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 @Getter
+@Accessors(fluent = true)
 @Builder
+// TODO implement a delete
 public class Admin {
     private String username;
 
@@ -61,7 +63,7 @@ public class Admin {
             pageToReturn.add(currentUser);
         }
 
-        return UserSearchResults.of(Collections.unmodifiableSet(pageToReturn), pageRequested, allUsers.size());
+        return UserSearchResults.of(Collections.unmodifiableSet(pageToReturn), pageRequested, searchResults.size());
     }
 
     public Optional<User> openUserDetails(String email, Set<User> allUsers) {

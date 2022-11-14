@@ -60,9 +60,9 @@ public class WebSecurityConfig {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost")); 
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost"));
 		// TODO add domain name eventually read from a property file
-		configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","OPTIONS"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/api/**", configuration);
 		return source;
@@ -73,7 +73,7 @@ public class WebSecurityConfig {
 	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.mvcMatchers("/admin/api/**")
+				.mvcMatchers("/api/**")
 				.authenticated()
 				.and()
 				.anonymous().disable()
@@ -107,10 +107,10 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
-	public ServletRegistrationBean customServletRegistrationBean() {
-		ServletRegistrationBean bean = new ServletRegistrationBean(
+	public ServletRegistrationBean<StaticResourceServlet> customServletRegistrationBean() {
+		ServletRegistrationBean<StaticResourceServlet> bean = new ServletRegistrationBean<StaticResourceServlet>(
 				new StaticResourceServlet(), "/static/*");
-				log.info("Registering servlet StaticResourceServlet");
+		log.info("Registering servlet StaticResourceServlet");
 		bean.setLoadOnStartup(1);
 		return bean;
 	}

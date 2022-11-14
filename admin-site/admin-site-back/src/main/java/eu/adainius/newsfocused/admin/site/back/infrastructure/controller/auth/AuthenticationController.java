@@ -1,4 +1,4 @@
-package eu.adainius.newsfocused.admin.site.back.controller.auth;
+package eu.adainius.newsfocused.admin.site.back.infrastructure.controller.auth;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.POST;

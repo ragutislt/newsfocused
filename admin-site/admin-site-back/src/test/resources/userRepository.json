@@ -1,0 +1,26 @@
+[
+    {
+        "email": "some@email.com",
+        "preferences": {
+            "sites": [
+                "www.bbc.com"
+            ],
+            "daysToSendOn": [
+                "Sunday"
+            ],
+            "headlineCount": 4
+        }
+    },
+    {
+        "email": "some@email222.com",
+        "preferences": {
+            "sites": [
+                "www.bbc.com"
+            ],
+            "daysToSendOn": [
+                "Wednesday"
+            ],
+            "headlineCount": 48
+        }
+    }
+]

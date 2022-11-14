@@ -17,7 +17,7 @@
     <dependency>
       <groupId>eu.adainius</groupId>
       <artifactId>newsfocused</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jsoup</groupId>
