@@ -19,6 +19,7 @@ import eu.adainius.newsfocused.admin.site.back.infrastructure.controller.UserSer
 import eu.adainius.newsfocused.admin.site.back.infrastructure.repositories.AdminFromPropertiesRepository;
 import eu.adainius.newsfocused.admin.site.back.infrastructure.repositories.UserFileBasedJsonRepository;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
+import eu.adainius.newsfocused.admin.site.back.domain.services.AdminSiteDomainServiceImpl;
 
 @Configuration
 public class SpringBeans {
@@ -41,6 +42,11 @@ public class SpringBeans {
         Properties applicationProperties = new Properties();
         applicationProperties.load(SpringBeans.class.getClassLoader().getResourceAsStream("application.properties"));
         return new UserFileBasedJsonRepository(applicationProperties.getProperty("userRepoPath"), objectMapper);
+    }
+
+    @Bean
+    public AdminSiteDomainServiceImpl adminSiteDomainService(@Autowired AdminFromPropertiesRepository adminRepository, @Autowired UserFileBasedJsonRepository userRepository) {
+        return new AdminSiteDomainServiceImpl(adminRepository, userRepository);
     }
 
     @Bean

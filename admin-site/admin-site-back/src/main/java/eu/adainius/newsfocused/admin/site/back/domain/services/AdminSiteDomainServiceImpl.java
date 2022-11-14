@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.apache.commons.validator.routines.EmailValidator;
-import org.springframework.stereotype.Service;
 
 import eu.adainius.newsfocused.admin.site.back.domain.Admin;
 import eu.adainius.newsfocused.admin.site.back.domain.User;
@@ -15,7 +14,7 @@ import eu.adainius.newsfocused.admin.site.back.domain.repositories.UserRepositor
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 
-@Service // TODO remove
+// TODO write archunit tests to protect the domain layer
 @AllArgsConstructor
 public class AdminSiteDomainServiceImpl implements AdminSiteDomainService {
 
