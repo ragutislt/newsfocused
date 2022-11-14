@@ -48,7 +48,7 @@ public class UserFileBasedJsonRepositoryTest {
 
         private String copyTestDataToTempFile() throws IOException {
                 String testData = Files
-                                .readString(Paths.get("src/test/java/eu/adainius/resources/userRepository.json"));
+                                .readString(Paths.get("src/test/resources/userRepository.json"));
                 // File tempFile = new File(tempRepoFile.toAbsolutePath() +
                 // "tempUserRepo.json");
                 File tempFile = tempRepoFile.toFile().createTempFile("temp", null);
@@ -71,7 +71,7 @@ public class UserFileBasedJsonRepositoryTest {
                                                 .sites(Set.of("www.bbc.com")).build())
                                 .build();
 
-                File repoFilePath = new File("src/test/java/eu/adainius/resources/userRepository.json");
+                File repoFilePath = new File("src/test/resources/userRepository.json");
 
                 UserFileBasedJsonRepository userRepository = new UserFileBasedJsonRepository(repoFilePath.toString(),
                                 objectMapper);
