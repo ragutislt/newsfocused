@@ -45,7 +45,7 @@ public class AppTest {
                 App.setNewsRepository(mockRepository);
                 App.main(new String[] { usersLocation });
 
-                mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(1));
+                mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(2));
 
                 Mockito.verify(mockRepository).getRunningWeekFor("some@email.com");
                 Mockito.verify(mockRepository).getRunningWeekFor("some@email222.com");
@@ -64,7 +64,7 @@ public class AppTest {
                 App.setNewsRepository(mockRepository);
                 App.main(new String[] { usersLocation });
 
-                mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(1));
+                mailProviderMock.verify(() -> EmailProvider.sendEmail(any(Email.class)), times(2));
 
                 Mockito.verify(mockRepository).saveRunningWeekFor(Mockito.any(Headlines.class), eq("some@email.com"));
                 Mockito.verify(mockRepository).saveRunningWeekFor(Mockito.any(Headlines.class), eq("some@email222.com"));
