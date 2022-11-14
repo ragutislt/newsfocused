@@ -73,7 +73,7 @@ public class WebSecurityConfig {
 	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.mvcMatchers("/admin/api/**")
+				.mvcMatchers("/api/**")
 				.authenticated()
 				.and()
 				.anonymous().disable()

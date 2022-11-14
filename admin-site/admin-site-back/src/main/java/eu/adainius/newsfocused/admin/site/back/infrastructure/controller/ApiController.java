@@ -20,7 +20,6 @@ import eu.adainius.newsfocused.admin.site.back.domain.services.AdminSiteDomainSe
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 
-// TODO protect these endpoints, now we get NPE when retrieving the principal, but we shouldn' arrive until there
 @Controller
 @Path("api")
 @AllArgsConstructor
