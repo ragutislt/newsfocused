@@ -8,6 +8,7 @@ class AdminSiteBackApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// This test will fail if context does not load properly
 	}
 
 }
