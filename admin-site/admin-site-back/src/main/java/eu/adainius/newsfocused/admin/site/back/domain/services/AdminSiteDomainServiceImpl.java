@@ -14,7 +14,6 @@ import eu.adainius.newsfocused.admin.site.back.domain.repositories.UserRepositor
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 
-// TODO write archunit tests to protect the domain layer
 @AllArgsConstructor
 public class AdminSiteDomainServiceImpl implements AdminSiteDomainService {
 
@@ -62,7 +61,8 @@ public class AdminSiteDomainServiceImpl implements AdminSiteDomainService {
             int pageSize, int pageRequested) {
         return ifAdminExists(adminUsername, admin -> {
             Set<User> allUsers = userRepository.retrieveAll();
-            // TODO potentially, since we use Set everywhere, the ordering might get screwed up if on next save it does a different order
+            // TODO potentially, since we use Set everywhere, the ordering might get screwed
+            // up if on next save it does a different order
             UserSearchResults searchResults = admin.searchForUser(emailSearchTerm, allUsers, pageSize,
                     pageRequested);
             return Either.right(searchResults);
