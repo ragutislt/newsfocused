@@ -37,7 +37,7 @@ describe('login to the admin app', () => {
 
         cy.intercept({
             method: 'POST',
-            url: '**/api/login'
+            url: 'admin/api/auth'
         }, {
             statusCode: 200
         }).as('postLogin')
@@ -45,12 +45,14 @@ describe('login to the admin app', () => {
         cy.get('#login-button').click()
 
         cy.wait('@postLogin').should(({ request }) => {
-            expect(request.body).property('username').to.equal('username');
-            expect(request.body).property('password').to.equal('password');
+            console.log(request.headers['authorization']);
+            const authHeader = window.atob(request.headers['authorization'].replace("Basic ","")).split(":");
+            expect(authHeader[0]).to.equal('username');
+            expect(authHeader[1]).to.equal('password');
         })
 
-        cy.get('#username-input').should('have.length', 0)
-        cy.get('#password-input').should('have.length', 0)
+        cy.get('#username-input').should('not.exist')
+        cy.get('#password-input').should('not.exist')
     })
 
     it('displays error message on failed login', () => {
@@ -59,7 +61,7 @@ describe('login to the admin app', () => {
 
         cy.intercept({
             method: 'POST',
-            url: '**/api/login'
+            url: 'admin/api/auth'
         }, {
             statusCode: 401
         }).as('postLogin')

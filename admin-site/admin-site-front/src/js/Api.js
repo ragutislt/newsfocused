@@ -1,5 +1,5 @@
 export const callLogin = (username, password) => {
-    const credentials = btoa(`${username}:${password}`);
+    const credentials = window.btoa(`${username}:${password}`);
     return fetch(`admin/api/auth`, {
         method: 'POST',
         headers: {
