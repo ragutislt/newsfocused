@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,59 +7,44 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Button from "@mui/material/Button";
 
 const columns = [
-    { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
-    {
-        id: 'population',
-        label: 'Population',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-        id: 'size',
-        label: 'Size\u00a0(km\u00b2)',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-        id: 'density',
-        label: 'Density',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toFixed(2),
-    },
+    { id: 'email', label: 'Email', minWidth: 170 },
+    { id: 'registrationDate', label: 'Registration date', minWidth: 100, format: (timestamp) => (new Date(timestamp)).toUTCString()},
+    { id: 'actions', label: 'Actions', minWidth: 100 }
 ];
 
-function createData(name, code, population, size) {
-    const density = population / size;
-    return { name, code, population, size, density };
+const UserDetailsButton = () => {
+    return <Button id="userDetailsButton"
+        variant="contained"
+        size="small"
+        onClick={() => {
+            alert("good");
+        }}>
+        Details
+    </Button>;
 }
 
 const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    createData('France', 'FR', 67022000, 640679),
-    createData('United Kingdom', 'GB', 67545757, 242495),
-    createData('Russia', 'RU', 146793744, 17098246),
-    createData('Nigeria', 'NG', 200962417, 923768),
-    createData('Brazil', 'BR', 210147125, 8515767),
+    {
+        "email": "email@email.com", "registrationDate": 1668506917000, code: "email@email.com",
+        actions: <UserDetailsButton/>
+    },
+    {
+        "email": "email222@email.com", "registrationDate": 1668506917000, code: "email222@email.com",
+        actions: <UserDetailsButton/>
+    }
 ];
 
 const UserTable = () => {
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const userData = useState([]);
+
+    useEffect(() => {
+          
+    });
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -98,9 +83,7 @@ const UserTable = () => {
                                                 const value = row[column.id];
                                                 return (
                                                     <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
+                                                        {column.format ? column.format(value) : value}
                                                     </TableCell>
                                                 );
                                             })}

@@ -10,4 +10,22 @@ describe('See the user table page', () => {
             cy.get(table).should('be.visible')
         })
     })
+
+    it('displays a search bar', () => {
+        cy.get('#searchBar').then((searchBar) => {
+            cy.get(searchBar).should('be.visible')
+        })
+    })
+
+    it('gets all users at first load', () => {
+
+    })
+
+    it('searches users', () => {
+
+    })
+
+    it('opens user details', () => {
+
+    })
 })
