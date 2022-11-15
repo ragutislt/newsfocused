@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,6 +9,10 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from "@mui/material/Button";
 import { callSearch } from '../Api';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import '../../css/UserTable.css';
 
 const columns = [
     { id: 'email', label: 'Email', minWidth: 170 },
@@ -26,14 +30,14 @@ const UserDetailsButton = (props) => {
     </Button>;
 }
 
-// TODO display total count somewhere (and adapt pages based on it?)
 const UserTable = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [userData, setUserData] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
-        callSearch("", rowsPerPage, page + 1)
+        callSearch(searchTerm, rowsPerPage, page + 1)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(response.status);
@@ -51,7 +55,7 @@ const UserTable = () => {
                     alert('Unknown error');
                 }
             })
-    }, []);
+    }, [rowsPerPage, page, searchTerm]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -64,61 +68,75 @@ const UserTable = () => {
 
     return (
         <div id="userTable">
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column) => (
+            <Container maxWidth="lg" id="userTablePageContainer">
+                <Paper sx={{ width: '100%', overflow: 'hidden', my: '2rem' }} id="searchFieldPaper">
+                    <TextField
+                        fullWidth
+                        id="userSearchInput"
+                        label="Search for users"
+                        variant="outlined"
+                        margin="normal"
+                        onChange={event => setSearchTerm(event.target.value)}
+                    />
+                    <Typography component="h1" variant="h5" marginTop={8}>
+                        Users
+                    </Typography>
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
+                                    {columns.map((column) => (
+                                        <TableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            style={{ minWidth: column.minWidth }}
+                                        >
+                                            {column.label}
+                                        </TableCell>
+                                    ))}
                                     <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
+                                        key="actions"
+                                        style={{ minWidth: 100 }}
                                     >
-                                        {column.label}
+                                        Actions
                                     </TableCell>
-                                ))}
-                                <TableCell
-                                    key="actions"
-                                    style={{ minWidth: 100 }}
-                                >
-                                    Actions
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {userData
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.email}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format ? column.format(value) : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                            <TableCell key={row["email"]} align="left">
-                                                <UserDetailsButton userEmail={row["email"]} />
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={userData.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {userData
+                                    // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) should not be needed as pagination is handled on the backend
+                                    .sort((a, b) => a.email > b.email ? 1 : -1)
+                                    .map((row) => {
+                                        return (
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.email}>
+                                                {columns.map((column) => {
+                                                    const value = row[column.id];
+                                                    return (
+                                                        <TableCell key={column.id} align={column.align}>
+                                                            {column.format ? column.format(value) : value}
+                                                        </TableCell>
+                                                    );
+                                                })}
+                                                <TableCell key={row["email"]} align="left">
+                                                    <UserDetailsButton userEmail={row["email"]} />
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[10, 25, 100]}
+                        component="div"
+                        count={userData.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </Paper>
+            </Container>
         </div>
     )
 }
