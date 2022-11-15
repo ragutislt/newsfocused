@@ -41,7 +41,7 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^9.6.0"
+    "cypress": "^11.0.1"
   },
   "homepage": ".",
   "proxy": "http://localhost:8080"

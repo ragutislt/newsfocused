@@ -35,7 +35,7 @@ describe('login to the admin app', () => {
         cy.get('#username-input').type('username')
         cy.get('#password-input').type('password')
 
-        cy.intercept({
+        cy.intercept({ // TODO - do not stub this call as we need to e2e-test the actual login
             method: 'POST',
             url: 'admin/api/auth'
         }, {
