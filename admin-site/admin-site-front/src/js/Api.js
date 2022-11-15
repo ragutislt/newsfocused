@@ -9,6 +9,15 @@ export const callLogin = (username, password) => {
     })
 }
 
+export const callSearch = (searchTerm, pageSize, pageRequested) => {
+    return fetch(`admin/api/user/search?term=${searchTerm}&pageSize=${pageSize}&pageRequested=${pageRequested}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
 const doFetch = (url, options) => {
     return fetch(`admin/api/${url}`, 
         options

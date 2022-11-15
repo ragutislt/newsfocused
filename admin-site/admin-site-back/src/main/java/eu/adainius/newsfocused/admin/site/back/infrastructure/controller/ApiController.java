@@ -26,6 +26,7 @@ import lombok.AllArgsConstructor;
 public class ApiController {
     private AdminSiteDomainService adminSiteApplicationService;
 
+    // TODO for the search, we should only return a limited set of fields
     @Path("user/search")
     @GET
     @Produces("application/json")

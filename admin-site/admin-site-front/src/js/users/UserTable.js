@@ -8,43 +8,50 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from "@mui/material/Button";
+import { callSearch } from '../Api';
 
 const columns = [
     { id: 'email', label: 'Email', minWidth: 170 },
-    { id: 'registrationDate', label: 'Registration date', minWidth: 100, format: (timestamp) => (new Date(timestamp)).toUTCString()},
-    { id: 'actions', label: 'Actions', minWidth: 100 }
+    { id: 'registrationDate', label: 'Registration date', minWidth: 100, format: (timestamp) => (new Date(timestamp)).toUTCString() }
 ];
 
-const UserDetailsButton = () => {
+const UserDetailsButton = (props) => {
     return <Button id="userDetailsButton"
         variant="contained"
         size="small"
         onClick={() => {
-            alert("good");
+            alert(`Navigating to ${props.userEmail}`);
         }}>
         Details
     </Button>;
 }
 
-const rows = [
-    {
-        "email": "email@email.com", "registrationDate": 1668506917000, code: "email@email.com",
-        actions: <UserDetailsButton/>
-    },
-    {
-        "email": "email222@email.com", "registrationDate": 1668506917000, code: "email222@email.com",
-        actions: <UserDetailsButton/>
-    }
-];
-
+// TODO display total count somewhere (and adapt pages based on it?)
 const UserTable = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const userData = useState([]);
+    const [userData, setUserData] = useState([]);
 
     useEffect(() => {
-          
-    });
+        callSearch("", rowsPerPage, page + 1)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(response.status);
+                } else {
+                    response.json().then(json => {
+                        setUserData(json.usersFound);
+                    });
+                }
+            })
+            .catch(statusCode => {
+                if (statusCode === 401) {
+                    // Make sure to handle this higher in the chain
+                    alert('You are not allowed to query this data');
+                } else {
+                    alert('Unknown error');
+                }
+            })
+    }, []);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -71,14 +78,20 @@ const UserTable = () => {
                                         {column.label}
                                     </TableCell>
                                 ))}
+                                <TableCell
+                                    key="actions"
+                                    style={{ minWidth: 100 }}
+                                >
+                                    Actions
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows
+                            {userData
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.email}>
                                             {columns.map((column) => {
                                                 const value = row[column.id];
                                                 return (
@@ -87,6 +100,9 @@ const UserTable = () => {
                                                     </TableCell>
                                                 );
                                             })}
+                                            <TableCell key={row["email"]} align="left">
+                                                <UserDetailsButton userEmail={row["email"]} />
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -96,7 +112,7 @@ const UserTable = () => {
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
-                    count={rows.length}
+                    count={userData.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
