@@ -10,7 +10,10 @@
 //
 //
 // -- This is a parent command --
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add('fakeLogin', () => {
+    // This will mock a login
+    cy.visit('http://localhost:3000')
+    
     cy.get('#username-input').type('username')
     cy.get('#password-input').type('password')
 
@@ -22,6 +25,25 @@ Cypress.Commands.add('login', () => {
     }).as('postLogin')
 
     cy.get('#login-button').click()
+
+    cy.get('#username-input', { timeout: 10000 }).should('not.exist');
+});
+
+Cypress.Commands.add('realLogin', () => {
+    // This will mock a login
+    cy.visit('http://localhost:3000')
+    
+    cy.get('#username-input').type('user')
+    cy.get('#password-input').type('password')
+
+    cy.intercept({
+        method: 'POST',
+        url: 'admin/api/auth'
+    }).as('postLogin')
+
+    cy.get('#login-button').click()
+
+    cy.wait('@postLogin')
 
     cy.get('#username-input', { timeout: 10000 }).should('not.exist');
 });

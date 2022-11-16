@@ -23,8 +23,9 @@ const UserDetailsButton = (props) => {
     return <Button id="userDetailsButton"
         variant="contained"
         size="small"
+        data-test-id="user_details_button"
         onClick={() => {
-            alert(`Navigating to ${props.userEmail}`);
+            window.location.hash = `users/${encodeURIComponent(props.userEmail)}`;
         }}>
         Details
     </Button>;
@@ -67,13 +68,14 @@ const UserTable = () => {
     };
 
     return (
-        <div id="userTable">
+        <div id="userTable" data-test-id="user_table">
             <Container maxWidth="lg" id="userTablePageContainer">
                 <Paper sx={{ width: '100%', overflow: 'hidden', my: '2rem' }} id="searchFieldPaper">
                     <TextField
                         fullWidth
                         id="userSearchInput"
-                        label="Search for users"
+                        data-test-id="user_search_input"
+                        label="Search users"
                         variant="outlined"
                         margin="normal"
                         onChange={event => setSearchTerm(event.target.value)}
@@ -102,9 +104,8 @@ const UserTable = () => {
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
+                            <TableBody data-test-id="user_table_body">
                                 {userData
-                                    // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) should not be needed as pagination is handled on the backend
                                     .sort((a, b) => a.email > b.email ? 1 : -1)
                                     .map((row) => {
                                         return (
@@ -129,6 +130,7 @@ const UserTable = () => {
                     <TablePagination
                         rowsPerPageOptions={[10, 25, 100]}
                         component="div"
+                        data-test-id="table_pagination_parent"
                         count={userData.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
