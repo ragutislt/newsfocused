@@ -1,11 +1,14 @@
 package eu.adainius.newsfocused.admin.site.back.infrastructure.controller;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -79,6 +82,25 @@ public class ApiController {
 
         if (result.isRight()) {
             return result.get();
+        } else {
+            throw new WebApplicationException(result.getLeft(), Response.Status.BAD_REQUEST);
+        }
+    }
+
+    @Path("user/{email}")
+    @GET
+    @Produces("application/json")
+    public User retrieveUser(
+            @PathParam("email") String userEmail,
+            @Context HttpServletRequest httpRequest) {
+        String adminUsername = httpRequest.getUserPrincipal().getName();
+
+        Either<String, Optional<User>> result = adminSiteApplicationService.retrieveUser(adminUsername,
+                userEmail);
+
+        if (result.isRight()) {
+            return result.get()
+                    .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
         } else {
             throw new WebApplicationException(result.getLeft(), Response.Status.BAD_REQUEST);
         }

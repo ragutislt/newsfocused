@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.catchException;
 import static org.mockito.Mockito.when;
 
 import java.security.Principal;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,6 +85,77 @@ public class ApiControllerTest {
         assertThat(thrown).isInstanceOf(WebApplicationException.class);
         assertThat(thrown).hasMessage("Admin not found");
         assertThat(thrown).extracting(ex -> ((WebApplicationException) ex).getResponse().getStatus()).isEqualTo(400);
+    }
+
+    @Test
+    public void test_retrieveUser() {
+        // GIVEN
+        String userEmail = "email";
+        String adminUsername = "admin";
+
+        Mockito.when(adminSiteApplicationService.retrieveUser(adminUsername, userEmail))
+                .thenReturn(Either.right(Optional.of(User.builder().email(userEmail).build())));
+
+        HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
+        Principal principal = Mockito.mock(Principal.class);
+        when(httpRequest.getUserPrincipal()).thenReturn(principal);
+        when(principal.getName()).thenReturn(adminUsername);
+
+        // WHEN
+        User userFound = apiController.retrieveUser(userEmail, httpRequest);
+
+        // THEN
+        assertThat(userFound.email()).isEqualTo(userEmail);
+    }
+
+    @Test
+    public void test_retrieveUser_throws_WAE_if_admin_not_found() {
+        // GIVEN
+        String userEmail = "email";
+        String adminUsername = "admin";
+
+        Mockito.when(adminSiteApplicationService.retrieveUser(adminUsername, userEmail))
+                .thenReturn(Either.left("Admin not found"));
+
+        HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
+        Principal principal = Mockito.mock(Principal.class);
+        when(httpRequest.getUserPrincipal()).thenReturn(principal);
+        when(principal.getName()).thenReturn(adminUsername);
+
+        // WHEN
+        Exception thrown = catchException(() -> {
+            apiController.retrieveUser(userEmail, httpRequest);
+        });
+
+        // THEN
+        assertThat(thrown).isInstanceOf(WebApplicationException.class);
+        assertThat(thrown).hasMessage("Admin not found");
+        assertThat(thrown).extracting(ex -> ((WebApplicationException) ex).getResponse().getStatus()).isEqualTo(400);
+    }
+
+    @Test
+    public void test_retrieveUser_throws_WAE_if_user_not_found() {
+        // GIVEN
+        String userEmail = "email";
+        String adminUsername = "admin";
+
+        Mockito.when(adminSiteApplicationService.retrieveUser(adminUsername, userEmail))
+                .thenReturn(Either.right(Optional.empty()));
+
+        HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
+        Principal principal = Mockito.mock(Principal.class);
+        when(httpRequest.getUserPrincipal()).thenReturn(principal);
+        when(principal.getName()).thenReturn(adminUsername);
+
+        // WHEN
+        Exception thrown = catchException(() -> {
+            apiController.retrieveUser(userEmail, httpRequest);
+        });
+
+        // THEN
+        assertThat(thrown).isInstanceOf(WebApplicationException.class);
+        assertThat(thrown).extracting(ex -> ((WebApplicationException) ex).getResponse().getStatus())
+                .isEqualTo(404);
     }
 
     @Test
