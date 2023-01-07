@@ -42,3 +42,29 @@ describe('User page is rendered with fake data', () => {
         cy.get('[data-test-id=sites]').should('have.text', TEST_SITES.join(', '))
     })
 });
+
+describe('User page is rendered with real data', () => {
+    const TEST_EMAIL = "some@email333.com";
+
+    beforeEach(() => {
+        cy.intercept({
+            method: 'GET',
+            pathname: ' /admin/api/user/search'
+        }).as('getSearch')
+
+        cy.realLogin();
+        cy.wait('@getSearch')
+    })
+
+    it('renders real users data', () => {
+        cy.intercept({
+            method: 'GET',
+            pathname: `/admin/api/user/${encodeURIComponent(TEST_EMAIL)}`
+        }).as('getUser')
+
+        cy.visit(`http://localhost:3000/users/${encodeURIComponent(TEST_EMAIL)}`)
+
+        cy.wait('@getUser')
+        cy.get('[data-test-id=email_title]').should('have.text', TEST_EMAIL)
+    })
+});
