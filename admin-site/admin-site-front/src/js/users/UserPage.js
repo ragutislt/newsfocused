@@ -1,11 +1,13 @@
-import { Container, Paper } from '@mui/material';
+import { Container, Grid, Paper, Typography } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { callUserDetails } from '../Api';
+import { UserMainDetails } from './UserMainDetails';
+import { UserPreferences } from './UserPreferences';
 
 export const UserPage = () => {
     let { email } = useParams();
-    const [userDetails, setUserDetails] = useState({});
+    const [userDetails, setUserDetails] = useState(null);
 
     useEffect(() => {
         callUserDetails(email)
@@ -28,13 +30,27 @@ export const UserPage = () => {
             })
     }, []);
 
-    return (
-        <div id="userPage" data-test-id="user_page">
-            <Container maxWidth="lg" id="userPageContainer">
-                <Paper sx={{ width: '100%', overflow: 'hidden', my: '2rem' }} id="userPagePaper">
-                    <div data-test-id="email">{userDetails.email}</div>
-                </Paper>
-            </Container>
-        </div>
-    )
+    if (!userDetails) {
+        return null;
+    } else {
+        return (
+            <div id="userPage" data-test-id="user_page">
+                <Container maxWidth="lg" id="userPageContainer">
+                    <Paper sx={{ overflow: 'hidden', my: '2rem', padding: '0.5rem' }} id="userPagePaper">
+                        <Typography variant="h4" data-test-id="email_title">
+                            {userDetails.email}
+                        </Typography>
+                    </Paper>
+                    <Grid container spacing={6}>
+                        <Grid item xs={6}>
+                            <UserMainDetails userDetails={userDetails} />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <UserPreferences preferences={userDetails.preferences} />
+                        </Grid>
+                    </Grid>
+                </Container>
+            </div>
+        )
+    }
 }
