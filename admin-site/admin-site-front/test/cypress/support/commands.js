@@ -30,7 +30,7 @@ Cypress.Commands.add('fakeLogin', () => {
 });
 
 Cypress.Commands.add('realLogin', () => {
-    // This will mock a login
+    // This will do a real login
     cy.visit('http://localhost:3000')
     
     cy.get('#username-input').type('user')

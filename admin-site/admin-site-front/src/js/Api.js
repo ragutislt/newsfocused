@@ -18,6 +18,15 @@ export const callSearch = (searchTerm, pageSize, pageRequested) => {
     })
 }
 
+export const callUserDetails = (email) => {
+    return fetch(`/admin/api/user/${encodeURIComponent(email)}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
 const doFetch = (url, options) => {
     return fetch(`admin/api/${url}`, 
         options

@@ -39,7 +39,8 @@ This avoids breakdown of parsing a site
     property format?
         store in one json file?
 * User a business key for ideantifying users instead of email? (would help if email changes, we don't lose all history; but is it really needed?)
-    would help also with deleting CIDs? could keep the id. Also would help with debugging/tracking
+    * Would help also with deleting CIDs? could keep the id. Also would help with debugging/tracking
+    * Can also help with forming URLs - the GET /user/:id is better than GET/user/:email (encoding, url spoofing, etc...)
 * ~~after sending email, clear running list~~ DONE
     
     Here don't clean data right away, instead keep the 'old' week/period and just save new headlines in the new week/period

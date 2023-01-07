@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import '../../css/UserTable.css';
+import { Link } from 'react-router-dom';
 
 const columns = [
     { id: 'email', label: 'Email', minWidth: 170 },
@@ -23,11 +24,8 @@ const UserDetailsButton = (props) => {
     return <Button id="userDetailsButton"
         variant="contained"
         size="small"
-        data-test-id="user_details_button"
-        onClick={() => {
-            window.location.hash = `users/${encodeURIComponent(props.userEmail)}`;
-        }}>
-        Details
+        data-test-id="user_details_button">
+            <Link to={`users/${encodeURIComponent(props.userEmail)}`}>Details</Link>
     </Button>;
 }
 
